@@ -38,10 +38,12 @@
   - `/admin/login` (Authentication portal): 200 OK
   - `/admin` (Protected dashboard redirect): 307 to `/admin/login`
 
-### 5. GitHub Repository
+### 5. GitHub Repository & Actions Automation
 - **Repository**: `https://github.com/stringAyush/mohit-literary-archive.git`
 - **Branch**: `main`
 - **Push Status**: Up to date with all source code, schema, migrations, seed scripts, and documentation. Zero secrets tracked.
+- **GitHub Actions Secret**: `CRON_SECRET` securely synchronized to repository secrets (`stringAyush/mohit-literary-archive`) for the automated scheduled publication workflow (`.github/workflows/publish-scheduled.yml`).
+- **Endpoint Test**: `/api/cron/publish-scheduled` verified (HTTP 401 on missing/invalid key, HTTP 200 on authorized Bearer key).
 
 ### 6. Deployment to Vercel (Next Step)
 - The codebase and production Neon database are ready for live deployment.
@@ -50,4 +52,5 @@
   - `SESSION_SECRET`: 32+ character random string
   - `SITE_URL`: Production domain (e.g. `https://mohit-literary-archive.vercel.app`)
   - `SHOW_DEMO_CONTENT`: `"false"`
-  - `CRON_SECRET`: Optional, 32+ character string for daily scheduled publishing
+  - `CRON_SECRET`: Configured 64-character cron secret for scheduled publishing
+
