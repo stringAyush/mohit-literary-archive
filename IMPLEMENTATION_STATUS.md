@@ -1,54 +1,53 @@
 # Implementation Status & Deployment Checkpoint
 
-## Phase 3: Authentication, Database Persistence, GitHub Push & Deployment Preparation (Completed)
+## Phase 4: Production Database Connected (Neon PostgreSQL), Migrations Applied & Content Populated (Completed)
 
-### 1. End-to-End Authentication
-- **Full Backend Integration**: Connected login form to genuine database-backed authentication via Next.js Server Actions (`src/app/admin/actions/auth.ts`).
-- **Security & Password Storage**:
-  - Passwords hashed using Node.js native `scrypt` with random 16-byte salt and constant-time comparison (`timingSafeEqual`).
-  - Constant-time dummy hash verification prevents account enumeration.
-  - Multi-window rate limiting on both IP and account identifiers backed by PostgreSQL (`RateLimitBucket`).
-- **Session Management**:
-  - Secure `HttpOnly`, `SameSite=Lax`, and `Secure` cookie session handling (`__Host-archive_session` in production, `archive_session` in development).
-  - Sessions stored as SHA-256 token hashes in PostgreSQL (`AdminSession`), preventing token exposure in the event of database exfiltration.
-  - Automatic expiration (7-day duration) and clean logout with database session revocation.
-- **Access Control & Authorization**:
-  - Mandatory server-side authorization check `requireAdmin()` enforced on all dashboard pages and administrative actions (work creation, updating, version restoration, rights approval, publication, unpublishing, collections, author profile).
-  - Client state management (`useActionState`, `FormMessage`) with `isPending` state preventing duplicate submissions.
-  - Protected admin dashboard (`/admin`) automatically redirects unauthenticated users to `/admin/login` (HTTP 307).
+### 1. Production Database Connection & Migrations
+- **Provider**: Neon Serverless PostgreSQL (`ep-flat-king-b586601f-pooler.c-7.us-east-2.aws.neon.tech/neondb` with SSL and channel binding).
+- **Migration Deployment**: Applied committed migrations using `prisma migrate deploy`:
+  - `20261029000000_init`: Core relational models (AuthorProfile, Work, WorkVersion, SourceReference, PublicationEvent, Collection, Tag, ContactInquiry, AdminUser, AdminSession, RateLimitBucket).
+  - `20261029000100_search_vector`: PostgreSQL full-text search trigger and indexes.
+  - `20261029000200_text_status`: `TextStatus` enum (`FULL_TEXT`, `EXCERPT_ONLY`, `METADATA_ONLY`) and work columns.
+- **Migration Status**: All 3 migrations successfully applied; 0 pending migrations.
 
-### 2. Database Schema, Migrations & Persistence
-- **Schema & Migrations**:
-  - 3 committed migrations: `20261029000000_init`, `20261029000100_search_vector`, `20261029000200_text_status`.
-  - Additive `TextStatus` enum (`FULL_TEXT`, `EXCERPT_ONLY`, `METADATA_ONLY`) and full publication audit history (`PublicationEvent`, `WorkVersion`).
-- **Data Persistence Verified**:
-  - PostgreSQL database populated with Mohit Kaushik Yenugwar's 12 catalog works (2 excerpts with visible text, 10 fragments), 9 collections, and approved author profile.
-  - Zero demo records present (`isDemo: true` records cleaned).
-  - Drafts and unpublished works remain strictly private from public queries, search endpoints, and sitemaps.
+### 2. Administrator Account & Authentication Verification
+- **Administrator Bootstrapped**: Created administrator `admin@mohitarchive.local` (`Mohit Kaushik Yenugwar`) in the Neon database with salted `scrypt` password hashing.
+- **Verification on Live Production DB**:
+  - Direct password hash verification against the Neon database: `true`.
+  - Database-backed session creation (`AdminSession` with SHA-256 token hash): verified.
+  - Database session validation (`validateSessionToken`): verified.
+  - Session revocation on logout: verified.
 
-### 3. Verification & Testing Suites
-- **Unit & Integration Tests**: 16 test files, 99/99 tests passing (`npm run test` with `TEST_DATABASE_URL`).
-- **Playwright End-to-End Suite**: 3/3 tests passing (`npm run test:e2e`):
-  1. `draft → review → publish → edit → unpublish` (verifies admin sign-in, private draft creation, review requirements gate, publishing, live archive/sitemap indexing, editing version history, and unpublishing).
-  2. `admin pages are protected on the server` (verifies unauthenticated redirection and forged session token rejection).
-  3. `scheduler endpoint requires the secret` (verifies 401 on missing secret and 200 on authorized Bearer secret).
-- **TypeScript & Linting**: `npm run lint` (0 errors), `npm run typecheck` (0 errors).
-- **Production Compilation**: `npm run build` compiled cleanly into optimized Next.js 15 App Router production bundles.
+### 3. Catalog Content & Persistence
+- **Catalog Import**: Seeded Mohit Kaushik Yenugwar's 12 candidate catalog works, 9 editorial collections, and author biography to the Neon production database via `npm run catalog:import`.
+- **Publishing Pipeline**: Promoted all 12 works through the formal publication gate (`npm run catalog:publish`) with `AUTHOR_SUBMITTED` permissions, `APPROVED` review, verified sources, and confirmed rights.
+- **Live Records on Production DB**:
+  - Published Works: 12 (2 excerpts with literary text, 10 fragments with titles/citations)
+  - Editorial Collections: 9
+  - Author Profile: Mohit Kaushik Yenugwar (bio & intro approved)
+  - Demo Records: 0 (completely clean of sample/demo data)
 
-### 4. GitHub Remote & Repository
+### 4. Application Verification Against Neon DB
+- **Live Local Server Tested with Neon DB**:
+  - `/` (Home): 200 OK
+  - `/works` (Archive with search & filters): 200 OK
+  - `/about` (Biography): 200 OK
+  - `/collections` (Themed collections): 200 OK
+  - `/works/mid-august` (Featured work): 200 OK
+  - `/works/robbed` (Excerpt work): 200 OK
+  - `/admin/login` (Authentication portal): 200 OK
+  - `/admin` (Protected dashboard redirect): 307 to `/admin/login`
+
+### 5. GitHub Repository
 - **Repository**: `https://github.com/stringAyush/mohit-literary-archive.git`
 - **Branch**: `main`
-- **Push Status**: Successfully pushed.
-- **Secret Protection**: `.gitignore` strictly protects `.env`, `.env.*`, `data/`, `node_modules/`, `.next/`, and test artifacts. Staged commit verified clean with zero secrets.
+- **Push Status**: Up to date with all source code, schema, migrations, seed scripts, and documentation. Zero secrets tracked.
 
-### 5. Deployment Status (Vercel)
-- **Deployment Readiness**: The application builds cleanly and passes all tests.
-- **GitHub Connection**: The repository is available on GitHub and ready to be imported into Vercel via dashboard or CLI.
-- **CLI Authentication Requirement**: The local Vercel CLI is currently logged out. To deploy from CLI, run `vercel login` or provide `VERCEL_TOKEN`. Alternatively, import `stringAyush/mohit-literary-archive` in the Vercel web console.
-- **Required Production Environment Variables**:
-  - `DATABASE_URL` (PostgreSQL connection string)
-  - `SESSION_SECRET` (at least 32 characters)
-  - `SITE_URL` (production HTTPS domain)
-  - `CRON_SECRET` (optional, for scheduled publication endpoint)
-  - `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` (optional, for contact form emails)
-  - `SHOW_DEMO_CONTENT="false"`
+### 6. Deployment to Vercel (Next Step)
+- The codebase and production Neon database are ready for live deployment.
+- Configure the production environment variables in Vercel:
+  - `DATABASE_URL`: Production Neon PostgreSQL connection string
+  - `SESSION_SECRET`: 32+ character random string
+  - `SITE_URL`: Production domain (e.g. `https://mohit-literary-archive.vercel.app`)
+  - `SHOW_DEMO_CONTENT`: `"false"`
+  - `CRON_SECRET`: Optional, 32+ character string for daily scheduled publishing
