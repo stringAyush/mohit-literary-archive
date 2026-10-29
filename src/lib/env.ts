@@ -46,11 +46,38 @@ export type Env = z.infer<typeof envSchema>;
 
 let cached: Env | null = null;
 
+function getRawEnv() {
+  const rawSiteUrl = (
+    process.env.SITE_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "") ||
+    "http://localhost:3000"
+  ).trim();
+
+  const normalizedSiteUrl =
+    rawSiteUrl.startsWith("http://") || rawSiteUrl.startsWith("https://")
+      ? rawSiteUrl
+      : `https://${rawSiteUrl}`;
+
+  const rawDbUrl = (
+    process.env.DATABASE_URL ||
+    process.env.POSTGRES_PRISMA_URL ||
+    process.env.POSTGRES_URL ||
+    ""
+  ).trim();
+
+  return {
+    ...process.env,
+    DATABASE_URL: rawDbUrl,
+    SITE_URL: normalizedSiteUrl,
+  };
+}
+
 export function getEnv(): Env {
   if (cached && process.env.NODE_ENV !== "test") return cached;
-  const parsed = envSchema.safeParse(process.env);
+  const parsed = envSchema.safeParse(getRawEnv());
   if (!parsed.success) {
     const problems = parsed.error.issues.map((issue) => `${issue.path.join(".")}: ${issue.message}`);
+    console.error(`Invalid environment configuration:\n${problems.join("\n")}`);
     throw new Error(`Invalid environment configuration:\n${problems.join("\n")}`);
   }
   if (process.env.NODE_ENV !== "test") {
