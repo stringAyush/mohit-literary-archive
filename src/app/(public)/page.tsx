@@ -44,7 +44,7 @@ export default async function HomePage() {
           <div>
             <h1
               id="hero-heading"
-              className="font-display tracking-[-0.025em] text-ink text-[clamp(1.85rem,5.4vw,4.85rem)] leading-[1.08] sm:leading-[1.04]"
+              className="font-display tracking-[-0.03em] text-ink text-[clamp(2.4rem,8.1vw,7.28rem)] leading-[1.04] sm:leading-[0.98]"
             >
               <span className="block">Some things are better</span>
               <span className="block">left in words.</span>
