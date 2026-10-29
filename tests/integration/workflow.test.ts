@@ -6,6 +6,7 @@ import {
   archiveWork,
   changeReview,
   createWork,
+  deleteWork,
   publishWork,
   restoreWork,
   unpublishWork,
@@ -166,5 +167,18 @@ describe.skipIf(!hasDatabase)("publishing workflow", () => {
     const restored = await db.work.findUniqueOrThrow({ where: { id: work.id } });
     expect(restored.status).toBe("DRAFT");
     expect(await db.workVersion.count({ where: { workId: work.id } })).toBe(1);
+  });
+
+  it("deletes a work and cascades all its versions and events", async () => {
+    const work = await createWork(workInput({ title: "Temporary piece to delete" }), admin);
+    expect(await db.work.count({ where: { id: work.id } })).toBe(1);
+    expect(await db.workVersion.count({ where: { workId: work.id } })).toBe(1);
+    expect(await db.publicationEvent.count({ where: { workId: work.id } })).toBe(1);
+
+    await deleteWork(work.id);
+
+    expect(await db.work.findUnique({ where: { id: work.id } })).toBeNull();
+    expect(await db.workVersion.count({ where: { workId: work.id } })).toBe(0);
+    expect(await db.publicationEvent.count({ where: { workId: work.id } })).toBe(0);
   });
 });

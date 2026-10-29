@@ -1,6 +1,7 @@
 import type { Prisma, WorkStatus } from "@prisma/client";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { DeleteWorkButton } from "@/components/admin/DeleteWorkButton";
 import { PageHeader, StageBadge, StatusBadge } from "@/components/admin/ui";
 import { hrefFor, Pagination } from "@/components/ui/Pagination";
 import { requireAdmin } from "@/lib/auth/admin";
@@ -29,6 +30,7 @@ export default async function AdminWorksPage({ searchParams }: Props) {
   const tab = TABS.find((t) => t.key === tabKey) ?? TABS[0];
   const q = typeof raw.q === "string" ? raw.q.trim().slice(0, 100) : "";
   const page = Math.max(1, Number.parseInt(typeof raw.page === "string" ? raw.page : "1", 10) || 1);
+  const isDeleted = raw.deleted === "1";
 
   const where: Prisma.WorkWhereInput = {
     ...(tab.status ? { status: tab.status } : { status: { not: "ARCHIVED" } }),
@@ -82,6 +84,12 @@ export default async function AdminWorksPage({ searchParams }: Props) {
         }
       />
 
+      {isDeleted && (
+        <p role="status" className="mb-6 border-l-2 border-[#3d6b4a] bg-[#3d6b4a]/5 px-4 py-3 font-sans text-sm text-[#2f5539]">
+          The work has been permanently deleted from the archive.
+        </p>
+      )}
+
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <nav aria-label="Filter by status">
           <ul className="flex flex-wrap gap-1">
@@ -125,6 +133,7 @@ export default async function AdminWorksPage({ searchParams }: Props) {
                 <th scope="col" className="px-4 py-3 font-medium">Stage</th>
                 <th scope="col" className="px-4 py-3 font-medium">Status</th>
                 <th scope="col" className="px-4 py-3 font-medium">Last changed</th>
+                <th scope="col" className="px-4 py-3 font-medium text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-line">
@@ -146,6 +155,18 @@ export default async function AdminWorksPage({ searchParams }: Props) {
                   <td className="px-4 py-3"><StageBadge work={work} /></td>
                   <td className="px-4 py-3"><StatusBadge status={work.status} /></td>
                   <td className="whitespace-nowrap px-4 py-3 text-muted">{formatDateTime(work.updatedAt)}</td>
+                  <td className="whitespace-nowrap px-4 py-3 text-right">
+                    <div className="flex items-center justify-end gap-2">
+                      <Link href={`/admin/works/${work.id}`} className="btn btn-quiet h-8 min-h-8 px-2.5 text-xs">
+                        Edit
+                      </Link>
+                      <DeleteWorkButton
+                        workId={work.id}
+                        workTitle={work.title ?? (work.body.split("\n")[0]?.slice(0, 40) || work.slug)}
+                        variant="table-action"
+                      />
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>

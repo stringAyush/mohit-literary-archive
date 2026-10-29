@@ -576,6 +576,18 @@ export async function restoreWork(id: string, actor: Actor) {
   });
 }
 
+export async function deleteWork(id: string) {
+  return db.$transaction(async (tx) => {
+    const work = await tx.work.findUnique({
+      where: { id },
+      select: { id: true, title: true, slug: true },
+    });
+    if (!work) throw new WorkflowError("NOT_FOUND", "This work no longer exists.");
+    await tx.work.delete({ where: { id } });
+    return work;
+  });
+}
+
 // ─── Scheduler ────────────────────────────────────────────────────────────
 
 export type ScheduledRunResult = {

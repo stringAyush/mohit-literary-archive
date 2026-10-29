@@ -18,6 +18,7 @@ import {
   cancelSchedule,
   changeReview,
   createWork,
+  deleteWork,
   publishWork,
   restoreVersion,
   restoreWork,
@@ -142,4 +143,16 @@ export async function restoreVersionAction(_prev: ActionState, formData: FormDat
   }
   refresh();
   redirect(`/admin/works/${id}/history?restored=${version}`);
+}
+
+export async function deleteWorkAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
+  await requireAdmin();
+  const id = workId(formData);
+  try {
+    await deleteWork(id);
+  } catch (error) {
+    return errorToState(error);
+  }
+  refresh();
+  redirect("/admin/works?deleted=1");
 }

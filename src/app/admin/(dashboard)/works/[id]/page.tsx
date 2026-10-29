@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { DeleteWorkButton } from "@/components/admin/DeleteWorkButton";
 import { PageHeader, Panel, StageBadge, StatusBadge } from "@/components/admin/ui";
 import { WorkEditor } from "@/components/admin/WorkEditor";
 import { ApproveForm, ReviewStatusForm, ScheduleForm, WorkflowButton } from "@/components/admin/WorkflowForms";
@@ -156,6 +157,13 @@ export default async function EditWorkPage({ params, searchParams }: Props) {
             {!ready && work.status !== "ARCHIVED" && (
               <p className="mt-4 font-sans text-xs text-muted">Publishing becomes available once every requirement is met.</p>
             )}
+
+            <div className="mt-6 border-t hairline pt-4">
+              <p className="mb-2 font-sans text-xs text-muted">
+                Permanently remove this work and its history from the database:
+              </p>
+              <DeleteWorkButton workId={work.id} workTitle={label} />
+            </div>
           </Panel>
 
           <Panel title="Rights & review" id="review-panel">
