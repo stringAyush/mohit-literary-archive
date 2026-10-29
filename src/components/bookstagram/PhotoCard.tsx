@@ -33,18 +33,18 @@ export function PhotoCard({ post, onOpenLightbox, priority = false }: Props) {
             alt={mainImage.altText || post.title}
             fill
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1280px) 33vw, 25vw"
             loading={priority ? "eager" : "lazy"}
             priority={priority}
           />
 
           {/* Pinterest-style translucent hover scrim */}
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300" />
 
-          {/* Top Bar on Hover: Category (left) + View Pill (right) */}
-          <div className="absolute top-3 inset-x-3 flex items-center justify-between gap-2 pointer-events-none">
+          {/* Top Bar: Category (left) + View Pill (right) */}
+          <div className="absolute top-2.5 sm:top-3 inset-x-2.5 sm:inset-x-3 flex items-center justify-between gap-2 pointer-events-none">
             {post.category ? (
-              <span className="rounded-full bg-black/55 px-2.5 py-1 font-sans text-[11px] font-medium text-white shadow-xs backdrop-blur-md">
+              <span className="rounded-full bg-black/60 px-2 sm:px-2.5 py-0.5 sm:py-1 font-sans text-[10px] sm:text-[11px] font-medium text-white shadow-xs backdrop-blur-md">
                 {post.category}
               </span>
             ) : (
@@ -54,7 +54,7 @@ export function PhotoCard({ post, onOpenLightbox, priority = false }: Props) {
             <Link
               href={`/bookstagram/${post.slug}`}
               onClick={(e) => e.stopPropagation()}
-              className="pointer-events-auto flex items-center gap-1 rounded-full bg-accent px-3 py-1 font-sans text-xs font-semibold text-white shadow-md backdrop-blur-xs transition-all hover:bg-accent/90 hover:scale-105 active:scale-95 no-underline"
+              className="pointer-events-auto flex items-center gap-1 rounded-full bg-accent px-2.5 sm:px-3 py-1 font-sans text-xs font-semibold text-white shadow-md backdrop-blur-xs transition-all hover:bg-accent/90 hover:scale-105 active:scale-95 no-underline opacity-95 sm:opacity-0 sm:group-hover:opacity-100"
               aria-label={`View ${post.title}`}
             >
               <span>View</span>
@@ -62,10 +62,10 @@ export function PhotoCard({ post, onOpenLightbox, priority = false }: Props) {
             </Link>
           </div>
 
-          {/* Bottom Bar on Hover: Multi-photo indicator + Quick Lightbox Expand */}
-          <div className="absolute bottom-3 inset-x-3 flex items-end justify-between gap-2 pointer-events-none">
+          {/* Bottom Bar: Multi-photo indicator + Quick Lightbox Expand */}
+          <div className="absolute bottom-2.5 sm:bottom-3 inset-x-2.5 sm:inset-x-3 flex items-end justify-between gap-2 pointer-events-none">
             {post.images.length > 1 ? (
-              <span className="flex items-center gap-1 rounded-full bg-black/60 px-2.5 py-1 font-sans text-[11px] font-medium text-white backdrop-blur-md">
+              <span className="flex items-center gap-1 rounded-full bg-black/65 px-2 sm:px-2.5 py-0.5 sm:py-1 font-sans text-[10px] sm:text-[11px] font-medium text-white backdrop-blur-md">
                 <Layers className="h-3 w-3" />
                 <span>{post.images.length} photos</span>
               </span>
@@ -79,7 +79,7 @@ export function PhotoCard({ post, onOpenLightbox, priority = false }: Props) {
                 e.stopPropagation();
                 onOpenLightbox();
               }}
-              className="pointer-events-auto flex h-9 w-9 items-center justify-center rounded-full bg-white/95 text-ink shadow-md backdrop-blur-sm transition-all hover:bg-white hover:scale-110 active:scale-95"
+              className="pointer-events-auto flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-white/95 text-ink shadow-md backdrop-blur-sm transition-all hover:bg-white hover:scale-110 active:scale-95 opacity-95 sm:opacity-0 sm:group-hover:opacity-100"
               aria-label="Expand in lightbox"
               title="Expand in lightbox"
             >

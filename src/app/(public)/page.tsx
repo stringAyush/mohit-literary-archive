@@ -40,28 +40,29 @@ export default async function HomePage() {
     <>
       {/* ─── Hero ─────────────────────────────────────────────── */}
       <section aria-labelledby="hero-heading" className="border-b hairline bg-linear-to-b from-paper via-surface/40 to-paper">
-        <div className="page-container grid gap-12 py-14 lg:grid-cols-[1.45fr_1fr] lg:gap-16 lg:py-24">
+        <div className="page-container grid gap-10 sm:gap-12 py-12 sm:py-16 lg:grid-cols-[1.45fr_1fr] lg:gap-16 lg:py-24">
           <div>
             <h1
               id="hero-heading"
-              className="max-w-[14ch] font-display text-[clamp(2.75rem,6.2vw,5.25rem)] leading-[1.02] tracking-[-0.02em] text-balance text-ink"
+              className="font-display tracking-[-0.025em] text-ink text-[clamp(1.85rem,5.4vw,4.85rem)] leading-[1.08] sm:leading-[1.04]"
             >
-              Some things are better left in words.
+              <span className="block">Some things are better</span>
+              <span className="block">left in words.</span>
             </h1>
-            <p className="mt-7 max-w-[34ch] font-editorial text-[1.5rem] leading-snug text-ink/80 sm:text-[1.75rem]">
+            <p className="mt-5 sm:mt-7 max-w-[34ch] font-editorial text-[1.25rem] sm:text-[1.5rem] lg:text-[1.75rem] leading-snug text-ink/80">
               An evolving collection of thoughts, poems, fragments, and observations.
             </p>
-            <div className="mt-10 flex flex-wrap items-center gap-3.5">
+            <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-3.5">
               <Link
                 href="/works"
-                className="inline-flex items-center gap-2 rounded-xl bg-accent px-6 py-3 font-sans text-sm font-semibold text-white shadow-xs transition-all hover:bg-accent-hover hover:shadow-md"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-6 py-3.5 font-sans text-sm font-semibold text-white shadow-xs transition-all hover:bg-accent-hover hover:shadow-md"
               >
                 <span>Enter the archive</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/about"
-                className="inline-flex items-center gap-2 rounded-xl border border-line/80 bg-surface/80 px-5 py-3 font-sans text-sm font-medium text-ink shadow-xs backdrop-blur-xs transition-all hover:border-ink/50 hover:bg-surface"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-line/80 bg-surface/80 px-5 py-3.5 font-sans text-sm font-medium text-ink shadow-xs backdrop-blur-xs transition-all hover:border-ink/50 hover:bg-surface"
               >
                 About the writer
               </Link>
@@ -69,8 +70,8 @@ export default async function HomePage() {
           </div>
 
           {/* Table of contents card */}
-          <aside aria-labelledby="contents-heading" className="self-end">
-            <Card className="border border-line/80 bg-surface/95 p-6 shadow-sm">
+          <aside aria-labelledby="contents-heading" className="w-full self-end">
+            <Card className="border border-line/80 bg-surface/95 p-5 sm:p-6 lg:p-7 shadow-sm">
               <div className="flex items-center justify-between border-b hairline pb-4">
                 <div className="flex items-center gap-2">
                   <BookOpen className="h-4 w-4 text-accent" />
@@ -268,7 +269,7 @@ export default async function HomePage() {
                               <span />
                             )}
 
-                            <span className="flex items-center gap-1 rounded-full bg-accent px-3 py-1 font-sans text-xs font-semibold text-white shadow-md backdrop-blur-xs transition-all group-hover:scale-105">
+                            <span className="flex items-center gap-1 rounded-full bg-accent px-2.5 sm:px-3 py-1 font-sans text-xs font-semibold text-white shadow-md backdrop-blur-xs transition-all group-hover:scale-105 opacity-95 sm:opacity-0 sm:group-hover:opacity-100">
                               <span>View</span>
                               <ArrowUpRight className="h-3 w-3" />
                             </span>

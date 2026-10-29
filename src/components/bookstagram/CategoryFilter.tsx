@@ -16,7 +16,7 @@ export function CategoryFilter({ categories, totalCount }: Props) {
   const categoryMap = new Map(categories.map((c) => [c.name, c.count]));
 
   return (
-    <nav aria-label="Filter photographs by category" className="overflow-x-auto pb-2">
+    <nav aria-label="Filter photographs by category" className="-mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto pb-2 scrollbar-none">
       <ul className="flex items-center gap-2 min-w-max">
         <li>
           <Link

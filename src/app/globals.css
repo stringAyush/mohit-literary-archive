@@ -20,7 +20,9 @@
   --radius-xs: 2px;
 
   --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
   --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
 }
 
 /* Font families come from next/font (see src/app/fonts.ts), which sets these variables on <html>. */
