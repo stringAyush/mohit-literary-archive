@@ -45,7 +45,19 @@
 - **GitHub Actions Secret**: `CRON_SECRET` securely synchronized to repository secrets (`stringAyush/mohit-literary-archive`) for the automated scheduled publication workflow (`.github/workflows/publish-scheduled.yml`).
 - **Endpoint Test**: `/api/cron/publish-scheduled` verified (HTTP 401 on missing/invalid key, HTTP 200 on authorized Bearer key).
 
-### 6. Deployment to Vercel (Next Step)
+### 6. Sleek UI Upgrades (shadcn Design System)
+- **Component Suite Added**:
+  - `Select` ([`src/components/ui/select.tsx`](file:///home/phoenix/Downloads/mohit-literary-archive/src/components/ui/select.tsx)): Custom chevron, rounded-xl borders, subtle shadows, and focus rings.
+  - `Card` ([`src/components/ui/card.tsx`](file:///home/phoenix/Downloads/mohit-literary-archive/src/components/ui/card.tsx)): Modern surface cards with glassmorphism, rounded-2xl geometry, and hover elevations.
+  - `Badge` ([`src/components/ui/badge.tsx`](file:///home/phoenix/Downloads/mohit-literary-archive/src/components/ui/badge.tsx)): Pill-shaped chips (`accent`, `secondary`, `outline`, `muted`).
+  - `Input` ([`src/components/ui/input.tsx`](file:///home/phoenix/Downloads/mohit-literary-archive/src/components/ui/input.tsx)): Sleek search and text input with icon integration and clear buttons.
+  - `Button` ([`src/components/ui/button.tsx`](file:///home/phoenix/Downloads/mohit-literary-archive/src/components/ui/button.tsx)): Polished button primitives with subtle shadow and transitions.
+- **Pages Enhanced**:
+  - **Index (Homepage)**: Hero badge, modern CTA buttons, Table of Contents card with hover row highlights, featured piece showcase card with quote styling, and collection cards.
+  - **List (The Archive & Collections)**: Individual work cards with pill tags, reading metadata, smooth hover lift, active filter chips with 1-click removal, and pill-style pagination.
+  - **Select & Filter Controls**: Clean custom selects for Form, Collection, Theme, Language, and Order with interactive filter badges.
+
+### 7. Deployment to Vercel (Next Step)
 - The codebase and production Neon database are ready for live deployment.
 - Configure the production environment variables in Vercel:
   - `DATABASE_URL`: Production Neon PostgreSQL connection string
@@ -53,4 +65,5 @@
   - `SITE_URL`: Production domain (e.g. `https://mohit-literary-archive.vercel.app`)
   - `SHOW_DEMO_CONTENT`: `"false"`
   - `CRON_SECRET`: Configured 64-character cron secret for scheduled publishing
+
 
