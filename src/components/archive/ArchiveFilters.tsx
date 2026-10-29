@@ -2,7 +2,11 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { useRef, useTransition } from "react";
-import { SearchIcon } from "@/components/ui/icons";
+import { Search, X, SlidersHorizontal } from "lucide-react";
+import { Select } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 type Option = { value: string; label: string };
 
@@ -14,11 +18,6 @@ type Props = {
   languages: Option[];
 };
 
-/**
- * A plain GET form: it works without JavaScript, and the URL always describes the
- * current results (so they can be bookmarked and shared). With JavaScript, choosing
- * a filter updates the results immediately.
- */
 export function ArchiveFilters({ values, types, collections, themes, languages }: Props) {
   const router = useRouter();
   const pathname = usePathname();
@@ -52,27 +51,22 @@ export function ArchiveFilters({ values, types, collections, themes, languages }
     navigate(formRef.current);
   }
 
-  const select = (name: string, label: string, options: Option[], value: string, allLabel: string) => (
-    <div className="min-w-0">
-      <label htmlFor={`filter-${name}`} className="eyebrow mb-2 block text-[0.6875rem]">
-        {label}
-      </label>
-      <select
-        id={`filter-${name}`}
-        name={name}
-        defaultValue={value}
-        onChange={onSelectChange}
-        className="input text-sm"
-      >
-        <option value="">{allLabel}</option>
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
+  function removeFilter(key: string) {
+    if (!formRef.current) return;
+    const element = formRef.current.elements.namedItem(key) as HTMLSelectElement | HTMLInputElement | null;
+    if (element) {
+      element.value = "";
+      navigate(formRef.current);
+    }
+  }
+
+  const activeFilters = [
+    values.type && { key: "type", label: `Form: ${types.find((t) => t.value === values.type)?.label ?? values.type}` },
+    values.collection && { key: "collection", label: `Collection: ${collections.find((c) => c.value === values.collection)?.label ?? values.collection}` },
+    values.theme && { key: "theme", label: `Theme: ${themes.find((t) => t.value === values.theme)?.label ?? values.theme}` },
+    values.lang && { key: "lang", label: `Language: ${languages.find((l) => l.value === values.lang)?.label ?? values.lang}` },
+    values.sort && values.sort !== "newest" && { key: "sort", label: "Order: Oldest first" },
+  ].filter(Boolean) as { key: string; label: string }[];
 
   return (
     <form
@@ -82,62 +76,133 @@ export function ArchiveFilters({ values, types, collections, themes, languages }
       method="get"
       onSubmit={onSubmit}
       aria-busy={isPending}
-      className="border-y hairline py-6"
+      className="rounded-2xl border border-line/70 bg-surface/85 p-5 shadow-xs backdrop-blur-md sm:p-6"
     >
-      <div className="flex gap-2">
+      <div className="flex flex-col gap-3 sm:flex-row">
         <div className="relative min-w-0 flex-1">
-          <label htmlFor="archive-q" className="sr-only">
-            Search words, titles, and collections
-          </label>
-          <SearchIcon className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted" />
-          <input
+          <Input
             id="archive-q"
             name="q"
             type="search"
             defaultValue={values.q}
             maxLength={100}
-            placeholder="Search words, titles, and collections..."
-            className="input h-12 pl-10 font-editorial text-xl [&::-webkit-search-cancel-button]:hidden"
+            placeholder="Search words, titles, thoughts, or collections..."
+            icon={<Search className="h-4 w-4" />}
+            className="h-12 rounded-xl text-base"
           />
           {values.q && (
             <button
               type="button"
               onClick={clearSearch}
-              className="absolute right-1 top-1/2 inline-flex h-11 -translate-y-1/2 items-center px-3 font-sans text-xs uppercase tracking-[0.12em] text-muted hover:text-accent"
+              className="absolute right-3 top-1/2 inline-flex -translate-y-1/2 items-center gap-1 rounded-md px-2 py-1 font-sans text-xs font-medium text-muted transition-colors hover:bg-ink/5 hover:text-ink"
             >
-              Clear
+              <X className="h-3.5 w-3.5" />
+              <span>Clear</span>
             </button>
           )}
         </div>
-        <button type="submit" className="btn btn-primary h-12">
+        <Button type="submit" size="lg" className="h-12 rounded-xl px-7 text-sm font-semibold">
           Search
-        </button>
+        </Button>
       </div>
 
-      <div className="mt-5 grid grid-cols-2 gap-4 lg:grid-cols-5">
-        {select("type", "Form", types, values.type, "All forms")}
-        {select("collection", "Collection", collections, values.collection, "All collections")}
-        {select("theme", "Theme", themes, values.theme, "All themes")}
-        {select("lang", "Language", languages, values.lang, "All languages")}
-        <div className="min-w-0">
-          <label htmlFor="filter-sort" className="eyebrow mb-2 block text-[0.6875rem]">
-            Order
-          </label>
-          <select
-            id="filter-sort"
-            name="sort"
-            defaultValue={values.sort || "newest"}
-            onChange={onSelectChange}
-            className="input text-sm"
-          >
-            <option value="newest">Newest first</option>
-            <option value="oldest">Oldest first</option>
-          </select>
+      <div className="mt-5 grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-5">
+        <Select
+          id="filter-type"
+          name="type"
+          label="Form"
+          defaultValue={values.type}
+          onChange={onSelectChange}
+        >
+          <option value="">All forms</option>
+          {types.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </Select>
+
+        <Select
+          id="filter-collection"
+          name="collection"
+          label="Collection"
+          defaultValue={values.collection}
+          onChange={onSelectChange}
+        >
+          <option value="">All collections</option>
+          {collections.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </Select>
+
+        <Select
+          id="filter-theme"
+          name="theme"
+          label="Theme"
+          defaultValue={values.theme}
+          onChange={onSelectChange}
+        >
+          <option value="">All themes</option>
+          {themes.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </Select>
+
+        <Select
+          id="filter-lang"
+          name="lang"
+          label="Language"
+          defaultValue={values.lang}
+          onChange={onSelectChange}
+        >
+          <option value="">All languages</option>
+          {languages.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </Select>
+
+        <Select
+          id="filter-sort"
+          name="sort"
+          label="Order"
+          defaultValue={values.sort || "newest"}
+          onChange={onSelectChange}
+        >
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+        </Select>
+      </div>
+
+      {/* Active filter badges */}
+      {activeFilters.length > 0 && (
+        <div className="mt-4 flex flex-wrap items-center gap-2 border-t hairline pt-3">
+          <span className="flex items-center gap-1 font-sans text-xs font-medium text-muted">
+            <SlidersHorizontal className="h-3 w-3" /> Filters:
+          </span>
+          {activeFilters.map((filter) => (
+            <button
+              key={filter.key}
+              type="button"
+              onClick={() => removeFilter(filter.key)}
+              className="group inline-flex items-center"
+            >
+              <Badge variant="accent" className="cursor-pointer gap-1.5 transition-transform group-hover:scale-[1.02]">
+                {filter.label}
+                <X className="h-3 w-3 opacity-70 group-hover:opacity-100" />
+              </Badge>
+            </button>
+          ))}
         </div>
-      </div>
+      )}
 
-      <p role="status" aria-live="polite" className="mt-3 min-h-5 font-sans text-xs text-muted">
-        {isPending ? "Updating results…" : ""}
+      <p role="status" aria-live="polite" className="mt-2.5 min-h-4 font-sans text-xs text-muted">
+        {isPending ? "Updating archive results…" : ""}
       </p>
     </form>
   );

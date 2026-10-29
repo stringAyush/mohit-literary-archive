@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
+import { Archive, RotateCcw } from "lucide-react";
 import { ArchiveFilters } from "@/components/archive/ArchiveFilters";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { Badge } from "@/components/ui/badge";
 import { hrefFor, Pagination } from "@/components/ui/Pagination";
 import { WorkGrid } from "@/components/works/WorkPreview";
 import { CONTENT_TYPES, contentTypeParam, contentTypePlural, languageLabel } from "@/lib/constants";
@@ -26,7 +28,6 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     title: params.q ? `Search: ${params.q}` : "The Archive",
     description: "A growing collection of published writing — quotes, poems, aphorisms and reflections.",
     alternates: { canonical: "/works" },
-    // Filtered and searched views are useful to readers but not to search engines.
     robots: filtered ? { index: false, follow: true } : undefined,
   };
 }
@@ -40,16 +41,19 @@ export default async function ArchivePage({ searchParams }: Props) {
   return (
     <div className="page-container pb-16 pt-12 lg:pb-24 lg:pt-20">
       <header className="max-w-3xl">
-        <p className="eyebrow">Published writing</p>
-        <h1 className="mt-4 font-display text-[clamp(2.5rem,5vw,4rem)] leading-[1.05] tracking-[-0.015em]">
+        <Badge variant="accent" className="gap-1.5 px-3 py-1">
+          <Archive className="h-3 w-3" />
+          <span>Complete Archive</span>
+        </Badge>
+        <h1 className="mt-4 font-display text-[clamp(2.5rem,5vw,4rem)] leading-[1.05] tracking-[-0.015em] text-ink">
           The Archive
         </h1>
-        <p className="mt-5 font-editorial text-[1.5rem] leading-snug text-ink/80">
-          A growing collection of published writing.
+        <p className="mt-4 font-editorial text-[1.4rem] leading-snug text-ink/80">
+          A growing collection of poems, reflections, excerpts, and literary observations.
         </p>
       </header>
 
-      <div className="mt-10 lg:mt-14">
+      <div className="mt-8 lg:mt-12">
         <ArchiveFilters
           key={resultsKey}
           values={{
@@ -99,17 +103,25 @@ async function ArchiveResults({ params }: { params: ArchiveParams }) {
 
   return (
     <section aria-labelledby="results-heading" className="mt-10">
-      <div className="mb-6 flex flex-wrap items-baseline justify-between gap-3">
-        <h2 id="results-heading" className="font-sans text-sm text-muted" aria-live="polite">
-          {result.total === 0
-            ? "No results"
-            : `${result.total} ${result.total === 1 ? "piece" : "pieces"}${description ? ` · ${description}` : ""}${
-                params.q ? ` matching “${params.q}”` : ""
-              }`}
-        </h2>
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <Badge variant="outline" className="tabular-nums">
+            {result.total === 0 ? "0 results" : `${result.total} ${result.total === 1 ? "work" : "works"}`}
+          </Badge>
+          {description && <span className="font-sans text-xs text-muted">· {description}</span>}
+          {params.q && (
+            <span className="font-sans text-xs text-muted">
+              matching “<strong className="text-ink">{params.q}</strong>”
+            </span>
+          )}
+        </div>
         {filtered && (
-          <Link href="/works" className="text-link font-sans text-sm">
-            Clear all filters
+          <Link
+            href="/works"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-line/70 bg-surface/60 px-3 py-1 font-sans text-xs font-medium text-muted transition-colors hover:border-ink/40 hover:text-ink"
+          >
+            <RotateCcw className="h-3 w-3" />
+            <span>Clear all filters</span>
           </Link>
         )}
       </div>
@@ -138,14 +150,22 @@ async function ArchiveResults({ params }: { params: ArchiveParams }) {
 function ResultsSkeleton() {
   return (
     <div className="mt-10" role="status" aria-live="polite">
-      <p className="mb-6 font-sans text-sm text-muted">Loading writing…</p>
-      <div className="grid gap-x-12 md:grid-cols-2">
+      <div className="mb-6 flex items-center gap-2">
+        <div className="h-5 w-24 rounded-full bg-surface-2 animate-pulse" />
+      </div>
+      <div className="grid gap-6 md:grid-cols-2">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="border-t hairline pb-10 pt-6" aria-hidden="true">
-            <div className="h-3 w-24 bg-surface-2" />
-            <div className="mt-5 h-5 w-4/5 bg-surface-2" />
-            <div className="mt-3 h-5 w-3/5 bg-surface-2" />
-            <div className="mt-3 h-5 w-2/3 bg-surface-2" />
+          <div key={i} className="rounded-2xl border border-line/60 bg-surface/60 p-6" aria-hidden="true">
+            <div className="flex gap-2">
+              <div className="h-5 w-16 rounded-full bg-surface-2 animate-pulse" />
+              <div className="h-5 w-14 rounded-full bg-surface-2 animate-pulse" />
+            </div>
+            <div className="mt-4 h-6 w-3/4 rounded-md bg-surface-2 animate-pulse" />
+            <div className="mt-3 space-y-2">
+              <div className="h-4 w-full rounded bg-surface-2 animate-pulse" />
+              <div className="h-4 w-5/6 rounded bg-surface-2 animate-pulse" />
+              <div className="h-4 w-2/3 rounded bg-surface-2 animate-pulse" />
+            </div>
           </div>
         ))}
       </div>
