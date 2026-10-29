@@ -25,6 +25,9 @@ backups/
 data/
 .pgdata/
 
+# raw source photos (copied to public/photos with web-safe names)
+Photos/
+
 # misc
 .DS_Store
 *.log

@@ -1,5 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Feather, Sparkles, Quote } from "lucide-react";
+import { ArrowRight, BookOpen, Camera, Feather, Sparkles, Quote } from "lucide-react";
 import { CollectionGrid } from "@/components/collections/CollectionPanel";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -7,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { WorkGrid } from "@/components/works/WorkPreview";
 import { WorkText } from "@/components/works/WorkText";
+import { getFeaturedPhotoPosts } from "@/lib/bookstagram/queries";
 import { CONTENT_TYPES, contentTypeLabel, contentTypeParam, SITE_NAME } from "@/lib/constants";
 import { formatDate } from "@/lib/format";
 import { makeExcerpt } from "@/lib/works/excerpt";
@@ -22,11 +24,12 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [featured, author, collections, counts] = await Promise.all([
+  const [featured, author, collections, counts, featuredPhotos] = await Promise.all([
     getFeaturedWork(),
     getPrimaryAuthor(),
     getPublicCollections(),
     getContentTypeCounts(),
+    getFeaturedPhotoPosts(3),
   ]);
   const recent = await getRecentWorks(6, featured?.work.id);
   const hasWorks = Boolean(featured);
@@ -210,6 +213,78 @@ export default async function HomePage() {
               link={{ label: "All collections", href: "/collections" }}
             />
             <CollectionGrid collections={collections.slice(0, 6)} />
+          </div>
+        </section>
+      )}
+
+      {/* ─── Book Photography ─────────────────────────────────── */}
+      {featuredPhotos.length > 0 && (
+        <section aria-labelledby="photography-heading" className="border-t hairline bg-paper">
+          <div className="page-container section-space">
+            <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <Badge variant="accent" className="gap-1.5 px-2.5 py-0.5 text-xs mb-3">
+                  <Camera className="h-3 w-3" />
+                  <span>Through the reader&apos;s lens</span>
+                </Badge>
+                <h2 id="photography-heading" className="font-display text-[2rem] leading-tight sm:text-[2.25rem]">
+                  Book Photography
+                </h2>
+                <p className="mt-2 max-w-xl font-editorial text-lg text-muted">
+                  Book covers, natural light reading setups, and quiet moments between pages.
+                </p>
+              </div>
+              <Link
+                href="/bookstagram"
+                className="inline-flex items-center gap-1.5 font-sans text-sm font-medium text-accent hover:underline"
+              >
+                <span>View all photographs</span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {featuredPhotos.map((photo) => {
+                const img = photo.images[0];
+                if (!img) return null;
+                return (
+                  <Link
+                    key={photo.id}
+                    href={`/bookstagram/${photo.slug}`}
+                    className="group overflow-hidden rounded-xl border border-line/80 bg-surface shadow-xs transition-all hover:border-ink/40 hover:shadow-md no-underline"
+                  >
+                    <div className="relative aspect-4/3 overflow-hidden bg-paper">
+                      <Image
+                        src={img.url}
+                        alt={img.altText || photo.title}
+                        fill
+                        className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        loading="lazy"
+                      />
+                      {photo.category && (
+                        <span className="absolute top-3 left-3 rounded-md bg-surface/90 px-2 py-0.5 font-sans text-[10px] font-medium text-ink backdrop-blur-xs">
+                          {photo.category}
+                        </span>
+                      )}
+                    </div>
+                    <div className="p-4">
+                      {photo.bookTitle && (
+                        <p className="font-sans text-[11px] font-semibold uppercase tracking-wider text-accent truncate">
+                          {photo.bookTitle}
+                        </p>
+                      )}
+                      <h3 className="mt-1 font-display text-base font-semibold text-ink group-hover:text-accent transition-colors">
+                        {photo.title}
+                      </h3>
+                      {photo.bookAuthor && (
+                        <p className="mt-0.5 font-sans text-xs text-muted">by {photo.bookAuthor}</p>
+                      )}
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
           </div>
         </section>
       )}

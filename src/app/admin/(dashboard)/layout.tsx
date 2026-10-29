@@ -18,6 +18,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const items = [
     { label: "Overview", href: "/admin" },
     { label: "Works", href: "/admin/works" },
+    { label: "Book Photography", href: "/admin/bookstagram" },
     { label: "Review queue", href: "/admin/review", count: reviewCount },
     { label: "Collections", href: "/admin/collections" },
     { label: "Themes", href: "/admin/themes" },

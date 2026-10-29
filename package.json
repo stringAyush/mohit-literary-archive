@@ -24,6 +24,7 @@
     "db:studio": "prisma studio",
     "admin:create": "tsx scripts/create-admin.ts",
     "publish:scheduled": "tsx scripts/publish-scheduled.ts",
+    "bookstagram:import": "tsx scripts/import-photos.ts",
     "postinstall": "prisma generate"
   },
   "prisma": {

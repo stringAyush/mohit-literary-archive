@@ -366,3 +366,50 @@ model RateLimitBucket {
   count   Int
   resetAt DateTime
 }
+
+// ─── Book Photography / Bookstagram ────────────────────────────────────────
+
+model PhotoPost {
+  id              String       @id @default(cuid())
+  slug            String       @unique
+  title           String
+  caption         String?
+  bookTitle       String?
+  bookAuthor      String?
+  publisher       String?
+  category        String?
+  tags            String[]     @default([])
+  instagramUrl    String?
+  photographyDate DateTime?    @db.Date
+  publishedAt     DateTime?    @default(now())
+  isPublished     Boolean      @default(true)
+  featured        Boolean      @default(false)
+  sortOrder       Int          @default(0)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  images          PhotoImage[]
+
+  @@index([isPublished, publishedAt])
+  @@index([category])
+  @@index([featured])
+  @@index([sortOrder])
+}
+
+model PhotoImage {
+  id        String    @id @default(cuid())
+  postId    String
+  post      PhotoPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  url       String
+  altText   String?
+  caption   String?
+  width     Int?
+  height    Int?
+  fileSize  Int?
+  hash      String?   @unique
+  sortOrder Int       @default(0)
+  createdAt DateTime  @default(now())
+
+  @@index([postId, sortOrder])
+  @@index([hash])
+}

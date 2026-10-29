@@ -7,6 +7,7 @@ const SECTIONS = [
     heading: "Explore",
     links: [
       { label: "The Archive", href: "/works" },
+      { label: "Book Photography", href: "/bookstagram" },
       { label: "Collections", href: "/collections" },
     ],
   },
