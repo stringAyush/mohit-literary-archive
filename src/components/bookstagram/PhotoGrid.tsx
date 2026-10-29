@@ -29,13 +29,16 @@ export function PhotoGrid({ posts }: Props) {
 
   return (
     <>
-      <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+      {/* ─── Pinterest-style Responsive Masonry Grid ─── */}
+      <div className="columns-1 sm:columns-2 md:columns-3 xl:columns-4 gap-5 sm:gap-6 [column-fill:_balance]">
         {posts.map((post, index) => (
-          <PhotoCard
-            key={post.id}
-            post={post}
-            onOpenLightbox={() => setLightboxIndex(index)}
-          />
+          <div key={post.id} className="mb-6 break-inside-avoid inline-block w-full">
+            <PhotoCard
+              post={post}
+              onOpenLightbox={() => setLightboxIndex(index)}
+              priority={index < 4}
+            />
+          </div>
         ))}
       </div>
 

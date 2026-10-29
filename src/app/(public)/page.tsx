@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Camera, Feather, Sparkles, Quote } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BookOpen, Camera, Feather, Layers, Sparkles, Quote } from "lucide-react";
 import { CollectionGrid } from "@/components/collections/CollectionPanel";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -29,7 +29,7 @@ export default async function HomePage() {
     getPrimaryAuthor(),
     getPublicCollections(),
     getContentTypeCounts(),
-    getFeaturedPhotoPosts(3),
+    getFeaturedPhotoPosts(6),
   ]);
   const recent = await getRecentWorks(6, featured?.work.id);
   const hasWorks = Boolean(featured);
@@ -243,45 +243,94 @@ export default async function HomePage() {
               </Link>
             </div>
 
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {featuredPhotos.map((photo) => {
+            {/* ─── Pinterest-style Responsive Masonry Grid ─── */}
+            <div className="columns-1 sm:columns-2 lg:columns-3 gap-5 sm:gap-6 [column-fill:_balance]">
+              {featuredPhotos.map((photo, idx) => {
                 const img = photo.images[0];
                 if (!img) return null;
+                const aspectRatio =
+                  img.width && img.height ? img.width / img.height : 1.4;
+
                 return (
-                  <Link
-                    key={photo.id}
-                    href={`/bookstagram/${photo.slug}`}
-                    className="group overflow-hidden rounded-xl border border-line/80 bg-surface shadow-xs transition-all hover:border-ink/40 hover:shadow-md no-underline"
-                  >
-                    <div className="relative aspect-4/3 overflow-hidden bg-paper">
-                      <Image
-                        src={img.url}
-                        alt={img.altText || photo.title}
-                        fill
-                        className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        loading="lazy"
-                      />
-                      {photo.category && (
-                        <span className="absolute top-3 left-3 rounded-md bg-surface/90 px-2 py-0.5 font-sans text-[10px] font-medium text-ink backdrop-blur-xs">
-                          {photo.category}
-                        </span>
-                      )}
-                    </div>
-                    <div className="p-4">
-                      {photo.bookTitle && (
-                        <p className="font-sans text-[11px] font-semibold uppercase tracking-wider text-accent truncate">
-                          {photo.bookTitle}
-                        </p>
-                      )}
-                      <h3 className="mt-1 font-display text-base font-semibold text-ink group-hover:text-accent transition-colors">
-                        {photo.title}
-                      </h3>
-                      {photo.bookAuthor && (
-                        <p className="mt-0.5 font-sans text-xs text-muted">by {photo.bookAuthor}</p>
-                      )}
-                    </div>
-                  </Link>
+                  <div key={photo.id} className="mb-6 break-inside-avoid inline-block w-full">
+                    <article className="group relative block w-full">
+                      {/* Framed Pin Image */}
+                      <div className="relative overflow-hidden rounded-2xl bg-paper ring-1 ring-line/70 shadow-xs transition-all duration-300 ease-out group-hover:-translate-y-0.5 group-hover:shadow-xl group-hover:shadow-ink/10 group-hover:ring-ink/20">
+                        <Link
+                          href={`/bookstagram/${photo.slug}`}
+                          className="relative block w-full overflow-hidden"
+                          style={{ aspectRatio: `${aspectRatio}` }}
+                        >
+                          <Image
+                            src={img.url}
+                            alt={img.altText || photo.title}
+                            fill
+                            className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                            loading={idx < 3 ? "eager" : "lazy"}
+                            priority={idx < 3}
+                          />
+
+                          {/* Hover Scrim */}
+                          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+                          {/* Top Controls */}
+                          <div className="absolute top-3 inset-x-3 flex items-center justify-between gap-2 pointer-events-none">
+                            {photo.category ? (
+                              <span className="rounded-full bg-black/55 px-2.5 py-1 font-sans text-[11px] font-medium text-white shadow-xs backdrop-blur-md">
+                                {photo.category}
+                              </span>
+                            ) : (
+                              <span />
+                            )}
+
+                            <span className="flex items-center gap-1 rounded-full bg-accent px-3 py-1 font-sans text-xs font-semibold text-white shadow-md backdrop-blur-xs transition-all group-hover:scale-105">
+                              <span>View</span>
+                              <ArrowUpRight className="h-3 w-3" />
+                            </span>
+                          </div>
+
+                          {/* Bottom Multi-photo Badge */}
+                          {photo.images.length > 1 && (
+                            <div className="absolute bottom-3 left-3 flex items-center gap-1 rounded-full bg-black/60 px-2.5 py-1 font-sans text-[11px] font-medium text-white backdrop-blur-md">
+                              <Layers className="h-3 w-3" />
+                              <span>{photo.images.length} photos</span>
+                            </div>
+                          )}
+                        </Link>
+                      </div>
+
+                      {/* Pin Info Below */}
+                      <div className="pt-3 pb-1 px-1">
+                        {photo.bookTitle && (
+                          <div className="flex items-center gap-1.5 font-sans text-[11px] font-semibold uppercase tracking-wider text-accent truncate">
+                            <BookOpen className="h-3 w-3 shrink-0" />
+                            <span className="truncate">{photo.bookTitle}</span>
+                            {photo.bookAuthor && (
+                              <span className="font-normal text-muted normal-case tracking-normal truncate">
+                                · {photo.bookAuthor}
+                              </span>
+                            )}
+                          </div>
+                        )}
+
+                        <h3 className="mt-1 font-display text-base font-semibold leading-snug text-ink transition-colors group-hover:text-accent">
+                          <Link href={`/bookstagram/${photo.slug}`} className="no-underline">
+                            {photo.title}
+                          </Link>
+                        </h3>
+
+                        <div className="mt-2 flex items-center justify-between font-sans text-xs text-muted">
+                          <div className="flex items-center gap-1.5">
+                            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-accent/15 font-sans text-[9px] font-bold text-accent">
+                              MK
+                            </span>
+                            <span className="text-[11px] font-medium text-ink/80">Mohit Kaushik</span>
+                          </div>
+                        </div>
+                      </div>
+                    </article>
+                  </div>
                 );
               })}
             </div>
