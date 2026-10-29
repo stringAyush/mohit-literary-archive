@@ -1,0 +1,56 @@
+[
+  {
+    "slug": "identity-and-self-reflection",
+    "name": "Identity & Self-Reflection",
+    "description": "Writing that turns inward to examine identity, choices, and becoming.",
+    "status": "active"
+  },
+  {
+    "slug": "choices-and-consequences",
+    "name": "Choices & Consequences",
+    "description": "Work about decisions, silence, and the paths people shape.",
+    "status": "active"
+  },
+  {
+    "slug": "emotional-struggle",
+    "name": "Emotional Struggle",
+    "description": "Writing that gives language to difficult or conflicting feelings.",
+    "status": "active"
+  },
+  {
+    "slug": "love-and-relationships",
+    "name": "Love & Relationships",
+    "description": "Work about attachment, closeness, love, and relationships.",
+    "status": "active"
+  },
+  {
+    "slug": "memory-and-presence",
+    "name": "Memory & Presence",
+    "description": "Writing about absence, remembrance, and the presence people leave behind.",
+    "status": "active"
+  },
+  {
+    "slug": "writing-and-creativity",
+    "name": "Writing & Creativity",
+    "description": "Reflections on writing, books, expression, and the creative process.",
+    "status": "active"
+  },
+  {
+    "slug": "farewell-and-separation",
+    "name": "Farewell & Separation",
+    "description": "Work about parting, endings, and letting go.",
+    "status": "active"
+  },
+  {
+    "slug": "longing-and-waiting",
+    "name": "Longing & Waiting",
+    "description": "Writing shaped by anticipation, distance, and longing.",
+    "status": "active"
+  },
+  {
+    "slug": "change-and-growth",
+    "name": "Change & Growth",
+    "description": "Work about transformation and becoming someone new.",
+    "status": "active"
+  }
+]

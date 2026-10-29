@@ -1,0 +1,60 @@
+{
+  "name": "literary-archive",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mohit Kaushik Yenugwar — a personal literary archive and publishing platform.",
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "scripts": {
+    "dev": "node scripts/start-local-db.mjs && next dev",
+    "build": "prisma generate && next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration",
+    "test:e2e": "playwright test",
+    "db:migrate": "prisma migrate deploy",
+    "db:migrate:dev": "prisma migrate dev",
+    "db:seed": "prisma db seed",
+    "catalog:import": "tsx scripts/import-catalog.ts",
+    "catalog:publish": "tsx scripts/publish-seed-content.ts",
+    "db:studio": "prisma studio",
+    "admin:create": "tsx scripts/create-admin.ts",
+    "publish:scheduled": "tsx scripts/publish-scheduled.ts",
+    "postinstall": "prisma generate"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@fontsource-variable/cormorant-garamond": "^5.0.0",
+    "@fontsource-variable/inter": "^5.0.0",
+    "@fontsource-variable/noto-serif-devanagari": "^5.0.0",
+    "@fontsource-variable/playfair-display": "^5.0.0",
+    "@prisma/client": "^6.16.0",
+    "next": "~15.5.7",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "server-only": "^0.0.1",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.0",
+    "@playwright/test": "1.63.0",
+    "@tailwindcss/postcss": "^4.1.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "embedded-postgres": "^18.4.0-beta.17",
+    "eslint": "^9.30.0",
+    "eslint-config-next": "~15.5.7",
+    "prisma": "^6.16.0",
+    "tailwindcss": "^4.1.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.8.0",
+    "vitest": "^3.2.0"
+  }
+}

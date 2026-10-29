@@ -1,0 +1,17 @@
+{
+  "package_name": "Mohit Kaushik Yenugwar Literary Archive Content Seed",
+  "generated_on": "2026-10-29",
+  "status": "partial_not_complete_export",
+  "profile_quote_count_snapshot": 544,
+  "record_count": 12,
+  "collections_count": 9,
+  "full_text_count": 0,
+  "excerpt_count": 2,
+  "metadata_only_count": 10,
+  "publication_ready_count": 0,
+  "notes": [
+    "The live profile loads the quote list dynamically; this package does not extract all profile entries.",
+    "No full poems are included. Two records include short source excerpts.",
+    "All records require review and permission checks before publication."
+  ]
+}

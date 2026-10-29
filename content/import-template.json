@@ -1,0 +1,20 @@
+{
+  "works": [
+    {
+      "title": "Optional title",
+      "text": "Replace this with the exact text.\nUse \\n for line breaks.\n\nA blank line is a stanza break.",
+      "contentType": "poem",
+      "language": "en",
+      "sourcePlatform": "personal_submission",
+      "sourceUrl": "",
+      "originalPublishedAt": "",
+      "composedOn": "",
+      "themes": ["home", "rain"],
+      "collections": [],
+      "reviewStatus": "needs_verification",
+      "permissionStatus": "author_submitted",
+      "permissionNote": "Sent by the writer by email on 2026-11-02",
+      "notes": "Example — delete before importing"
+    }
+  ]
+}

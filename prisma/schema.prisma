@@ -1,0 +1,368 @@
+// Database schema for the literary archive.
+// Read top to bottom: writers → works → versions/sources/events → collections/themes
+// → contact messages → admin accounts.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────
+
+enum ContentType {
+  QUOTE
+  POEM
+  APHORISM
+  REFLECTION
+  SHORT_PIECE
+}
+
+enum TextStatus {
+  FULL_TEXT
+  EXCERPT_ONLY
+  METADATA_ONLY
+}
+
+// Where a work is in its publishing life.
+enum WorkStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
+  ARCHIVED
+}
+
+// Where a work is in the authorship / permission review.
+// Only APPROVED works can be published.
+enum ReviewStatus {
+  DISCOVERED
+  NEEDS_VERIFICATION
+  PERMISSION_PENDING
+  APPROVED
+  REJECTED
+}
+
+enum PermissionStatus {
+  UNKNOWN
+  REQUESTED
+  GRANTED // the writer gave permission to publish it here
+  AUTHOR_SUBMITTED // the writer supplied the text for this archive
+  DENIED
+}
+
+enum SourcePlatform {
+  YOURQUOTE
+  LINKEDIN
+  INSTAGRAM
+  PERSONAL_SUBMISSION
+  PRINT
+  OTHER
+}
+
+enum PublicationEventType {
+  CREATED
+  IMPORTED
+  UPDATED
+  VERSION_RESTORED
+  REVIEW_CHANGED
+  APPROVED
+  REJECTED
+  SCHEDULED
+  SCHEDULE_CANCELLED
+  SCHEDULE_BLOCKED
+  PUBLISHED
+  UNPUBLISHED
+  ARCHIVED
+  RESTORED
+}
+
+enum AdminRole {
+  ADMIN
+}
+
+// ─── Writers ──────────────────────────────────────────────────────────────
+
+model AuthorProfile {
+  id               String   @id @default(cuid())
+  slug             String   @unique
+  displayName      String
+  // Short introduction for the home page ("Behind the words").
+  shortIntro       String?
+  biography        String?
+  writingPhilosophy String?
+  // [{ "label": "YourQuote", "url": "https://..." }]
+  links            Json     @default("[]")
+  // Biography text is shown publicly only after the writer has approved it.
+  profileApprovedAt DateTime?
+  profileApprovalNote String?
+  isPrimary        Boolean  @default(false)
+  // Demonstration profiles hold sample text for development and are never public in production.
+  isDemo           Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  works Work[]
+}
+
+// ─── Works ────────────────────────────────────────────────────────────────
+
+model Work {
+  id          String      @id @default(cuid())
+  slug        String      @unique
+  title       String?
+  // The exact text. Line breaks and spacing are preserved as written.
+  body        String
+  contentType ContentType
+  textStatus  TextStatus  @default(FULL_TEXT)
+  // BCP-47 language code, e.g. "en", "hi", "mr".
+  language    String      @default("en")
+
+  authorId String
+  author   AuthorProfile @relation(fields: [authorId], references: [id])
+
+  status           WorkStatus       @default(DRAFT)
+  reviewStatus     ReviewStatus     @default(NEEDS_VERIFICATION)
+  permissionStatus PermissionStatus @default(UNKNOWN)
+  // How permission was given (e.g. "Email from the writer on 2 Nov 2026").
+  permissionNote   String?
+  rightsConfirmedAt   DateTime?
+  rightsConfirmedById String?
+  rightsConfirmedBy   AdminUser? @relation("RightsConfirmedBy", fields: [rightsConfirmedById], references: [id])
+  reviewNote       String?
+
+  featured Boolean @default(false)
+  isDemo   Boolean @default(false)
+
+  // Dates — each one means something different:
+  composedOn          DateTime? @db.Date // when the writer wrote it, if known
+  originalPublishedAt DateTime? @db.Date // when it first appeared on its original platform
+  importedAt          DateTime? // when it was imported into this archive
+  firstPublishedAt    DateTime? // first publication on this website; never overwritten
+  publishedAt         DateTime? // start of the current (or most recent) publication
+  scheduledFor        DateTime?
+  archivedAt          DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  createdById String?
+  createdBy   AdminUser? @relation("WorkCreatedBy", fields: [createdById], references: [id])
+  updatedById String?
+  updatedBy   AdminUser? @relation("WorkUpdatedBy", fields: [updatedById], references: [id])
+
+  currentVersion Int     @default(1)
+  // SHA-256 of the canonical text (see src/lib/works/hash.ts). Identifies this exact
+  // text; it does not prove authorship or creation time.
+  contentHash    String?
+
+  // Full-text search vector, maintained by a database trigger (see the migration).
+  searchVector Unsupported("tsvector")?
+
+  sourceReference SourceReference?
+  versions        WorkVersion[]
+  events          PublicationEvent[]
+  collections     WorkCollection[]
+  tags            WorkTag[]
+  slugRedirects   SlugRedirect[]
+
+  @@index([status, publishedAt])
+  @@index([status, firstPublishedAt])
+  @@index([status, scheduledFor])
+  @@index([reviewStatus])
+  @@index([contentType])
+  @@index([textStatus])
+  @@index([language])
+  @@index([featured])
+  @@index([authorId])
+  @@index([searchVector], type: Gin)
+}
+
+// A snapshot of the literary content every time it changes.
+model WorkVersion {
+  id          String      @id @default(cuid())
+  workId      String
+  work        Work        @relation(fields: [workId], references: [id], onDelete: Cascade)
+  version     Int
+  title       String?
+  body        String
+  contentType ContentType
+  textStatus  TextStatus  @default(FULL_TEXT)
+  language    String
+  slug        String
+  contentHash String
+  changeReason String?
+  createdAt   DateTime    @default(now())
+  createdById String?
+  createdBy   AdminUser?  @relation(fields: [createdById], references: [id])
+
+  @@unique([workId, version])
+  @@index([workId, createdAt])
+}
+
+// Where a work came from and how that was checked.
+model SourceReference {
+  id                  String         @id @default(cuid())
+  workId              String         @unique
+  work                Work           @relation(fields: [workId], references: [id], onDelete: Cascade)
+  platform            SourcePlatform
+  url                 String?
+  originalTitle       String?
+  originalPublishedAt DateTime?      @db.Date
+  retrievalMethod     String?
+  notes               String?
+  verifiedAt          DateTime?
+  verifiedById        String?
+  verifiedBy          AdminUser?     @relation(fields: [verifiedById], references: [id])
+  verificationNote    String?
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+
+  @@index([url])
+}
+
+// Every lifecycle change (publish, unpublish, review decisions...). Rows are only ever added.
+model PublicationEvent {
+  id         String               @id @default(cuid())
+  workId     String
+  work       Work                 @relation(fields: [workId], references: [id], onDelete: Cascade)
+  type       PublicationEventType
+  fromStatus WorkStatus?
+  toStatus   WorkStatus?
+  version    Int?
+  note       String?
+  actorId    String?
+  actor      AdminUser?           @relation(fields: [actorId], references: [id])
+  // "system:scheduler" when the scheduler acted, otherwise empty.
+  actorLabel String?
+  occurredAt DateTime             @default(now())
+
+  @@index([workId, occurredAt])
+  @@index([occurredAt])
+}
+
+// Old slugs keep working: /works/<old-slug> permanently redirects to the new one.
+model SlugRedirect {
+  slug      String   @id
+  workId    String
+  work      Work     @relation(fields: [workId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([workId])
+}
+
+// ─── Collections and themes ───────────────────────────────────────────────
+
+model Collection {
+  id           String   @id @default(cuid())
+  slug         String   @unique
+  name         String
+  description  String?
+  introduction String?
+  isPublished  Boolean  @default(false)
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  works WorkCollection[]
+
+  @@index([isPublished, sortOrder])
+}
+
+model Tag {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  works WorkTag[]
+}
+
+model WorkCollection {
+  workId       String
+  work         Work       @relation(fields: [workId], references: [id], onDelete: Cascade)
+  collectionId String
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  position     Int        @default(0)
+  addedAt      DateTime   @default(now())
+
+  @@id([workId, collectionId])
+  @@index([collectionId, position])
+}
+
+model WorkTag {
+  workId  String
+  work    Work     @relation(fields: [workId], references: [id], onDelete: Cascade)
+  tagId   String
+  tag     Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  addedAt DateTime @default(now())
+
+  @@id([workId, tagId])
+  @@index([tagId])
+}
+
+// ─── Contact ──────────────────────────────────────────────────────────────
+
+model ContactInquiry {
+  id             String    @id @default(cuid())
+  name           String
+  email          String
+  subject        String
+  message        String
+  // A one-way hash of the sender's IP address (for abuse handling), never the raw IP.
+  ipHash         String?
+  emailDelivered Boolean   @default(false)
+  deliveryError  String?
+  handledAt      DateTime?
+  createdAt      DateTime  @default(now())
+
+  @@index([createdAt])
+  @@index([handledAt])
+}
+
+// ─── Administration ───────────────────────────────────────────────────────
+
+model AdminUser {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String
+  passwordHash String
+  role         AdminRole @default(ADMIN)
+  disabledAt   DateTime?
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  sessions          AdminSession[]
+  worksCreated      Work[]             @relation("WorkCreatedBy")
+  worksUpdated      Work[]             @relation("WorkUpdatedBy")
+  rightsConfirmed   Work[]             @relation("RightsConfirmedBy")
+  versions          WorkVersion[]
+  events            PublicationEvent[]
+  sourcesVerified   SourceReference[]
+}
+
+model AdminSession {
+  id         String    @id @default(cuid())
+  // SHA-256 of the cookie token. The token itself is never stored.
+  tokenHash  String    @unique
+  userId     String
+  user       AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userAgent  String?
+  createdAt  DateTime  @default(now())
+  lastUsedAt DateTime  @default(now())
+  expiresAt  DateTime
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+// Fixed-window counters for rate limiting (login and contact form).
+model RateLimitBucket {
+  key     String   @id
+  count   Int
+  resetAt DateTime
+}

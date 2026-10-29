@@ -1,0 +1,32 @@
+{
+  "author": "Mohit Kaushik Yenugwar",
+  "author_display_name_on_primary_source": "Mohit Yenugwar",
+  "primary_source": "https://www.yourquote.in/mohit-yenugwar-v0m/quotes",
+  "additional_sources": [
+    {
+      "label": "LinkedIn profile",
+      "url": "https://in.linkedin.com/in/mohit-kaushik-yenugwar-b16b99155",
+      "status": "public profile reference; not a primary literary text source"
+    },
+    {
+      "label": "Goodreads author quote page",
+      "url": "https://www.goodreads.com/author/quotes/17432747.Mohit_Kaushik_Yenugwar_",
+      "status": "community-submitted quote leads; not independently verified"
+    }
+  ],
+  "profile_snapshot": {
+    "retrieved_on": "2026-10-29",
+    "displayed_quote_count": 544,
+    "count_note": "Count shown on the accessible profile page at retrieval time. It is a profile statistic, not a count of works extracted into this package.",
+    "displayed_followers": 139,
+    "displayed_following": 15,
+    "joined_date": "2017-02-16"
+  },
+  "catalog_status": "partial_research_seed",
+  "not_a_complete_export": true,
+  "extracted_records": 12,
+  "records_with_full_text": 0,
+  "records_with_short_excerpt": 2,
+  "records_metadata_only": 10,
+  "policy": "Do not publish any record automatically. Verify source and rights status first."
+}

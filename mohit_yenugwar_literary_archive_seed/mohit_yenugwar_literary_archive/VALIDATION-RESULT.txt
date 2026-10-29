@@ -1,0 +1,5 @@
+Loaded 12 work records and 9 collections.
+Records with full text: 0
+Records with excerpt only: 2
+Records needing review: 12
+Catalog validation passed.
