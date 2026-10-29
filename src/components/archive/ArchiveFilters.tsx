@@ -192,7 +192,7 @@ export function ArchiveFilters({ values, types, collections, themes, languages }
               onClick={() => removeFilter(filter.key)}
               className="group inline-flex items-center"
             >
-              <Badge variant="accent" className="cursor-pointer gap-1.5 transition-transform group-hover:scale-[1.02]">
+              <Badge variant="secondary" className="cursor-pointer gap-1.5 transition-transform group-hover:scale-[1.02] hover:border-ink/40">
                 {filter.label}
                 <X className="h-3 w-3 opacity-70 group-hover:opacity-100" />
               </Badge>

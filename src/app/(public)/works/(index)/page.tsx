@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { Archive, RotateCcw } from "lucide-react";
+import { RotateCcw } from "lucide-react";
 import { ArchiveFilters } from "@/components/archive/ArchiveFilters";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { Badge } from "@/components/ui/badge";
 import { hrefFor, Pagination } from "@/components/ui/Pagination";
 import { WorkGrid } from "@/components/works/WorkPreview";
 import { CONTENT_TYPES, contentTypeParam, contentTypePlural, languageLabel } from "@/lib/constants";
@@ -41,10 +40,7 @@ export default async function ArchivePage({ searchParams }: Props) {
   return (
     <div className="page-container pb-16 pt-12 lg:pb-24 lg:pt-20">
       <header className="max-w-3xl">
-        <Badge variant="accent" className="gap-1.5 px-3 py-1">
-          <Archive className="h-3 w-3" />
-          <span>Complete Archive</span>
-        </Badge>
+        <p className="eyebrow">The Complete Archive</p>
         <h1 className="mt-4 font-display text-[clamp(2.5rem,5vw,4rem)] leading-[1.05] tracking-[-0.015em] text-ink">
           The Archive
         </h1>
@@ -105,9 +101,9 @@ async function ArchiveResults({ params }: { params: ArchiveParams }) {
     <section aria-labelledby="results-heading" className="mt-10">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <Badge variant="outline" className="tabular-nums">
+          <span className="font-sans text-xs font-semibold uppercase tracking-wider text-muted tabular-nums">
             {result.total === 0 ? "0 results" : `${result.total} ${result.total === 1 ? "work" : "works"}`}
-          </Badge>
+          </span>
           {description && <span className="font-sans text-xs text-muted">· {description}</span>}
           {params.q && (
             <span className="font-sans text-xs text-muted">

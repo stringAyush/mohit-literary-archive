@@ -1,12 +1,11 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { contentTypeLabel } from "@/lib/constants";
 import { formatDate } from "@/lib/format";
 import type { WorkListItem } from "@/lib/works/queries";
 
-/** A sleek shadcn-inspired editorial card for literary works. */
+/** A sleek editorial card for literary works. */
 export function WorkPreview({ work, headingLevel = 3 }: { work: WorkListItem; headingLevel?: 2 | 3 }) {
   const Heading = headingLevel === 2 ? "h2" : "h3";
   const label = work.title ?? work.excerpt.text.split("\n")[0];
@@ -14,20 +13,20 @@ export function WorkPreview({ work, headingLevel = 3 }: { work: WorkListItem; he
 
   return (
     <Card className="group relative flex h-full flex-col overflow-hidden border border-line/75 bg-surface/80 p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/40 hover:bg-surface hover:shadow-md">
-      {/* Top metadata badges */}
+      {/* Top metadata */}
       <div className="flex flex-wrap items-center gap-2">
-        <Badge variant="accent">
+        <span className="eyebrow text-accent text-[0.6875rem]">
           {contentTypeLabel(work.contentType)}
-        </Badge>
+        </span>
         {work.textStatus === "EXCERPT_ONLY" && (
-          <Badge variant="secondary">
-            Excerpt
-          </Badge>
+          <span className="eyebrow text-muted text-[0.6875rem]">
+            · Excerpt
+          </span>
         )}
         {work.textStatus === "METADATA_ONLY" && (
-          <Badge variant="muted">
-            Fragment
-          </Badge>
+          <span className="eyebrow text-muted text-[0.6875rem]">
+            · Fragment
+          </span>
         )}
         {work.firstPublishedAt && (
           <time
@@ -37,7 +36,7 @@ export function WorkPreview({ work, headingLevel = 3 }: { work: WorkListItem; he
             {formatDate(work.firstPublishedAt)}
           </time>
         )}
-        {work.isDemo && <Badge variant="outline">Demo</Badge>}
+        {work.isDemo && <span className="eyebrow text-muted text-[0.6875rem]">· Demo</span>}
       </div>
 
       {/* Title */}

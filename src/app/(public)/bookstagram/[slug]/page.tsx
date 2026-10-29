@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, BookOpen, Calendar, ExternalLink, Tag } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { InstagramIcon } from "@/components/ui/icons";
 import { getAdjacentPhotoPosts, getPhotoPostBySlug } from "@/lib/bookstagram/queries";
@@ -88,9 +87,7 @@ export default async function PhotoPostPage({ params }: Props) {
         <aside className="space-y-6">
           <Card className="p-6 sm:p-8 border border-line/80 bg-surface/90">
             {post.category && (
-              <Badge variant="accent" className="mb-4">
-                {post.category}
-              </Badge>
+              <p className="eyebrow mb-3 text-accent font-semibold">{post.category}</p>
             )}
 
             <h1 className="font-display text-2xl sm:text-3xl leading-snug text-ink font-semibold">

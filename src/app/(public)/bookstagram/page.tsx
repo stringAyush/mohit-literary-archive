@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { Camera, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { CategoryFilter } from "@/components/bookstagram/CategoryFilter";
 import { PhotoGrid } from "@/components/bookstagram/PhotoGrid";
-import { Badge } from "@/components/ui/badge";
 import { getPhotoCategories, getPublicPhotoPosts } from "@/lib/bookstagram/queries";
 
 export const dynamic = "force-dynamic";
@@ -29,11 +28,8 @@ export default async function BookstagramPage({ searchParams }: Props) {
     <div className="page-container py-12 lg:py-20">
       {/* Editorial Header */}
       <header className="mb-12 max-w-3xl">
-        <div className="flex items-center gap-2 mb-4">
-          <Badge variant="accent" className="gap-1.5 px-3 py-1">
-            <Camera className="h-3 w-3" />
-            <span>Book Photography &amp; Bookstagram</span>
-          </Badge>
+        <div className="flex items-center justify-between gap-4 mb-4">
+          <p className="eyebrow">Book Photography</p>
           <span className="font-sans text-xs text-muted">
             {posts.length} {posts.length === 1 ? "frame" : "frames"}
           </span>

@@ -1,10 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, BookOpen, Camera, Feather, Layers, Sparkles, Quote } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BookOpen, Layers, Quote } from "lucide-react";
 import { CollectionGrid } from "@/components/collections/CollectionPanel";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { WorkGrid } from "@/components/works/WorkPreview";
 import { WorkText } from "@/components/works/WorkText";
@@ -43,15 +42,9 @@ export default async function HomePage() {
       <section aria-labelledby="hero-heading" className="border-b hairline bg-linear-to-b from-paper via-surface/40 to-paper">
         <div className="page-container grid gap-12 py-14 lg:grid-cols-[1.45fr_1fr] lg:gap-16 lg:py-24">
           <div>
-            <div className="flex items-center gap-2">
-              <Badge variant="accent" className="gap-1.5 px-3 py-1">
-                <Feather className="h-3 w-3" />
-                <span>Personal literary archive</span>
-              </Badge>
-            </div>
             <h1
               id="hero-heading"
-              className="mt-6 max-w-[14ch] font-display text-[clamp(2.75rem,6.2vw,5.25rem)] leading-[1.02] tracking-[-0.02em] text-balance text-ink"
+              className="max-w-[14ch] font-display text-[clamp(2.75rem,6.2vw,5.25rem)] leading-[1.02] tracking-[-0.02em] text-balance text-ink"
             >
               Some things are better left in words.
             </h1>
@@ -85,7 +78,7 @@ export default async function HomePage() {
                     Contents
                   </h2>
                 </div>
-                <Badge variant="secondary">Index</Badge>
+                <span className="eyebrow text-[0.6875rem]">Index</span>
               </div>
 
               {counts.length > 0 ? (
@@ -106,9 +99,9 @@ export default async function HomePage() {
                               {type.plural}
                             </span>
                           </div>
-                          <Badge variant="outline" className="tabular-nums transition-colors group-hover:border-accent/40 group-hover:text-accent">
+                          <span className="font-sans text-xs font-medium tabular-nums text-muted transition-colors group-hover:text-accent">
                             {count}
-                          </Badge>
+                          </span>
                         </Link>
                       </li>
                     );
@@ -140,13 +133,7 @@ export default async function HomePage() {
           <Card className="relative overflow-hidden border border-line/80 bg-surface/90 p-8 shadow-sm transition-all sm:p-12 hover:shadow-md">
             <div className="reading-column">
               <div className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-2">
-                  <Badge variant="accent" className="gap-1.5 px-3 py-1">
-                    <Sparkles className="h-3 w-3" />
-                    <span>Featured Piece</span>
-                  </Badge>
-                  <span className="font-sans text-xs text-muted">A piece to sit with</span>
-                </div>
+                <p className="eyebrow text-accent">Featured Piece</p>
                 <Quote className="h-6 w-6 text-accent/30" />
               </div>
 
@@ -167,11 +154,11 @@ export default async function HomePage() {
                 </blockquote>
                 <figcaption className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 font-sans text-sm text-muted">
                   <span className="font-editorial text-xl italic text-ink">— {featured.work.author.displayName}</span>
-                  <Badge variant="secondary">{contentTypeLabel(featured.work.contentType)}</Badge>
+                  <span className="eyebrow text-accent text-xs">{contentTypeLabel(featured.work.contentType)}</span>
                   {featured.work.firstPublishedAt && (
                     <span className="text-xs tabular-nums">{formatDate(featured.work.firstPublishedAt)}</span>
                   )}
-                  {featured.work.isDemo && <Badge variant="outline">Demo text</Badge>}
+                  {featured.work.isDemo && <span className="eyebrow text-muted text-xs">Demo text</span>}
                 </figcaption>
               </figure>
 
@@ -223,10 +210,7 @@ export default async function HomePage() {
           <div className="page-container section-space">
             <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
               <div>
-                <Badge variant="accent" className="gap-1.5 px-2.5 py-0.5 text-xs mb-3">
-                  <Camera className="h-3 w-3" />
-                  <span>Through the reader&apos;s lens</span>
-                </Badge>
+                <p className="eyebrow mb-2">Through the reader&apos;s lens</p>
                 <h2 id="photography-heading" className="font-display text-[2rem] leading-tight sm:text-[2.25rem]">
                   Book Photography
                 </h2>
@@ -343,7 +327,7 @@ export default async function HomePage() {
         <Card className="border border-line/80 bg-surface/90 p-8 sm:p-12">
           <div className="grid gap-8 lg:grid-cols-[1fr_2fr] lg:gap-16">
             <div>
-              <Badge variant="muted" className="mb-3">Author Note</Badge>
+              <p className="eyebrow mb-3">Author Note</p>
               <h2 id="author-heading" className="font-display text-[2rem] leading-tight sm:text-[2.25rem]">
                 Behind the words
               </h2>
