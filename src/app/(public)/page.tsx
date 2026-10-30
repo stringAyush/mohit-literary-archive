@@ -44,12 +44,11 @@ export default async function HomePage() {
           <div>
             <h1
               id="hero-heading"
-              className="font-display tracking-[-0.03em] text-ink text-[clamp(2.4rem,8.1vw,7.28rem)] leading-[1.04] sm:leading-[0.98]"
+              className="max-w-[14ch] font-display text-[clamp(2.75rem,6.2vw,5.25rem)] leading-[1.02] tracking-[-0.02em] text-balance text-ink"
             >
-              <span className="block">Some things are better</span>
-              <span className="block">left in words.</span>
+              Some things are better left in words.
             </h1>
-            <p className="mt-5 sm:mt-7 max-w-[34ch] font-editorial text-[1.25rem] sm:text-[1.5rem] lg:text-[1.75rem] leading-snug text-ink/80">
+            <p className="mt-7 max-w-[34ch] font-editorial text-[1.5rem] leading-snug text-ink/80 sm:text-[1.75rem]">
               An evolving collection of thoughts, poems, fragments, and observations.
             </p>
             <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-3.5">

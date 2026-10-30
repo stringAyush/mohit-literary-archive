@@ -44,7 +44,7 @@ export function PhotoCard({ post, onOpenLightbox, priority = false }: Props) {
           {/* Top Bar: Category (left) + View Pill (right) */}
           <div className="absolute top-2.5 sm:top-3 inset-x-2.5 sm:inset-x-3 flex items-center justify-between gap-2 pointer-events-none">
             {post.category ? (
-              <span className="rounded-full bg-black/60 px-2 sm:px-2.5 py-0.5 sm:py-1 font-sans text-[10px] sm:text-[11px] font-medium text-white shadow-xs backdrop-blur-md">
+              <span className="rounded-full bg-black/60 px-2 sm:px-2.5 py-0.5 sm:py-1 font-sans text-[11px] font-medium text-white shadow-xs backdrop-blur-md">
                 {post.category}
               </span>
             ) : (
@@ -65,7 +65,7 @@ export function PhotoCard({ post, onOpenLightbox, priority = false }: Props) {
           {/* Bottom Bar: Multi-photo indicator + Quick Lightbox Expand */}
           <div className="absolute bottom-2.5 sm:bottom-3 inset-x-2.5 sm:inset-x-3 flex items-end justify-between gap-2 pointer-events-none">
             {post.images.length > 1 ? (
-              <span className="flex items-center gap-1 rounded-full bg-black/65 px-2 sm:px-2.5 py-0.5 sm:py-1 font-sans text-[10px] sm:text-[11px] font-medium text-white backdrop-blur-md">
+              <span className="flex items-center gap-1 rounded-full bg-black/65 px-2 sm:px-2.5 py-0.5 sm:py-1 font-sans text-[11px] font-medium text-white backdrop-blur-md">
                 <Layers className="h-3 w-3" />
                 <span>{post.images.length} photos</span>
               </span>
