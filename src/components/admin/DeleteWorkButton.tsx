@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Trash2 } from "lucide-react";
 import { deleteWorkAction } from "@/app/admin/actions/works";
 import { FormMessage } from "./FormMessage";
@@ -16,7 +17,78 @@ export function DeleteWorkButton({
   variant?: "button" | "table-action";
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const { state, isPending, onSubmit } = useActionForm(deleteWorkAction);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && !isPending) {
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, isPending]);
+
+  const modal = isOpen ? (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={`delete-title-${workId}`}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 text-left whitespace-normal backdrop-blur-sm"
+      onClick={(e) => {
+        if (e.target === e.currentTarget && !isPending) setIsOpen(false);
+      }}
+    >
+      <div className="w-full max-w-md rounded-lg border border-line bg-surface p-6 text-left whitespace-normal shadow-2xl">
+        <div className="flex items-start gap-4">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#8f2f22]/15 text-[#8f2f22]">
+            <Trash2 className="h-5 w-5" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h3 id={`delete-title-${workId}`} className="font-display text-lg font-semibold text-ink">
+              Delete work permanently?
+            </h3>
+            <p className="mt-2 font-sans text-sm text-muted break-words">
+              Are you sure you want to delete <strong className="text-ink">{workTitle || "this work"}</strong>?
+            </p>
+            <p className="mt-2 font-sans text-xs text-muted">
+              This will permanently delete the text, all version history, source references, and publication events. This action cannot be undone.
+            </p>
+          </div>
+        </div>
+
+        <form onSubmit={onSubmit} className="mt-6 flex items-center justify-end gap-3">
+          <input type="hidden" name="id" value={workId} />
+          <button
+            type="button"
+            onClick={() => setIsOpen(false)}
+            disabled={isPending}
+            className="btn btn-quiet px-4 py-2 text-sm"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={isPending}
+            className="btn btn-danger px-4 py-2 text-sm"
+          >
+            {isPending ? "Deleting…" : "Yes, delete work"}
+          </button>
+        </form>
+        {state.status !== "idle" && (
+          <div className="mt-4">
+            <FormMessage state={state} />
+          </div>
+        )}
+      </div>
+    </div>
+  ) : null;
 
   return (
     <>
@@ -42,60 +114,7 @@ export function DeleteWorkButton({
         </button>
       )}
 
-      {isOpen && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby={`delete-title-${workId}`}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
-          onClick={(e) => {
-            if (e.target === e.currentTarget && !isPending) setIsOpen(false);
-          }}
-        >
-          <div className="w-full max-w-md rounded-lg border border-line bg-surface p-6 shadow-2xl">
-            <div className="flex items-start gap-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#8f2f22]/15 text-[#8f2f22]">
-                <Trash2 className="h-5 w-5" />
-              </div>
-              <div className="flex-1">
-                <h3 id={`delete-title-${workId}`} className="font-display text-lg font-semibold text-ink">
-                  Delete work permanently?
-                </h3>
-                <p className="mt-2 font-sans text-sm text-muted">
-                  Are you sure you want to delete <strong className="text-ink">{workTitle || "this work"}</strong>?
-                </p>
-                <p className="mt-2 font-sans text-xs text-muted">
-                  This will permanently delete the text, all version history, source references, and publication events. This action cannot be undone.
-                </p>
-              </div>
-            </div>
-
-            <form onSubmit={onSubmit} className="mt-6 flex items-center justify-end gap-3">
-              <input type="hidden" name="id" value={workId} />
-              <button
-                type="button"
-                onClick={() => setIsOpen(false)}
-                disabled={isPending}
-                className="btn btn-quiet px-4 py-2 text-sm"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={isPending}
-                className="btn btn-danger px-4 py-2 text-sm"
-              >
-                {isPending ? "Deleting…" : "Yes, delete work"}
-              </button>
-            </form>
-            {state.status !== "idle" && (
-              <div className="mt-4">
-                <FormMessage state={state} />
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+      {mounted && modal ? createPortal(modal, document.body) : modal}
     </>
   );
 }
