@@ -15,8 +15,8 @@ export async function resetDatabase() {
 export async function createAuthor(overrides: { isDemo?: boolean; slug?: string; isPrimary?: boolean } = {}) {
   return db.authorProfile.create({
     data: {
-      slug: overrides.slug ?? "mohit-kaushik-yenugwar",
-      displayName: overrides.isDemo ? "Sample Writer (demo)" : "Mohit Kaushik Yenugwar",
+      slug: overrides.slug ?? "mohit-yenugwar",
+      displayName: overrides.isDemo ? "Sample Writer (demo)" : "Mohit Yenugwar",
       isPrimary: overrides.isPrimary ?? !overrides.isDemo,
       isDemo: overrides.isDemo ?? false,
     },

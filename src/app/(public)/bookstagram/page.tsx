@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Book Photography — Bookstagram",
-  description: "A curated literary photography gallery of book covers, reading setups, bookshelves, and reading moments by Mohit Kaushik Yenugwar.",
+  description: "A curated literary photography gallery of book covers, reading setups, bookshelves, and reading moments by Mohit Yenugwar.",
 };
 
 type Props = {
@@ -60,7 +60,7 @@ export default async function BookstagramPage({ searchParams }: Props) {
         </div>
         <h2 className="font-display text-xl sm:text-2xl text-ink">Original Photography</h2>
         <p className="mx-auto mt-2 max-w-xl font-sans text-sm text-muted">
-          All photographs in this gallery are original works composed and photographed by Mohit Kaushik Yenugwar.
+          All photographs in this gallery are original works composed and photographed by Mohit Yenugwar.
           Images may not be reproduced or republished without prior written permission.
         </p>
       </aside>

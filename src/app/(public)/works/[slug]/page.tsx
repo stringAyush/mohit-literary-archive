@@ -177,22 +177,104 @@ export default async function WorkPage({ params }: Props) {
             </div>
           )}
 
-          <p className="eyebrow text-accent">{contentTypeLabel(work.contentType)}</p>
-          {work.title ? (
-            <h1 className="mt-5 font-display text-[clamp(2.25rem,4.5vw,3.25rem)] leading-[1.1] tracking-[-0.01em]">
-              {work.title}
-            </h1>
-          ) : (
-            <h1 className="sr-only">{title}</h1>
-          )}
+          {work.contentType === "QUOTE" || work.contentType === "APHORISM" ? (
+            /* ─── Dedicated Quote Experience ─── */
+            <div className="space-y-8">
+              <div className="relative rounded-2xl border border-line/80 bg-surface/90 p-8 sm:p-12 shadow-xs transition-shadow hover:shadow-sm">
+                <div className="flex items-center justify-between gap-4 border-b hairline pb-4">
+                  <span className="eyebrow text-accent font-semibold">{contentTypeLabel(work.contentType)}</span>
+                  {work.originalPublishedAt && (
+                    <span className="font-sans text-xs text-muted tabular-nums">
+                      {formatCalendarDate(work.originalPublishedAt)}
+                    </span>
+                  )}
+                </div>
 
-          {work.body.trim() ? (
-            <div className={work.title ? "mt-10" : "mt-8"}>
-              <WorkText body={work.body} language={work.language} lineated={work.contentType !== "REFLECTION"} />
+                {work.title && (
+                  <h1 className="mt-6 font-display text-[1.75rem] sm:text-[2.1rem] leading-tight text-ink font-semibold">
+                    {work.title}
+                  </h1>
+                )}
+
+                <div className={work.title ? "mt-6" : "mt-8"}>
+                  <WorkText body={work.body} language={work.language} size="quote" lineated={true} />
+                </div>
+
+                <div className="mt-8 flex items-center justify-between border-t hairline pt-6">
+                  <p className="font-editorial text-[1.4rem] italic text-ink sm:text-[1.6rem]">
+                    — {authorName}
+                  </p>
+                </div>
+
+                <div className="mt-6 border-t hairline pt-6">
+                  <ShareControls
+                    url={url}
+                    copyText={copyText}
+                    shareTitle={`${title} — ${authorName}`}
+                    artworkHref={`/works/${work.slug}/artwork`}
+                  />
+                </div>
+              </div>
             </div>
           ) : (
-            <div className="mt-8 border-y hairline py-10 text-center font-editorial text-xl italic text-muted">
-              Complete text unavailable in this archive. Pending author submission or lawful publication verification.
+            /* ─── Dedicated Story / Poem / Reflection Experience ─── */
+            <div>
+              <div className="flex flex-wrap items-center gap-2.5 font-sans text-xs text-muted mb-4">
+                <span className="eyebrow text-accent font-semibold">{contentTypeLabel(work.contentType)}</span>
+                <span>•</span>
+                <span>{Math.max(1, Math.ceil((work.body.trim().split(/\s+/).length || 1) / 180))} min read</span>
+                <span>•</span>
+                <span>{work.body.trim().split(/\s+/).length} words</span>
+                <span>•</span>
+                <span>{languageLabel(work.language)}</span>
+              </div>
+
+              {work.title ? (
+                <h1 className="mt-4 font-display text-[clamp(2.25rem,4.5vw,3.25rem)] leading-[1.12] tracking-[-0.015em] text-ink font-semibold">
+                  {work.title}
+                </h1>
+              ) : (
+                <div className="mt-4 border-b hairline pb-3">
+                  <h1 className="sr-only">{title}</h1>
+                  <p className="font-editorial text-xl italic text-muted">Archival Piece</p>
+                </div>
+              )}
+
+              {work.body.trim() ? (
+                <div className="mt-10">
+                  <WorkText
+                    body={work.body}
+                    language={work.language}
+                    size={
+                      work.contentType === "SHORT_STORY" ||
+                      work.contentType === "PROSE" ||
+                      work.contentType === "REFLECTION"
+                        ? "story"
+                        : "reading"
+                    }
+                    lineated={
+                      work.contentType !== "SHORT_STORY" &&
+                      work.contentType !== "PROSE" &&
+                      work.contentType !== "REFLECTION"
+                    }
+                  />
+                </div>
+              ) : (
+                <div className="mt-8 border-y hairline py-10 text-center font-editorial text-xl italic text-muted">
+                  Complete text unavailable in this archive. Pending author submission or lawful publication verification.
+                </div>
+              )}
+
+              <p className="mt-12 font-editorial text-[1.5rem] italic text-ink">— {authorName}</p>
+
+              <div className="mt-8 border-t hairline pt-6">
+                <ShareControls
+                  url={url}
+                  copyText={copyText}
+                  shareTitle={`${title} — ${authorName}`}
+                  artworkHref={`/works/${work.slug}/artwork`}
+                />
+              </div>
             </div>
           )}
 
@@ -212,8 +294,6 @@ export default async function WorkPage({ params }: Props) {
               </p>
             </div>
           )}
-
-          <p className="mt-10 font-editorial text-[1.5rem] italic text-ink">— {authorName}</p>
 
           <dl className="mt-10 grid gap-x-8 gap-y-4 border-t hairline pt-6 font-sans text-sm sm:grid-cols-2">
             {details.map((detail) => (
@@ -238,11 +318,11 @@ export default async function WorkPage({ params }: Props) {
               )}
               {work.tags.length > 0 && (
                 <div className="flex flex-wrap items-baseline gap-x-2 gap-y-2">
-                  <span className="eyebrow mr-1 text-[0.6875rem]">Themes</span>
+                  <span className="eyebrow mr-1 text-[0.6875rem]">Tags</span>
                   {work.tags.map(({ tag }) => (
                     <Link
                       key={tag.id}
-                      href={`/works?theme=${tag.slug}`}
+                      href={`/works?q=${encodeURIComponent(tag.name)}`}
                       className="inline-flex min-h-8 items-center border hairline px-2.5 text-ink no-underline transition-colors hover:border-accent hover:text-accent"
                     >
                       {tag.name}
@@ -252,15 +332,6 @@ export default async function WorkPage({ params }: Props) {
               )}
             </div>
           )}
-
-          <div className="mt-8 border-t hairline pt-6">
-            <ShareControls
-              url={url}
-              copyText={copyText}
-              shareTitle={`${title} — ${authorName}`}
-              artworkHref={`/works/${work.slug}/artwork`}
-            />
-          </div>
 
           <footer className="mt-6 space-y-3 font-sans text-xs leading-relaxed text-muted">
             <p>

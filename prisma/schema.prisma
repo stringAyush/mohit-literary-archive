@@ -19,6 +19,9 @@ enum ContentType {
   APHORISM
   REFLECTION
   SHORT_PIECE
+  SHORT_STORY
+  PROSE
+  OTHER
 }
 
 enum TextStatus {

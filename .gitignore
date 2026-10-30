@@ -31,4 +31,6 @@ Photos/
 # misc
 .DS_Store
 *.log
+__pycache__/
+*.pyc
 

@@ -21,9 +21,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: `${post.title} — Book Photography`,
-    description: post.caption || `Book photography of ${post.bookTitle || post.title} by Mohit Kaushik Yenugwar.`,
+    description: post.caption || `Book photography of ${post.bookTitle || post.title} by Mohit Yenugwar.`,
     openGraph: {
-      title: `${post.title} — Mohit Kaushik Yenugwar`,
+      title: `${post.title} — Mohit Yenugwar`,
       description: post.caption || undefined,
       images: post.images[0] ? [{ url: post.images[0].url }] : [],
     },
@@ -123,7 +123,7 @@ export default async function PhotoPostPage({ params }: Props) {
             <dl className="mt-6 border-t hairline pt-6 space-y-3 font-sans text-xs">
               <div className="flex justify-between">
                 <dt className="text-muted">Photographer</dt>
-                <dd className="font-medium text-ink">Mohit Kaushik Yenugwar</dd>
+                <dd className="font-medium text-ink">Mohit Yenugwar</dd>
               </div>
 
               {post.photographyDate && (

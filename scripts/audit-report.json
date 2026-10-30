@@ -1,0 +1,1165 @@
+{
+  "summary": {
+    "author": "Mohit Yenugwar",
+    "total_source_entries": 205,
+    "total_published_works": 79,
+    "total_excluded_entries": 126,
+    "published_quotes": 52,
+    "published_stories_poems_prose": 27,
+    "language_breakdown": {
+      "en": 27,
+      "hi": 51,
+      "hi-Latn": 1
+    },
+    "content_type_breakdown": {
+      "QUOTE": 51,
+      "SHORT_STORY": 1,
+      "POEM": 24,
+      "REFLECTION": 2,
+      "PROSE": 1
+    }
+  },
+  "exclusion_breakdown": {
+    "ocr_corruption": 61,
+    "caption_dependent_preview": 29,
+    "ui_artifacts": 18,
+    "scraper_artifacts_empty": 28,
+    "incomplete": 4
+  },
+  "excluded_entries": [
+    {
+      "id": "yq-p017",
+      "pageNumber": 17,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "OCR corruption (garbled characters and noise)",
+      "originalSnippet": "इयफारए।- एक AANA\nमुझे वह सफलता स्वीकार नहीं\nजो तनख्वाह की पर्ची में सिमट जाए,\nन वह सम्मान\nजो रिश्तेदारों की स्वीकृति पर"
+    },
+    {
+      "id": "yq-p020",
+      "pageNumber": 20,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "OCR corruption (garbled characters)",
+      "originalSnippet": "मैं हमेशा सोचता हूँ कि यह HEH आखिरी बार है,\nअब न उसका VIR है, न ही मुझे उससे प्यार है..."
+    },
+    {
+      "id": "yq-p021",
+      "pageNumber": 21,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "OCR error in Hindi word (AK instead of अश्क)",
+      "originalSnippet": "नि\nजोड़-जोड़ कर शब्दों को कविता बना देता हूँ.\nबड़ा नादान F— उसकी याद में AK बहा देता हूँ..."
+    },
+    {
+      "id": "yq-p022",
+      "pageNumber": 22,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "OCR corruption in Hindi text (uel, thea)",
+      "originalSnippet": "सारा सारा दिन सपनों के पीछे भागता रह गया,\nलेकिन uel होते thea एक लड़की की तस्वीर को\nतकता रह गया..."
+    },
+    {
+      "id": "yq-p024",
+      "pageNumber": 24,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "OCR corruption in Hindi text (WR)",
+      "originalSnippet": "अबकी WR हम मिल गए कहीं तो क्या करूँगा?\nएक गहरी साँस लूंगा और ख़ुद से वफ़ा करूँगा..."
+    },
+    {
+      "id": "yq-p025",
+      "pageNumber": 25,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "Corrupted OCR header and trailing artifact (get.)",
+      "originalSnippet": "। {!\n|\nवो चार दोस्त पागल समझने लगे है मुझे,\nलेकिन आज भी चिढड़ियां लिखे जा रहा हूँ get."
+    },
+    {
+      "id": "yq-p026",
+      "pageNumber": 26,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "Corrupted OCR header and trailing artifact (get.)",
+      "originalSnippet": "। {!\n|\nवो चार दोस्त पागल समझने लगे है मुझे,\nलेकिन आज भी चिढड़ियां लिखे जा रहा हूँ get."
+    },
+    {
+      "id": "yq-p043",
+      "pageNumber": 43,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "Corrupted OCR prefix (GER) and trailing UI artifact",
+      "originalSnippet": "GER तस्वीर देख लेने भर से डरते है,\nन जाने कब मौसम तुम्हारा लौट आए...\n-~ — Mohit Yenugwar\nYou rQuote.in\n@ Mohit Yenugwar"
+    },
+    {
+      "id": "yq-p045",
+      "pageNumber": 45,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "Caption-dependent preview ('पूरी कविता अनुशीर्षक में पढ़े')",
+      "originalSnippet": "किताबें पढ़ना\nHS Pe पवित्रता से छू लेने जैसा है।\nऔर लिखना --\nFe पा लेने जैसा।\n(पूरी कविता अनुशीर्षक में पढ़े॥)"
+    },
+    {
+      "id": "yq-p052",
+      "pageNumber": 52,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "Caption-dependent preview ('पूरी कविता कैप्शन में पढ़े')",
+      "originalSnippet": "(पूरी कविता कैप्शन में पढ़े॥)"
+    },
+    {
+      "id": "yq-p058",
+      "pageNumber": 58,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "OCR corruption in Hindi text (FER)",
+      "originalSnippet": "अबकी मुझे रुकना नहीं था,\nइस बार मुझे दुनिया से भिड़ जाना था।\nFER ख्वाबों की खातिर,\nमुझे अपने ही खुदा से लड़ जाना था।"
+    },
+    {
+      "id": "yq-p075",
+      "pageNumber": 75,
+      "title": null,
+      "language": "en",
+      "contentType": "QUOTE",
+      "reason": "Empty or scraper garbage body ('0 yush')",
+      "originalSnippet": "0 yush"
+    },
+    {
+      "id": "yq-p078",
+      "pageNumber": 78,
+      "title": null,
+      "language": "en",
+      "contentType": "QUOTE",
+      "reason": "Empty or scraper garbage body ('0 yush')",
+      "originalSnippet": "yush"
+    },
+    {
+      "id": "yq-p079",
+      "pageNumber": 79,
+      "title": null,
+      "language": "en",
+      "contentType": "QUOTE",
+      "reason": "Empty or scraper garbage body ('0 yush')",
+      "originalSnippet": "0 yush"
+    },
+    {
+      "id": "yq-p080",
+      "pageNumber": 80,
+      "title": null,
+      "language": "en",
+      "contentType": "QUOTE",
+      "reason": "Empty or scraper garbage body ('0 yush')",
+      "originalSnippet": "yush"
+    },
+    {
+      "id": "yq-p081",
+      "pageNumber": 81,
+      "title": null,
+      "language": "en",
+      "contentType": "QUOTE",
+      "reason": "URL/timestamp scraper header only",
+      "originalSnippet": "1030726, 5:31 PM Mohit Yenugwar (Mohit verugwar) Quotes | YourQuote\nyush"
+    },
+    {
+      "id": "yq-p082",
+      "pageNumber": 82,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "UI artifact only ('20 ikes » 5 comments')",
+      "originalSnippet": "1030726, 5:31 PM Mohit Yenugwar (Mohit verugwar) Quotes | YourQuote\nyush\n20 ikes » 5 comments ५ 1 share"
+    },
+    {
+      "id": "yq-p083",
+      "pageNumber": 83,
+      "title": null,
+      "language": "en",
+      "contentType": "QUOTE",
+      "reason": "YourQuote UI artifact ('Show More')",
+      "originalSnippet": "0 yush\nnot romance with its roses and roles.\nNot sex... Show more"
+    },
+    {
+      "id": "yq-p085",
+      "pageNumber": 85,
+      "title": null,
+      "language": "en",
+      "contentType": "QUOTE",
+      "reason": "Empty or scraper garbage body ('0 yush')",
+      "originalSnippet": "yush"
+    },
+    {
+      "id": "yq-p086",
+      "pageNumber": 86,
+      "title": null,
+      "language": "en",
+      "contentType": "QUOTE",
+      "reason": "Empty or scraper garbage body ('0 yush')",
+      "originalSnippet": "0 yush"
+    },
+    {
+      "id": "yq-p087",
+      "pageNumber": 87,
+      "title": null,
+      "language": "en",
+      "contentType": "QUOTE",
+      "reason": "Empty or scraper garbage body ('0 yush')",
+      "originalSnippet": "0 yush"
+    },
+    {
+      "id": "yq-p088",
+      "pageNumber": 88,
+      "title": null,
+      "language": "en",
+      "contentType": "QUOTE",
+      "reason": "Empty or scraper garbage body ('0 yush')",
+      "originalSnippet": "yush"
+    },
+    {
+      "id": "yq-p089",
+      "pageNumber": 89,
+      "title": null,
+      "language": "en",
+      "contentType": "QUOTE",
+      "reason": "Empty or scraper garbage body ('yush likes')",
+      "originalSnippet": "yush\nlikes"
+    },
+    {
+      "id": "yq-p090",
+      "pageNumber": 90,
+      "title": null,
+      "language": "en",
+      "contentType": "QUOTE",
+      "reason": "YourQuote UI artifact ('Show More')",
+      "originalSnippet": "0 yush\nno matter what i say...\n10 matter how many times i fo... Show more\n@ Mohit Yenugwar"
+    },
+    {
+      "id": "yq-p091",
+      "pageNumber": 91,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "Caption-dependent preview ('पूरी कविता कैप्शन में पढ़े')",
+      "originalSnippet": "मैं केवल मैं हूँ\nऔर मेरे लिए इतना ade है।\n(पूरी कविता कैप्शन में पढ़े॥)"
+    },
+    {
+      "id": "yq-p094",
+      "pageNumber": 94,
+      "title": null,
+      "language": "en",
+      "contentType": "QUOTE",
+      "reason": "Caption-dependent preview ('Read the full poem in caption')",
+      "originalSnippet": "but morning comes,\nand the silence between breaths\nbecomes too loud,\nso he lights up another cigarette.\n(read the full p"
+    },
+    {
+      "id": "yq-p098",
+      "pageNumber": 98,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "Caption-dependent preview ('Read the full poem in caption')",
+      "originalSnippet": "छि\n@ Mohit Yenugwar\n“This war within: my life with OCD and\nSchizophrenia”\n(read the full poem in caption!)"
+    },
+    {
+      "id": "yq-p101",
+      "pageNumber": 101,
+      "title": null,
+      "language": "en",
+      "contentType": "QUOTE",
+      "reason": "Caption-dependent preview ('Read the full poem in caption')",
+      "originalSnippet": "@ Mohit Yenugwar\n“ten minutes worth of soothing silence”\n(read the full poem in caption!)"
+    },
+    {
+      "id": "yq-p103",
+      "pageNumber": 103,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "Caption-dependent preview ('पूरी कविता कैप्शन में')",
+      "originalSnippet": "“शरीर का धर्म”\n(पूरी कविता कैप्शन में us)"
+    },
+    {
+      "id": "yq-p104",
+      "pageNumber": 104,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "Corrupted OCR symbols and noise ('° ४. 0')",
+      "originalSnippet": "छि\n6 °\nवे सड़कों पे भी हैं तो चैन की नींद सोए है,\nमैं ४. 0 कमरे में भी हूँ तो बुत बना बैठा हूँ."
+    },
+    {
+      "id": "yq-p107",
+      "pageNumber": 107,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "Caption-dependent preview ('पूरी कविता कैप्शन में पढ़े')",
+      "originalSnippet": "९९ सपने”\nमन और सपने\n(पूरी कविता कैप्शन में पढ़े!)"
+    },
+    {
+      "id": "yq-p108",
+      "pageNumber": 108,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "Caption-dependent preview ('पूरी कविता कैप्शन में')",
+      "originalSnippet": "मैं चाहता हूँ रोना...\n(पूरी कविता कैप्शन में us)"
+    },
+    {
+      "id": "yq-p110",
+      "pageNumber": 110,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "Garbled OCR symbols ('its 9)')",
+      "originalSnippet": "its 9)\nबहुत दूर आखिर कितना दूर होता है?"
+    },
+    {
+      "id": "yq-p118",
+      "pageNumber": 118,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "Caption-dependent preview ('शीर्षक में पढ़े')",
+      "originalSnippet": "a ~*~ है|\n“oF कौन हूँ?”\n(शीर्षक में पढ़े।)"
+    },
+    {
+      "id": "yq-p120",
+      "pageNumber": 120,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "Fragmentary OCR noise only ('हूँ — M 4 ohit Yenugwar Copenspe')",
+      "originalSnippet": "हूँ\n— M 4\nohit Yenugwar\n@ Mohit Yenugwar\n—\\\nCopenspe ,"
+    },
+    {
+      "id": "yq-p123",
+      "pageNumber": 123,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "OCR corruption in Hindi text ('she' for share/save, 'रा' for रहा)",
+      "originalSnippet": "मैं हर पल को लिखकर she करना चाहता रहा हूँ और\nशायद यही वो वजह है जिस कारण मैं क्षणों को पूर्ण\nजीने में असफल रा हूँ।"
+    },
+    {
+      "id": "yq-p131",
+      "pageNumber": 131,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "OCR fragment only ('“मैं लेखक el” ० LV,')",
+      "originalSnippet": "“मैं लेखक el”\n० LV,"
+    },
+    {
+      "id": "yq-p142",
+      "pageNumber": 142,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "OCR corruption in Hindi line ('असाधारण सी at' for बात)",
+      "originalSnippet": "असाधारण सी at, साधारण सा मैं\nजब मिले पहली बार, मिल नहीं पाए"
+    },
+    {
+      "id": "yq-p145",
+      "pageNumber": 145,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "OCR corruption in Hindi line ('मगर मुझे है GAM')",
+      "originalSnippet": "कह रही थी कि है मुतमइन मेरे बगैर भी वो\nमगर मुझे है GAM इससे ज़्यादा यादगार तो रहा हूँ मैं"
+    },
+    {
+      "id": "yq-p151",
+      "pageNumber": 151,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "Severe OCR corruption in Devanagari text ('Ay GG! ॥ क्यों \\ नहीं दिखता) क्यों ae')",
+      "originalSnippet": "Ay GG!\n॥ क्‍यों \\ नहीं\nमुसलसल तू भी है यार तो दिखता) क्यों ae"
+    },
+    {
+      "id": "yq-p157",
+      "pageNumber": 157,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "OCR noise header and misspelled Hindi word ('जिह-ओ-जहद')",
+      "originalSnippet": "७\ni\nबदकिस्मती के बाद जो नसीब खुलता है,\nउसकी जिह-ओ-जहद में मैं तराशा जा रहा हूँ"
+    },
+    {
+      "id": "yq-p164",
+      "pageNumber": 164,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "Severe OCR corruption and fragment line endings ('है है 4 . aed ... wi')",
+      "originalSnippet": "है है 4 . aed\nraahat mehsoos hui apne yaar\nse bichhad kar,\nab mere khwabon khayalon mein\ntu nahin hain.\nwi"
+    },
+    {
+      "id": "yq-p165",
+      "pageNumber": 165,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "Pure OCR noise ('nae, ’ ¥ ५ MN + OL) y Moni')",
+      "originalSnippet": "nae, ’\n¥ ५\nMN + OL)\n.\ny\nMoni"
+    },
+    {
+      "id": "yq-p168",
+      "pageNumber": 168,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "OCR error in Hindi text ('दुश्मनों से भी Ges कर बैठा')",
+      "originalSnippet": "वो है के दुश्मनों से भी Ges कर बैठा\nअपनी ही दोस्त से मगर इश्क़ कर बैठा"
+    },
+    {
+      "id": "yq-p173",
+      "pageNumber": 173,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "Caption-dependent preview ('कैप्शन पढ़ें')",
+      "originalSnippet": "( प्रेम” » a\nस्थिर गति से चलने वाला स्थाई प्रेम” eS.\nहद won y\n(कैप्शन पढ़ें)"
+    },
+    {
+      "id": "yq-p176",
+      "pageNumber": 176,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "Severe OCR corruption ('ya हैं घर ... gar aa ढ़िल Fer')",
+      "originalSnippet": "ya हैं घर तुम्हारा भी नहीं बस सका\ngar aa ढ़िल Fer भी तो टूट गया"
+    },
+    {
+      "id": "yq-p177",
+      "pageNumber": 177,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "OCR error in Hindi text ('बोल Gan')",
+      "originalSnippet": "कर लूंगा तुम से फिर ढ्वोस्ती उस के बाढ़ क्या\nबोल Gan तुम से मोहब्बत नहीं हैं उस के बाढ़ क्या"
+    },
+    {
+      "id": "yq-p178",
+      "pageNumber": 178,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "URL/timestamp scraper header artifact",
+      "originalSnippet": "1070026, 591 PM Mot Yenugwar Mati Yenugwar Quotes | Yourguote\nघरूमः \"मोहित' 1\n-फिर के \"मोहित\" आना यही हैं"
+    },
+    {
+      "id": "yq-p179",
+      "pageNumber": 179,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "OCR symbol noise in Hindi lines ('है. . \\')",
+      "originalSnippet": "kuch dil ki kami rahi, है. .\nkuch kami mein dil raha...\ninsaan wahi hain, \\\nbas khuda badal raha..."
+    },
+    {
+      "id": "yq-p180",
+      "pageNumber": 180,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "Truncated fragment only ('yw\n')",
+      "originalSnippet": "छि\nyw\nबहुत बद-दु'आएँ खाई है,\n— Mohit a, 4\ntel\nYour@uote.in 1"
+    },
+    {
+      "id": "yq-p195",
+      "pageNumber": 195,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "OCR error in Hindi text ('SAH या गम')",
+      "originalSnippet": "तुम्हारी कामयाबी पे SAH या गम मनाऊं में,\nमेरी नाकामयाबी दूर ले ना रही हैं तुमसे मुझे..."
+    },
+    {
+      "id": "yq-p197",
+      "pageNumber": 197,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "URL header + garbled Hindi OCR + Latin noise",
+      "originalSnippet": "103026 3 Moh ena oi enna oes | Youre\nगम से AS थे तिरी फिक्र में नाना\nश »\nयुबह हुईं तो ये मालूम पड़ा कि aig पे रॉशनी\nnN 1"
+    },
+    {
+      "id": "yq-p199",
+      "pageNumber": 199,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "Scraper UI noise and corrupted attribution ('Your@Quote.in')",
+      "originalSnippet": "पर आच जा आनाए. कट\n— Mohit ९ hugwar i & J\nJ Cs\nYour@Quote.in\n@ Mohit Yenugwar\nCoven ar ,"
+    },
+    {
+      "id": "yq-p201",
+      "pageNumber": 201,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "OCR error in Hindi text ('शत-द्एर-शत', 'नागता', 'fat')",
+      "originalSnippet": "मेँ शत-द्एर-शत नागता रह गया,\nइक fat तस्वीर को ताकता रह गया..."
+    },
+    {
+      "id": "yq-p204",
+      "pageNumber": 204,
+      "title": null,
+      "language": "hi",
+      "contentType": "QUOTE",
+      "reason": "OCR noise and broken Hindi words ('os f', 'lad', 'याढ़')",
+      "originalSnippet": "७\n~ os f\n|\nइतनी lad से तुम्हे याढ़ करूंगा मेँ\nआँख मेरी नम होगी, छीक तुम्हे भी आएगी"
+    },
+    {
+      "id": "yq-p002",
+      "pageNumber": 2,
+      "title": null,
+      "language": "en",
+      "contentType": "POEM",
+      "reason": "Corrupted URL header + garbled OCR body",
+      "originalSnippet": "10/3076, 531M Monit Yenugwar Mohit Yerugaar) Quotes | Yourquote\nruined\nso gently\nthat i can not\npoint a finger\nto a cert"
+    },
+    {
+      "id": "yq-p006",
+      "pageNumber": 6,
+      "title": null,
+      "language": "en",
+      "contentType": "POEM",
+      "reason": "Artwork OCR typos and duplicated partial caption ('tendemess', 'waming')",
+      "originalSnippet": "that now, even tendemess —\narrives sounding like a waming.\ni confuse care with control,\nsilence with leaving,\nand every"
+    },
+    {
+      "id": "yq-p009",
+      "pageNumber": 9,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Clear OCR garbage (Latin characters mixed into Hindi text)",
+      "originalSnippet": "मर रहा हूँ मेँ, फिर भी तुमसे प्यार कर राहा हूँ मेँ.\nतुमको ये बस कहना लगे,\nपर नंगे Ue अंगारों चल रहा हूँ Ai\nFRE MAG इश्क्"
+    },
+    {
+      "id": "yq-p016",
+      "pageNumber": 16,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Contains corrupted OCR chars in Hindi text ('Fer', 'fais')",
+      "originalSnippet": "“इम्तिहान”\nएक काम अभी बाक़ी है,\nएक सलाम अभी बाक़ी है।\nवक़्त की अदालत में\nFer मुक़ाम अभी बाक़ी है।\nये दुनिया मुझे भी याद"
+    },
+    {
+      "id": "yq-p018",
+      "pageNumber": 18,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Caption-dependent preview ('Read the full poem in caption')",
+      "originalSnippet": "ifi am too much—\nsay it plainly.\nbut don’t sand me down\nand ask why i don’t sparkle.\niam not a curated quote.\niam not a"
+    },
+    {
+      "id": "yq-p023",
+      "pageNumber": 23,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Caption-dependent preview ('Read the full story in caption')",
+      "originalSnippet": "छि\nstill, i wait.\nstill, i long.\nstill, i love.\nhoping whoever,\nand wherever, .\nthis girl is— . a\nmaybe she will find he"
+    },
+    {
+      "id": "yq-p027",
+      "pageNumber": 27,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Caption-dependent preview ('Read the full poem in caption')",
+      "originalSnippet": "103026 531 ९५७५ oti Yenuvar Mott Yenugar Quotes | Yourguoe\nthey say unrequited love fades.\nthat’s a lie.\nit doesn’t fade"
+    },
+    {
+      "id": "yq-p030",
+      "pageNumber": 30,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Body has OCR artifacts at line endings ('ty', 'का', 'व')",
+      "originalSnippet": "छि\n“an opportunity wasted”\ntime keeps offering itself.\nyou keep loosening your grip.\nwhat’s lost\nisn’t the second— ty\nit"
+    },
+    {
+      "id": "yq-p031",
+      "pageNumber": 31,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Caption-dependent preview ('पूरी कविता अनुशीर्षक में')",
+      "originalSnippet": "कि ठीक मन-से-मन का\nकह पाना इतना कठिन है।\nकितना कठिन है gt Wt ke\nब्दों क्र 902\nशब्दों के बीच की ERLE KS\nउन ख़ामोश जगहों क"
+    },
+    {
+      "id": "yq-p032",
+      "pageNumber": 32,
+      "title": null,
+      "language": "en",
+      "contentType": "POEM",
+      "reason": "Contains YourQuote UI artifacts ('Show more')",
+      "originalSnippet": "ays with you]\nee\nyet my heai\none good hi\nUile ection\nYour Quote.in\ni don’t feel the same contentment or happiness spendi"
+    },
+    {
+      "id": "yq-p033",
+      "pageNumber": 33,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "URL/garbage header + garbled first line ('AA भा तज़ हा रहा ह1')",
+      "originalSnippet": "103026,531 6M Mohit Yenugwar (Monit Venugwar) Quotes | YourQuote\nAA भा तज़ हा रहा ह1\nतीन नाटक सूझे हैं-\nउन्हें लिखने की"
+    },
+    {
+      "id": "yq-p034",
+      "pageNumber": 34,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Severely garbled OCR ('65५ rit < mm, i \\ A ७ नए हे ¢')",
+      "originalSnippet": "65५\nrit <\nmm, i \\\nA\n७ नए हे ¢\n| जापकी अल्बिदा कहने का At नहीं है;\nif ३ पे"
+    },
+    {
+      "id": "yq-p036",
+      "pageNumber": 36,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Incomplete caption with UI artifact ('Show more')",
+      "originalSnippet": "८ हे. ”\nnothing hurts me no more\nihad to fall.\nihad to suffer.\ni had to shiver\nthrough the darkest nights.\ni had to give"
+    },
+    {
+      "id": "yq-p040",
+      "pageNumber": 40,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Contains YourQuote UI artifacts ('Show more')",
+      "originalSnippet": "10/3026, 5:31 PM Mohit Yenugwar (Mohit Yerugwar) Quotes | YourQuote\n10 yush\nहे =\n—_ “= जे\nind *\nan Tn,\nजा Wie TH]\n॥\n‘4yq"
+    },
+    {
+      "id": "yq-p041",
+      "pageNumber": 41,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Contains YourQuote UI artifacts ('Show more')",
+      "originalSnippet": "10130726, 5:31 PM 7 Mohit Yenugwar (Moni erugwar) Quotes | YourQuote _\nजब मैंने हो जाना सिखा\nमैं पहले GA हुआ\nGER भीतर जो"
+    },
+    {
+      "id": "yq-p044",
+      "pageNumber": 44,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "OCR noise and garbled Hindi phrases ('Saal Fs', 'yw \\ a')",
+      "originalSnippet": "Saal Fs\nमेरे नाम से पुकारना,\nऔर मेरा यूँ ही\nबुरंत पिघल जाना\nकुछ कविताएँ लिख देना:\nशायद यही,\nyw \\ a\nहाँ; शायद यही “६. :\nप"
+    },
+    {
+      "id": "yq-p046",
+      "pageNumber": 46,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "OCR errors in Hindi text ('जब को से मैं होकर', 'गाल में बंध')",
+      "originalSnippet": "जितना कितना सोचता हूं\nलिखना उतना ही कठिन हो जाता है।\nमेरे लिखे को पढ़ने वाला \"वो\"\nमेरे भीतर से \"मैं\" को खींच लाता है,\nऔर"
+    },
+    {
+      "id": "yq-p048",
+      "pageNumber": 48,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Has छि header + trailing YourQuote.in garbage + OCR artifacts in lines",
+      "originalSnippet": "छि\ni hate that i can’t\nshape myself into the boy\nyou'd love—\nand i hate more ’ -\nthat you’re not the girl ५३\ni could bea"
+    },
+    {
+      "id": "yq-p049",
+      "pageNumber": 49,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "OCR corruption (garbled characters or words)",
+      "originalSnippet": ": छ\nnt a in“ Qo} ee & » है. है,\nका. वो फिर कर्भी aled = प्रन UTd!\n७ i ee\nyw\nहो मैने मन मार कर ही यही लेकिन\nउसको फिर से अ"
+    },
+    {
+      "id": "yq-p050",
+      "pageNumber": 50,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "OCR corruption (garbled characters or words)",
+      "originalSnippet": ": छ\nnt a in“ Qo} ee & » है. है,\nका. वो फिर कर्भी aled = प्रन UTd!\n७ i ee\nyw\nहो मैने मन मार कर ही यही लेकिन\nउसको फिर से अ"
+    },
+    {
+      "id": "yq-p051",
+      "pageNumber": 51,
+      "title": null,
+      "language": "en",
+      "contentType": "POEM",
+      "reason": "Severely corrupted English OCR ('KK, | 9. Lik doesn t feel e put : |')",
+      "originalSnippet": "KK, |\nto me\ndeath\n9. Lik\ndoesn t feel e\n.\na barrier\nput\n:\nan opening.\n|"
+    },
+    {
+      "id": "yq-p055",
+      "pageNumber": 55,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Garbled OCR first line; main content begins mid-poem, incomplete",
+      "originalSnippet": "10730726, 531 PM Mohit Yenugwar (Mohit Yenugwar) Quotes | YourQuote\nyush\n- जलन yee gence eee ceeeneteng + चगक teeny ४० n"
+    },
+    {
+      "id": "yq-p060",
+      "pageNumber": 60,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Corrupted OCR characters inside English poem (': 9. 3 & कक: > | अर i)')",
+      "originalSnippet": "when i bleed,\nmy words scream louder and,\ni become\na kind of poet,\n: 9. 3 & कक: >\ni shouldn't be. | अर\ni)"
+    },
+    {
+      "id": "yq-p061",
+      "pageNumber": 61,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Caption-dependent preview ('Read the full poem in caption')",
+      "originalSnippet": "छि\nlife’s a weight\ni was never built to carry.\npeople say “hang in there”\nbut i’ve only ever wanted\nto hang out of here."
+    },
+    {
+      "id": "yq-p062",
+      "pageNumber": 62,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "URL header + mixed OCR garbage; poem fragments not recoverable",
+      "originalSnippet": "10730726, 531 PM Mohit Yenugwar (Mohit Yenugwar) Quotes | Yourg\n|\nS\nCI & @ MMe\nहु VF Nie 2\n५८\nSelf awareness is the key"
+    },
+    {
+      "id": "yq-p063",
+      "pageNumber": 63,
+      "title": null,
+      "language": "en",
+      "contentType": "POEM",
+      "reason": "Contains YourQuote UI artifacts ('Show more')",
+      "originalSnippet": "i was like the iron pole that stood\ntall and tall and tall\nuntil it started to chemically react\nwith oxygen and water an"
+    },
+    {
+      "id": "yq-p064",
+      "pageNumber": 64,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Corrupted OCR symbols in English poem ('कर', '~', 'alan’')",
+      "originalSnippet": "nobody knew it.\nhow i was\nbeing eaten away,\nbeing torn apart,\nby my own mind,\nby my own thoughts.\nuntil there was\nnothin"
+    },
+    {
+      "id": "yq-p066",
+      "pageNumber": 66,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Garbled OCR header and fragment ('कि eo = re; ६17 आकर... te <')",
+      "originalSnippet": "कि\neo = re; ६17 आकर...\nte <\nfor a second,\nin the midst of\nbattling death,\ni felt like\na cherry blossom."
+    },
+    {
+      "id": "yq-p067",
+      "pageNumber": 67,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Caption-dependent preview ('Read the full poem in caption')",
+      "originalSnippet": "छि\nBecause You're Still Here”\nyou're one of the reasons\ni lace up grief like boots\nand walk another fucking mile\ninto mo"
+    },
+    {
+      "id": "yq-p068",
+      "pageNumber": 68,
+      "title": null,
+      "language": "en",
+      "contentType": "POEM",
+      "reason": "Contains YourQuote UI artifacts ('Show more')",
+      "originalSnippet": "“But That’s About It”\neach day\n4711 fade a little.\nlike something\nleft in a back pocket\nthrough too many washes.\na laugh"
+    },
+    {
+      "id": "yq-p069",
+      "pageNumber": 69,
+      "title": null,
+      "language": "en",
+      "contentType": "POEM",
+      "reason": "Caption-dependent preview ('Read the full poem in caption')",
+      "originalSnippet": "“Un-Soul”\n(after your cry)\nand maybe then—\n471 carve a throat wide open,\nsince wrists are passé,\nand pain now craves a h"
+    },
+    {
+      "id": "yq-p070",
+      "pageNumber": 70,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Caption-dependent preview ('Read the full poem in caption')",
+      "originalSnippet": "छि\n“Robbed”\nAnd 1- %\niam dominantly 4\nthe thief i 11\nof my own breath, | लि\nthe quiet assassin Bs\nof my own becoming. |"
+    },
+    {
+      "id": "yq-p071",
+      "pageNumber": 71,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Caption-dependent preview ('पूरी कविता कैप्शन में पढ़े')",
+      "originalSnippet": "@ Mohit Yenugwar\nकह ~~” 4\n= ना, बस लिखते जाना” i\nजैसे पहचान की ज़रूरत ही नहीं।\nऔर फिरूकभी यूँ ही\nकिसी कोने में पड़ा अपना"
+    },
+    {
+      "id": "yq-p073",
+      "pageNumber": 73,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Contains YourQuote UI artifacts ('Show more')",
+      "originalSnippet": "छि\n@ Mohit Yenugwar\niam\nno longer\nwho\ni used to be.\nand\n: 9.\nidont know\nhow right\nor wrong\n। / that is.\nee > :\n‘4 » - Mo"
+    },
+    {
+      "id": "yq-p074",
+      "pageNumber": 74,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Contains YourQuote UI artifacts ('Show more')",
+      "originalSnippet": "छि\n@ Mohit Yenugwar\niam\nno longer\nwho\ni used to be.\nand\ni don’t know\n/ how right\nor wrong\n। / that is.\nDe » 5 ॥\n्‌। 4 »"
+    },
+    {
+      "id": "yq-p076",
+      "pageNumber": 76,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "URL/timestamp header artifact from page scraper",
+      "originalSnippet": "0 yush\nआँखें ताकती है तेरा रस्ता दिन-रात\nकैसे कह दूँ कि मुझे इंतज़ार नहीं...\nसोच के तुमको लिखी है कविताएं यार\nकैसे कह दू"
+    },
+    {
+      "id": "yq-p077",
+      "pageNumber": 77,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "URL/timestamp header artifact from page scraper",
+      "originalSnippet": "0 yush\nमैं तुम्हें अपनी किसी किताब में लिख देना चाहता हूँ\nऔर ये भी चाहता हूँ कि तुम्हें मेरे बगैर कोई ना पढ़े\nlimain-tum"
+    },
+    {
+      "id": "yq-p084",
+      "pageNumber": 84,
+      "title": null,
+      "language": "en",
+      "contentType": "POEM",
+      "reason": "Caption-dependent preview ('Read the full poem in caption')",
+      "originalSnippet": "yush\ni will dance with memories imagined,\nand sleep beneath a star\nthat only shines in stories\nof a love that lives afar"
+    },
+    {
+      "id": "yq-p092",
+      "pageNumber": 92,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Caption-dependent preview ('Read the full poem in caption')",
+      "originalSnippet": "“what you didn’t stay for, how will i er\nbe yours to keep?’\nyou didn’t sit with me ma\nwhen my silence was loud enough ~"
+    },
+    {
+      "id": "yq-p093",
+      "pageNumber": 93,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Caption-dependent preview ('Read the full poem in caption')",
+      "originalSnippet": "छि\n~ a\naay\n“things left unsaid.” |\nyou saw the explosion. {\nyou missed the slow leak. |\nyou saw the wave.\nyou missed the"
+    },
+    {
+      "id": "yq-p095",
+      "pageNumber": 95,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Caption-dependent preview ('Read the full poem in caption')",
+      "originalSnippet": "@ Mohit Yenugwar\nलप्रेक भाग ३ (समापन)\nपर प्रेम की भाषा में कोई पन्ना आख़िरी नहीं होता -\nवो बस थोड़ी देर के लिए चुप हो जा"
+    },
+    {
+      "id": "yq-p096",
+      "pageNumber": 96,
+      "title": null,
+      "language": "en",
+      "contentType": "POEM",
+      "reason": "Caption-dependent preview ('Read the full poem in caption')",
+      "originalSnippet": "there will also come a time\nwhen enthusiasts will come searching\nfor meaning—\ndigging up files,\nread the fragments,\npoke"
+    },
+    {
+      "id": "yq-p097",
+      "pageNumber": 97,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "URL header + 'your comment' UI garbage; poem stripped but incomplete",
+      "originalSnippet": "10730726, 531 PM Mohit Yenugwar (Mohit Yenugwar) Quotes | YourQuote\n8\n@ aga your comment है\n@ Mohit Yenugwar\nVor jr i\nY"
+    },
+    {
+      "id": "yq-p099",
+      "pageNumber": 99,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Caption-dependent preview ('an excerpt. full story in caption')",
+      "originalSnippet": "कि\nलप्रेक भाग २\nहमारी किताब अब भी वही खुली पड़ी है,\nपन्ने हवा में उलटते रहते है,\nऔर मैं हमेशा ही इस सोच में डूबा रहता हू"
+    },
+    {
+      "id": "yq-p100",
+      "pageNumber": 100,
+      "title": null,
+      "language": "en",
+      "contentType": "POEM",
+      "reason": "Caption-dependent preview ('Read the full poem in caption')",
+      "originalSnippet": "@ Mohit Yenugwar\ne x\n.\n> ~~\n~~\n6, . ”\n“suppressing every scream\n(read the full poem in caption!)"
+    },
+    {
+      "id": "yq-p113",
+      "pageNumber": 113,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Severely corrupted Hindi OCR ('ey - i ज मैने... rc mweee ”')",
+      "originalSnippet": "ज मैने अपने घर से अपना नाम मिटा दिया है,\nrc mweee ”\nताज मैंने अपने होने का एक निशान मिटा दिया है...\nहि — Mohit Yenugwar"
+    },
+    {
+      "id": "yq-p125",
+      "pageNumber": 125,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Contains YourQuote UI artifacts ('Show more')",
+      "originalSnippet": "उलझनें और भी थी, सिर्फ इश्क़ निभाने भर\nसे स्थायित्व प्राप्त नहीं होता।\n— Mohit ee पे\n~\n—_—\noy,\nYourQuote.in er\n@ Mohit Y"
+    },
+    {
+      "id": "yq-p132",
+      "pageNumber": 132,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "OCR corruption in English text ('iP you', 'bs |', 'Ve to be called aman')",
+      "originalSnippet": "iP you\ndo not talk sweetly\nwith your own kin\nthan you do\nwith others bs |\nyou're not worthy Ve\nto be called हि\naman at a"
+    },
+    {
+      "id": "yq-p133",
+      "pageNumber": 133,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Scraper header, likes, and OCR noise ('01 yush Val anit')",
+      "originalSnippet": "01 yush\na\n=~\nVal\nwy a\nधर किधर भी देखता हूं कल्पना बीज बोए\nanit\nदिखते हैं, =\n8 — | - “Ailes -\noss पा ra\n= San oe का Le ~"
+    },
+    {
+      "id": "yq-p134",
+      "pageNumber": 134,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Scraper artifact and garbled attribution ('_— M + ohit Yenugwar Tikes')",
+      "originalSnippet": "कुछ गुनहगार मैं भी हूँ,\n&\n_— M +\nohit Yenugwar\nyor हि\nTikes\n@ Mohit Yenugwar\n(कक"
+    },
+    {
+      "id": "yq-p138",
+      "pageNumber": 138,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Contains YourQuote UI artifacts ('Show more')",
+      "originalSnippet": "कुछ लोग a जाते है।\nसाथ में याद रह जाते है\nउनके |\nकुछ विशेष यादों के A दिन, वो तारीखें\nउन : |, सालगिरह। ]\nये दिन याद नहीं"
+    },
+    {
+      "id": "yq-p139",
+      "pageNumber": 139,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "OCR corruption in English text ('can atrord', 'ny sanity', 'put i can't')",
+      "originalSnippet": "छि\nican atrord\nlosing\nny sanity\nput i can’t afford\nending up\nas 8.\nmediocre writer."
+    },
+    {
+      "id": "yq-p140",
+      "pageNumber": 140,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Garbled OCR prefix and suffix ('ww za yw उसे', 'a Mohit Yenugwar')",
+      "originalSnippet": "ww za yw उसे\nनायाब कहूँ उसे या कोई ख़्वाब कहूँ उसे\n9 अज़ाब — ww उसे\nवो खुद ज़िन्दगी है या 'अज़ाब कहूँ उसे ॥\na Mohit Yenu"
+    },
+    {
+      "id": "yq-p141",
+      "pageNumber": 141,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Contains YourQuote UI artifacts ('Show more')",
+      "originalSnippet": "हे छि\n3 WENT tO |\nall those places\nin Delhi\nyou wanted to\ntake me to\nbut with\nanother girl\n—all that’s left of you in me"
+    },
+    {
+      "id": "yq-p143",
+      "pageNumber": 143,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Scraper timestamp header and duplicated partial text ('10/30/26 likes')",
+      "originalSnippet": "सुनाने को\nकिस्से थे\nकहानियाँ थी\nजब कोई\nउसकी बातों पर\nयक़ीन नहीं करता\nतब उसके पास\nदिखाने के लिए\nसबूत थे\nनिशानियाँ थी\nथी ऐ"
+    },
+    {
+      "id": "yq-p144",
+      "pageNumber": 144,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "OCR artifacts throughout ('. in close friends', '\"Ss having', '- 3 do')",
+      "originalSnippet": "छि\n“Do you remember me sometimes? Because I do.”\nfrom being\nBest Friends for life\nto not even being\n. in close friends l"
+    },
+    {
+      "id": "yq-p155",
+      "pageNumber": 155,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "URL header + almost entirely OCR garbage",
+      "originalSnippet": "10/3026, 531 Pm Mohit Yenugwar Meni Yenugwar Quotes | Yourguote\ni)\n= a A\nZi 4 =. a em\nAt // Uo\nWey A=\nएक ख़्वाब, या ख़ुद"
+    },
+    {
+      "id": "yq-p159",
+      "pageNumber": 159,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Contains YourQuote UI artifacts ('Show more')",
+      "originalSnippet": "रात कुछ यूँ बीती उनकी रौशनी में “मोहित”\nपे Mohit Yenugwar\nj ¥\ne S\nFo : *\n५ \" ft\n= —\n४\n\"Si ~ ——Your@uote.in|\n@ Mohit Yenu"
+    },
+    {
+      "id": "yq-p160",
+      "pageNumber": 160,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Broken words and OCR Latin noise ('देखना चाहा सभी A sea अपना', 'लेए ख़ुदा ने')",
+      "originalSnippet": "पर शख़्स हर कोई उसे पढ़ न पाया\nलड़ा यूँ तो दुनिया भर से “मोहित”\nवो आईना मगर उसको ज़ख्म दिखा नहीं पाया\nआईना इक आईना और बह"
+    },
+    {
+      "id": "yq-p161",
+      "pageNumber": 161,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Corrupted and broken poem ('STAT गए. प ९. प्रेम” में नहीं वे कभी थे ही नहीं')",
+      "originalSnippet": "कि\n“प्रेम”\nजो स्थाई रहे वो प्रेम नहीं\nऔर\nजो प्रेम के अस्थाई होने पर STAT गए.\nप ९. प्रेम” में नहीं\nवे कभी ' थे ही नहीं..."
+    },
+    {
+      "id": "yq-p162",
+      "pageNumber": 162,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Corrupted OCR characters in Hindi text ('Wa At आती है', 'ta’ हो जाता él')",
+      "originalSnippet": "कहने को कह लेता हूँ बातें हज़ार,\nजो हमेशा लुभा लेती हैं लोगो को।\nपर बात जब तुम्हारे Wa At आती है मैं 'मौन' हो जाता हूँ,"
+    },
+    {
+      "id": "yq-p181",
+      "pageNumber": 181,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Severely corrupted English OCR ('your #77670', 'put it was futile', 'presenteyy', 'lif; j')",
+      "originalSnippet": "हे छि\n“your #77670 27 '\ni loved her\nin all my capacity\nin health and illness vj\nput it was futile i“ }\nbecause she didn’"
+    },
+    {
+      "id": "yq-p183",
+      "pageNumber": 183,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "OCR typo in English reflection ('put' for but, odd punctuation)",
+      "originalSnippet": "छि\noftentimes it happens, when,love.\nbreaks us, we think, we know all about\nlove.\nput, believe me, there’s so much more,"
+    },
+    {
+      "id": "yq-p185",
+      "pageNumber": 185,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "OCR noise prefix and symbols ('26०01?”', 'NR that comes with ™!, 4 :')",
+      "originalSnippet": "26०01?”\ni long\nto be loved\nwithout ever\nhaving to bear\nthe weight of\nthe responsibility NR\nthat comes with ™!, 4 :"
+    },
+    {
+      "id": "yq-p187",
+      "pageNumber": 187,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "OCR noise header and punctuation ('8००७० ai ©', 'oy me off', 'dont. care. if. its.')",
+      "originalSnippet": "8००७० ai ©\nbefore they oy me off\nof my senses, ps\nI WILL BE MY OWN HERO.\ne श्र a 2 24)\ndont. care. if. its. even for.\nan"
+    },
+    {
+      "id": "yq-p189",
+      "pageNumber": 189,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "OCR typos in English text ('pe dead', 'Re', 'es ५ \\F', 'put never ih')",
+      "originalSnippet": "i will either\npe dead\nor co-exist i,\nin the past Re\nand the future es ५ \\F\nput never ih\nin the present. —"
+    },
+    {
+      "id": "yq-p190",
+      "pageNumber": 190,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Severely broken and incomplete Hindi text ('किसी ऑर की \"नान' से... Wer अपनी')",
+      "originalSnippet": "किसी ऑर की \"नान' से नान छड़ाकर,\nकि 2\nWer अपनी a — ~— aor \\\n— Mohit Yenug\nYou r@uote.in\n918७\n@ Mohit Yenugwar\n—\n(open ap"
+    },
+    {
+      "id": "yq-p191",
+      "pageNumber": 191,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Garbled OCR in Hindi poem ('डूबने को FAT?', 'किनाश ना पाऊँ', 'ASTER बहीं')",
+      "originalSnippet": "डूबने को FAT?\nडर लगता हैँ\nबह ना नाऊँ\nकिनाश ना पाऊँ\nडूबने को क्या?\nASTER बहीं\nना हैं कोई कश्ती ननर मे\nकहते कहते रह ना नाऊ"
+    },
+    {
+      "id": "yq-p194",
+      "pageNumber": 194,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "OCR noise header and typos ('seeyepu ५च 1७1०', '4 807 ४ know')",
+      "originalSnippet": "seeyepu ५च 1७1०\ni was\nin love with\nher younger self.\nthe older one;\n: 9.\n4 807 ४ know\nwho that is."
+    },
+    {
+      "id": "yq-p202",
+      "pageNumber": 202,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Contains YourQuote UI artifacts ('Show more')",
+      "originalSnippet": ">> 8\nby ag feat में तुमने भ्रुला fear मुझे,\nहि atte मेने भी आह न भरी...\n) कुछ यूं हुआ की ar ढ़िल न रहा,\nल्‍ हममें वो बात"
+    },
+    {
+      "id": "yq-p203",
+      "pageNumber": 203,
+      "title": null,
+      "language": "hi",
+      "contentType": "POEM",
+      "reason": "Broken characters and preview ('beg you to “<4', 'Show more')",
+      "originalSnippet": "if i have to\nbeg you to “<4\nis that even love? —\n?\nकै\n— Mohit Yenugwa:\n¥\npc,\nfe) Mohit Yenugwar"
+    }
+  ]
+}

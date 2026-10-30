@@ -25,6 +25,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     { label: "Writer profile", href: "/admin/author" },
     { label: "Import", href: "/admin/import" },
     { label: "Messages", href: "/admin/inquiries", count: inquiryCount },
+    { label: "Security & Account", href: "/admin/security" },
   ];
 
   return (

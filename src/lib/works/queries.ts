@@ -114,7 +114,6 @@ export type ArchiveFilters = {
   q?: string | null;
   type?: ContentType | null;
   collection?: string | null;
-  theme?: string | null;
   language?: string | null;
   sort?: ArchiveSort;
   page?: number;
@@ -156,13 +155,7 @@ function archiveConditions(filters: ArchiveFilters, now: Date): Prisma.Sql {
       WHERE wc."workId" = w."id" AND c."slug" = ${filters.collection} AND c."isPublished" = true
     )`);
   }
-  if (filters.theme) {
-    conditions.push(Prisma.sql`EXISTS (
-      SELECT 1 FROM "WorkTag" wt
-      JOIN "Tag" t ON t."id" = wt."tagId"
-      WHERE wt."workId" = w."id" AND t."slug" = ${filters.theme}
-    )`);
-  }
+
   return Prisma.join(conditions, " AND ");
 }
 
@@ -206,23 +199,17 @@ export async function getArchivePage(filters: ArchiveFilters): Promise<ArchivePa
 export type ArchiveFilterOptions = {
   types: { value: ContentType; count: number }[];
   collections: { slug: string; name: string }[];
-  themes: { slug: string; name: string }[];
   languages: string[];
 };
 
-/** Only offers filters that lead somewhere: types, collections, themes and languages with public works. */
+/** Only offers filters that lead somewhere: types, collections and languages with public works. */
 export async function getArchiveFilterOptions(): Promise<ArchiveFilterOptions> {
   const where = publicWorkWhere();
-  const [types, collections, themes, languages] = await Promise.all([
+  const [types, collections, languages] = await Promise.all([
     getContentTypeCounts(),
     db.collection.findMany({
       where: { isPublished: true, works: { some: { work: where } } },
       orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
-      select: { slug: true, name: true },
-    }),
-    db.tag.findMany({
-      where: { works: { some: { work: where } } },
-      orderBy: { name: "asc" },
       select: { slug: true, name: true },
     }),
     db.work.findMany({ where, distinct: ["language"], select: { language: true }, orderBy: { language: "asc" } }),
@@ -230,7 +217,6 @@ export async function getArchiveFilterOptions(): Promise<ArchiveFilterOptions> {
   return {
     types: types.map((t) => ({ value: t.contentType, count: t.count })),
     collections,
-    themes,
     languages: languages.map((l) => l.language),
   };
 }
@@ -355,11 +341,6 @@ export async function getPublicCollectionBySlug(slug: string, page = 1, pageSize
     pageSize,
     pageCount: Math.max(1, Math.ceil(total / pageSize)),
   };
-}
-
-export async function getThemeName(slug: string): Promise<string | null> {
-  const tag = await db.tag.findUnique({ where: { slug }, select: { name: true } });
-  return tag?.name ?? null;
 }
 
 // ─── Writer ───────────────────────────────────────────────────────────────

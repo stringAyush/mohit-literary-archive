@@ -161,7 +161,7 @@ export function PhotoLightbox({ posts, currentIndex, onClose, onNavigate }: Prop
 
           <div className="mt-8 border-t border-white/10 pt-4 flex items-center justify-between">
             <span className="font-sans text-[11px] text-white/40 tracking-wider uppercase">
-              Mohit Kaushik Photography
+              Mohit Yenugwar Photography
             </span>
             <Link
               href={`/bookstagram/${currentPost.slug}`}

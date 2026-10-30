@@ -148,8 +148,11 @@ export default async function HomePage() {
                   <WorkText
                     body={featuredExcerpt.text}
                     language={featured.work.language}
-                    size="feature"
-                    lineated={featured.work.contentType !== "REFLECTION"}
+                    lineated={
+                      featured.work.contentType !== "REFLECTION" &&
+                      featured.work.contentType !== "SHORT_STORY" &&
+                      featured.work.contentType !== "PROSE"
+                    }
                   />
                 </blockquote>
                 <figcaption className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 font-sans text-sm text-muted">
@@ -307,9 +310,9 @@ export default async function HomePage() {
                         <div className="mt-2 flex items-center justify-between font-sans text-xs text-muted">
                           <div className="flex items-center gap-1.5">
                             <span className="flex h-5 w-5 items-center justify-center rounded-full bg-accent/15 font-sans text-[9px] font-bold text-accent">
-                              MK
+                              MY
                             </span>
-                            <span className="text-[11px] font-medium text-ink/80">Mohit Kaushik</span>
+                            <span className="text-[11px] font-medium text-ink/80">Mohit Yenugwar</span>
                           </div>
                         </div>
                       </div>

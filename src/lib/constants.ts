@@ -1,26 +1,39 @@
 import type { ContentType, PermissionStatus, ReviewStatus, SourcePlatform, WorkStatus } from "@prisma/client";
 
-export const SITE_NAME = "Mohit Kaushik Yenugwar";
+export const SITE_NAME = "Mohit Yenugwar";
 export const SITE_SUBTITLE = "Writer & Poet";
 export const SITE_DESCRIPTION =
-  "A personal literary archive of quotes, poems, aphorisms, fragments and reflections by Mohit Kaushik Yenugwar.";
+  "A personal literary archive of quotes, poetry, short stories, prose, aphorisms, and reflections by Mohit Yenugwar.";
 
 export const ARCHIVE_PAGE_SIZE = 12;
 
-export const CONTENT_TYPES: { value: ContentType; label: string; plural: string }[] = [
-  { value: "QUOTE", label: "Quote", plural: "Quotes" },
-  { value: "POEM", label: "Poem", plural: "Poems" },
-  { value: "APHORISM", label: "Aphorism", plural: "Aphorisms" },
-  { value: "REFLECTION", label: "Reflection", plural: "Reflections" },
-  { value: "SHORT_PIECE", label: "Short piece", plural: "Short pieces" },
+export const CONTENT_TYPES: {
+  value: ContentType;
+  label: string;
+  plural: string;
+  hindiLabel: string;
+  hindiPlural: string;
+}[] = [
+  { value: "QUOTE", label: "Quote", plural: "Quotes", hindiLabel: "उद्धरण", hindiPlural: "उद्धरण / सुविचार" },
+  { value: "POEM", label: "Poem", plural: "Poetry / Poems", hindiLabel: "कविता / शायरी", hindiPlural: "कविताएँ / शायरी" },
+  { value: "SHORT_STORY", label: "Short Story", plural: "Short Stories", hindiLabel: "लघु कथा", hindiPlural: "लघु कथाएँ" },
+  { value: "PROSE", label: "Prose & Write-up", plural: "Prose & Write-ups", hindiLabel: "गद्य और लेख", hindiPlural: "गद्य और लेख" },
+  { value: "REFLECTION", label: "Reflection", plural: "Reflections & Life Lessons", hindiLabel: "विचार", hindiPlural: "विचार और जीवन-अनुभव" },
+  { value: "APHORISM", label: "Aphorism", plural: "Aphorisms", hindiLabel: "सूक्ति", hindiPlural: "सूक्तियाँ" },
+  { value: "SHORT_PIECE", label: "Short piece", plural: "Short pieces", hindiLabel: "लघु रचना", hindiPlural: "लघु रचनाएँ" },
+  { value: "OTHER", label: "Other Work", plural: "Other Works", hindiLabel: "अन्य रचना", hindiPlural: "अन्य रचनाएँ" },
 ];
 
-export function contentTypeLabel(type: ContentType): string {
-  return CONTENT_TYPES.find((t) => t.value === type)?.label ?? type;
+export function contentTypeLabel(type: ContentType, lang?: string): string {
+  const match = CONTENT_TYPES.find((t) => t.value === type);
+  if (!match) return type;
+  return lang === "hi" ? match.hindiLabel : match.label;
 }
 
-export function contentTypePlural(type: ContentType): string {
-  return CONTENT_TYPES.find((t) => t.value === type)?.plural ?? type;
+export function contentTypePlural(type: ContentType, lang?: string): string {
+  const match = CONTENT_TYPES.find((t) => t.value === type);
+  if (!match) return type;
+  return lang === "hi" ? match.hindiPlural : match.plural;
 }
 
 /** URL-friendly names for content types, used in archive filters (?type=poem). */
@@ -34,19 +47,21 @@ export function contentTypeFromParam(param: string | undefined | null): ContentT
   return match ? match.value : null;
 }
 
-export const LANGUAGES: { code: string; label: string }[] = [
-  { code: "en", label: "English" },
-  { code: "hi", label: "Hindi" },
-  { code: "mr", label: "Marathi" },
-  { code: "ur", label: "Urdu" },
-  { code: "hi-Latn", label: "Hindi (Roman script)" },
-  { code: "other", label: "Other" },
+export const LANGUAGES: { code: string; label: string; nativeLabel: string }[] = [
+  { code: "en", label: "English", nativeLabel: "English" },
+  { code: "hi", label: "Hindi", nativeLabel: "हिंदी (Hindi)" },
+  { code: "hi-Latn", label: "Hinglish / Mixed", nativeLabel: "Hinglish / Mixed" },
+  { code: "mr", label: "Marathi", nativeLabel: "मराठी (Marathi)" },
+  { code: "ur", label: "Urdu", nativeLabel: "اردو (Urdu)" },
+  { code: "other", label: "Other", nativeLabel: "Other" },
 ];
 
 export const LANGUAGE_CODES = LANGUAGES.map((l) => l.code) as [string, ...string[]];
 
-export function languageLabel(code: string): string {
-  return LANGUAGES.find((l) => l.code === code)?.label ?? code;
+export function languageLabel(code: string, native = false): string {
+  const match = LANGUAGES.find((l) => l.code === code);
+  if (!match) return code;
+  return native ? match.nativeLabel : match.label;
 }
 
 export const WORK_STATUS_LABELS: Record<WorkStatus, string> = {

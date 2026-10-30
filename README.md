@@ -1,6 +1,6 @@
-# Mohit Kaushik Yenugwar — Literary Archive
+# Mohit Yenugwar — Literary Archive
 
-A personal literary archive and publishing platform: quotes, poems, aphorisms, reflections and short pieces, each at a permanent address, with search, collections, quote artwork, and a private admin for drafting, reviewing and publishing.
+A personal literary archive and publishing platform: quotes, poems, short stories, prose, reflections and aphorisms, each at a permanent address, with search, collections, quote artwork, and a private admin for drafting, reviewing and publishing.
 
 Built with **Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · PostgreSQL · Prisma 6**.
 

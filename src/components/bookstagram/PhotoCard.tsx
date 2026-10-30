@@ -122,9 +122,9 @@ export function PhotoCard({ post, onOpenLightbox, priority = false }: Props) {
         <div className="mt-2 flex items-center justify-between font-sans text-xs text-muted">
           <div className="flex items-center gap-1.5">
             <span className="flex h-5 w-5 items-center justify-center rounded-full bg-accent/15 font-sans text-[9px] font-bold text-accent">
-              MK
+              MY
             </span>
-            <span className="text-[11px] font-medium text-ink/80">Mohit Kaushik</span>
+            <span className="text-[11px] font-medium text-ink/80">Mohit Yenugwar</span>
           </div>
 
           {post.instagramUrl && (

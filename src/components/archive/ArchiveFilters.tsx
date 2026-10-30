@@ -2,27 +2,28 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { useRef, useTransition } from "react";
-import { Search, X, SlidersHorizontal } from "lucide-react";
+import { Search, X, SlidersHorizontal, Globe } from "lucide-react";
 import { Select } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-type Option = { value: string; label: string };
+type Option = { value: string; label: string; hindiLabel?: string };
 
 type Props = {
-  values: { q: string; type: string; collection: string; theme: string; lang: string; sort: string };
+  values: { q: string; type: string; collection: string; lang: string; sort: string };
   types: Option[];
   collections: Option[];
-  themes: Option[];
   languages: Option[];
 };
 
-export function ArchiveFilters({ values, types, collections, themes, languages }: Props) {
+export function ArchiveFilters({ values, types, collections, languages }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const formRef = useRef<HTMLFormElement>(null);
   const [isPending, startTransition] = useTransition();
+
+  const isHindi = values.lang === "hi";
 
   function navigate(form: HTMLFormElement) {
     const data = new FormData(form);
@@ -33,6 +34,15 @@ export function ArchiveFilters({ values, types, collections, themes, languages }
     }
     const query = params.toString();
     startTransition(() => router.push(query ? `${pathname}?${query}` : pathname, { scroll: false }));
+  }
+
+  function setLanguageTab(langCode: string) {
+    if (!formRef.current) return;
+    const langSelect = formRef.current.elements.namedItem("lang") as HTMLSelectElement | null;
+    if (langSelect) {
+      langSelect.value = langCode;
+    }
+    navigate(formRef.current);
   }
 
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -61,12 +71,31 @@ export function ArchiveFilters({ values, types, collections, themes, languages }
   }
 
   const activeFilters = [
-    values.type && { key: "type", label: `Form: ${types.find((t) => t.value === values.type)?.label ?? values.type}` },
-    values.collection && { key: "collection", label: `Collection: ${collections.find((c) => c.value === values.collection)?.label ?? values.collection}` },
-    values.theme && { key: "theme", label: `Theme: ${themes.find((t) => t.value === values.theme)?.label ?? values.theme}` },
-    values.lang && { key: "lang", label: `Language: ${languages.find((l) => l.value === values.lang)?.label ?? values.lang}` },
+    values.type && {
+      key: "type",
+      label: `${isHindi ? "विधा" : "Category"}: ${
+        (isHindi ? types.find((t) => t.value === values.type)?.hindiLabel : null) ??
+        types.find((t) => t.value === values.type)?.label ??
+        values.type
+      }`,
+    },
+    values.collection && {
+      key: "collection",
+      label: `Collection: ${collections.find((c) => c.value === values.collection)?.label ?? values.collection}`,
+    },
+    values.lang && {
+      key: "lang",
+      label: `Language: ${languages.find((l) => l.value === values.lang)?.label ?? values.lang}`,
+    },
     values.sort && values.sort !== "newest" && { key: "sort", label: "Order: Oldest first" },
   ].filter(Boolean) as { key: string; label: string }[];
+
+  const languageTabs = [
+    { code: "", label: "All Languages", hindiLabel: "सभी भाषाएँ" },
+    { code: "hi", label: "हिंदी (Hindi)", hindiLabel: "हिंदी" },
+    { code: "en", label: "English", hindiLabel: "English" },
+    { code: "hi-Latn", label: "Hinglish / Mixed", hindiLabel: "Hinglish / मिश्रित" },
+  ];
 
   return (
     <form
@@ -78,6 +107,34 @@ export function ArchiveFilters({ values, types, collections, themes, languages }
       aria-busy={isPending}
       className="rounded-2xl border border-line/70 bg-surface/85 p-5 shadow-xs backdrop-blur-md sm:p-6"
     >
+      {/* ─── Language Section Tabs ─── */}
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b hairline pb-4">
+        <div className="flex items-center gap-1.5 font-sans text-xs font-semibold uppercase tracking-wider text-muted">
+          <Globe className="h-3.5 w-3.5 text-accent" />
+          <span>Language Section:</span>
+        </div>
+        <div className="inline-flex rounded-xl bg-ink/5 p-1">
+          {languageTabs.map((tab) => {
+            const isActive = values.lang === tab.code;
+            return (
+              <button
+                key={tab.code}
+                type="button"
+                onClick={() => setLanguageTab(tab.code)}
+                className={`rounded-lg px-3 py-1.5 font-sans text-xs font-medium transition-all ${
+                  isActive
+                    ? "bg-surface text-ink shadow-xs"
+                    : "text-muted hover:text-ink"
+                }`}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ─── Search Bar ─── */}
       <div className="flex flex-col gap-3 sm:flex-row">
         <div className="relative min-w-0 flex-1">
           <Input
@@ -86,7 +143,11 @@ export function ArchiveFilters({ values, types, collections, themes, languages }
             type="search"
             defaultValue={values.q}
             maxLength={100}
-            placeholder="Search words, titles, thoughts, or collections..."
+            placeholder={
+              isHindi
+                ? "शीर्षक, शब्द, पंक्तियाँ या संग्रह खोजें..."
+                : "Search words, titles, thoughts, or collections..."
+            }
             icon={<Search className="h-4 w-4" />}
             className="h-12 rounded-xl text-base"
           />
@@ -102,34 +163,37 @@ export function ArchiveFilters({ values, types, collections, themes, languages }
           )}
         </div>
         <Button type="submit" size="lg" className="h-12 rounded-xl px-7 text-sm font-semibold">
-          Search
+          {isHindi ? "खोजें" : "Search"}
         </Button>
       </div>
 
-      <div className="mt-5 grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-5">
+      {/* ─── Filter Controls (Theme filter completely removed) ─── */}
+      <div className="mt-5 grid grid-cols-2 gap-3.5 sm:grid-cols-4">
+        {/* Literary Category / Form */}
         <Select
           id="filter-type"
           name="type"
-          label="Form"
+          label={isHindi ? "साहित्यिक विधा" : "Category"}
           defaultValue={values.type}
           onChange={onSelectChange}
         >
-          <option value="">All forms</option>
+          <option value="">{isHindi ? "सभी विधाएँ" : "All categories"}</option>
           {types.map((option) => (
             <option key={option.value} value={option.value}>
-              {option.label}
+              {isHindi && option.hindiLabel ? option.hindiLabel : option.label}
             </option>
           ))}
         </Select>
 
+        {/* Collection */}
         <Select
           id="filter-collection"
           name="collection"
-          label="Collection"
+          label={isHindi ? "संग्रह" : "Collection"}
           defaultValue={values.collection}
           onChange={onSelectChange}
         >
-          <option value="">All collections</option>
+          <option value="">{isHindi ? "सभी संग्रह" : "All collections"}</option>
           {collections.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
@@ -137,29 +201,15 @@ export function ArchiveFilters({ values, types, collections, themes, languages }
           ))}
         </Select>
 
-        <Select
-          id="filter-theme"
-          name="theme"
-          label="Theme"
-          defaultValue={values.theme}
-          onChange={onSelectChange}
-        >
-          <option value="">All themes</option>
-          {themes.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </Select>
-
+        {/* Language dropdown */}
         <Select
           id="filter-lang"
           name="lang"
-          label="Language"
+          label={isHindi ? "भाषा" : "Language"}
           defaultValue={values.lang}
           onChange={onSelectChange}
         >
-          <option value="">All languages</option>
+          <option value="">{isHindi ? "सभी भाषाएँ" : "All languages"}</option>
           {languages.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
@@ -167,15 +217,16 @@ export function ArchiveFilters({ values, types, collections, themes, languages }
           ))}
         </Select>
 
+        {/* Sort Order */}
         <Select
           id="filter-sort"
           name="sort"
-          label="Order"
+          label={isHindi ? "क्रम" : "Order"}
           defaultValue={values.sort || "newest"}
           onChange={onSelectChange}
         >
-          <option value="newest">Newest first</option>
-          <option value="oldest">Oldest first</option>
+          <option value="newest">{isHindi ? "नवीनतम पहले" : "Newest first"}</option>
+          <option value="oldest">{isHindi ? "पुरातन पहले" : "Oldest first"}</option>
         </Select>
       </div>
 

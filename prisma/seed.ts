@@ -7,14 +7,14 @@
  * Idempotent, safe to run repeatedly, and never seeds fabricated demo quotations.
  */
 import { PrismaClient } from "@prisma/client";
-import { importCatalog } from "../scripts/import-catalog";
+import { importAuthoritativeCatalog } from "../scripts/import-authoritative-catalog";
 
 const db = new PrismaClient();
 
 async function main() {
-  console.log("Seeding database with Mohit Kaushik Yenugwar's research catalog...");
-  const summary = await importCatalog({ db, log: true });
-  console.log(`✓ Seed complete: ${summary.candidates} candidate works processed.`);
+  console.log("Seeding database with Mohit Yenugwar's authoritative catalog...");
+  await importAuthoritativeCatalog(db);
+  console.log("✓ Authoritative seed complete.");
 }
 
 main()

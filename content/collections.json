@@ -52,5 +52,35 @@
     "name": "Change & Growth",
     "description": "Work about transformation and becoming someone new.",
     "status": "active"
+  },
+  {
+    "slug": "human-nature-and-philosophy",
+    "name": "Human Nature & Philosophy",
+    "description": "Reflections on existence, society, time, reality, and life.",
+    "status": "active"
+  },
+  {
+    "slug": "personal-and-emotional-experiences",
+    "name": "Personal & Emotional Experiences",
+    "description": "Writing that touches on loneliness, pain, hope, and acceptance.",
+    "status": "active"
+  },
+  {
+    "slug": "relationships-and-emotions",
+    "name": "Relationships & Emotions",
+    "description": "Pieces exploring intimacy, heart, connection, and vulnerability.",
+    "status": "active"
+  },
+  {
+    "slug": "identity-and-introspection",
+    "name": "Identity & Introspection",
+    "description": "Probing self-discovery, quiet conflict, and authenticity.",
+    "status": "active"
+  },
+  {
+    "slug": "literature-and-creativity",
+    "name": "Literature & Creativity",
+    "description": "Reflections on the written word, craft, and art.",
+    "status": "active"
   }
 ]

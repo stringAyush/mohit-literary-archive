@@ -1,0 +1,36 @@
+# YourQuote profile capture — PDF page 26
+
+**Visible post date:** 25 JAN AT 23:47
+
+**OCR transcription (may contain recognition errors):**
+
+```text
+छ
+। {!
+|
+वो चार दोस्त पागल समझने लगे है मुझे,
+लेकिन आज भी चिढड़ियां लिखे जा रहा हूँ get.
+— Mohit Yenugwar
+I
+Your@uote.in
+#yqdidi #yourquote #yourquotedidi #dost #pagal #chithi #letters #love #... Show more
+A Add your comment
+@ Mohit Yenugwar
+```
+
+**Native PDF text layer:**
+
+```text
+#yqdidi #yourquote #yourquotedidi #dost #pagal #chithi #letters #love #... Show more
+6 likes
+Mohit Yenugwar
+25 JAN AT 23:47
+Add your comment
+HomeExploreBookstore Store Ayush
+Write your own quotes on YourQuote app
+Open App
+10/30/26, 5:31 PM
+Mohit Yenugwar (Mohit Yenugwar) Quotes | YourQuote
+https://www.yourquote.in/mohit-yenugwar-v0m/quotes
+26/207
+```

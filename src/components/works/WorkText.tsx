@@ -14,19 +14,28 @@ export function WorkText({
 }: {
   body: string;
   language: string;
-  size?: "reading" | "feature";
+  size?: "reading" | "feature" | "quote" | "story";
   lineated?: boolean;
 }) {
   const lang = language === "other" ? undefined : language;
   const sizeClass =
-    size === "feature"
+    size === "quote"
+      ? "text-[1.625rem] leading-[1.7] sm:text-[2rem] lg:text-[2.25rem]"
+      : size === "story"
+      ? "text-[1.25rem] leading-[1.85] sm:text-[1.375rem]"
+      : size === "feature"
       ? "text-[1.625rem] leading-[1.55] sm:text-[2rem] lg:text-[2.25rem]"
       : "text-[1.5rem] leading-[1.65] lg:text-[1.875rem]";
 
   if (!lineated) {
+    const paragraphs = body.replace(/\r\n?/g, "\n").split(/\n{2,}/);
     return (
-      <div lang={lang} className={`literary-text text-ink ${sizeClass}`}>
-        {body}
+      <div lang={lang} className={`literary-text text-ink ${sizeClass} space-y-6`}>
+        {paragraphs.map((para, i) => (
+          <p key={i} className="leading-[1.85]">
+            {para}
+          </p>
+        ))}
       </div>
     );
   }
@@ -36,7 +45,7 @@ export function WorkText({
     <div lang={lang} className={`literary-text text-ink ${sizeClass}`}>
       {lines.map((line, index) =>
         line.trim() === "" ? (
-          <br key={index} />
+          <span key={index} className="block h-4 sm:h-5" aria-hidden="true" />
         ) : (
           <span key={index} className="block pl-[1.25em] -indent-[1.25em]">
             {line}

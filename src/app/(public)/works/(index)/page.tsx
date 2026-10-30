@@ -56,17 +56,16 @@ export default async function ArchivePage({ searchParams }: Props) {
             q: params.q,
             type: params.type ? contentTypeParam(params.type) : "",
             collection: params.collection ?? "",
-            theme: params.theme ?? "",
             lang: params.language ?? "",
             sort: params.sort,
           }}
           types={CONTENT_TYPES.filter((t) => options.types.some((o) => o.value === t.value)).map((t) => ({
             value: contentTypeParam(t.value),
             label: t.plural,
+            hindiLabel: t.hindiPlural,
           }))}
           collections={options.collections.map((c) => ({ value: c.slug, label: c.name }))}
-          themes={options.themes.map((t) => ({ value: t.slug, label: t.name }))}
-          languages={options.languages.map((code) => ({ value: code, label: languageLabel(code) }))}
+          languages={options.languages.map((code) => ({ value: code, label: languageLabel(code, true) }))}
         />
       </div>
 
@@ -82,7 +81,6 @@ async function ArchiveResults({ params }: { params: ArchiveParams }) {
     q: params.q,
     type: params.type,
     collection: params.collection,
-    theme: params.theme,
     language: params.language,
     sort: params.sort,
     page: params.page,

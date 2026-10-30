@@ -60,12 +60,11 @@ describe.skipIf(!hasDatabase)("archive, search and collections", () => {
     expect((await getArchivePage({ q: "'); DROP TABLE \"Work\"; --" })).total).toBe(0);
   });
 
-  it("filters by type, language, collection and theme together", async () => {
+  it("filters by type, language and collection", async () => {
     expect((await getArchivePage({ type: "POEM" })).total).toBe(1);
     expect((await getArchivePage({ language: "hi" })).items[0].contentType).toBe("SHORT_PIECE");
     expect((await getArchivePage({ collection: "night-notes" })).total).toBe(2);
     expect((await getArchivePage({ collection: "unfinished" })).total).toBe(0); // unpublished collection
-    expect((await getArchivePage({ theme: "rain" })).total).toBe(1);
     expect((await getArchivePage({ collection: "night-notes", type: "APHORISM" })).total).toBe(1);
   });
 
@@ -80,7 +79,6 @@ describe.skipIf(!hasDatabase)("archive, search and collections", () => {
   it("offers only filters that lead to published work", async () => {
     const options = await getArchiveFilterOptions();
     expect(options.collections.map((c) => c.slug)).toEqual(["night-notes"]);
-    expect(options.themes.map((t) => t.slug)).toEqual(["rain"]);
     expect(options.languages.sort()).toEqual(["en", "hi"]);
     expect(options.types.map((t) => t.value).sort()).toEqual(["APHORISM", "POEM", "SHORT_PIECE"]);
   });

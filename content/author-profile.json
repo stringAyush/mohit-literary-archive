@@ -1,17 +1,12 @@
 {
-  "author": "Mohit Kaushik Yenugwar",
+  "author": "Mohit Yenugwar",
   "author_display_name_on_primary_source": "Mohit Yenugwar",
   "primary_source": "https://www.yourquote.in/mohit-yenugwar-v0m/quotes",
   "additional_sources": [
     {
       "label": "LinkedIn profile",
-      "url": "https://in.linkedin.com/in/mohit-kaushik-yenugwar-b16b99155",
-      "status": "public profile reference; not a primary literary text source"
-    },
-    {
-      "label": "Goodreads author quote page",
-      "url": "https://www.goodreads.com/author/quotes/17432747.Mohit_Kaushik_Yenugwar_",
-      "status": "community-submitted quote leads; not independently verified"
+      "url": "https://www.linkedin.com/in/mohit-yenugwar-63054823a/",
+      "status": "public profile reference"
     }
   ],
   "profile_snapshot": {
@@ -22,11 +17,13 @@
     "displayed_following": 15,
     "joined_date": "2017-02-16"
   },
-  "catalog_status": "partial_research_seed",
-  "not_a_complete_export": true,
-  "extracted_records": 12,
-  "records_with_full_text": 0,
-  "records_with_short_excerpt": 2,
-  "records_metadata_only": 10,
-  "policy": "Do not publish any record automatically. Verify source and rights status first."
+  "catalog_status": "authoritative_archive",
+  "not_a_complete_export": false,
+  "extracted_records": 205,
+  "records_with_full_text": 205,
+  "records_with_short_excerpt": 0,
+  "records_metadata_only": 0,
+  "quotes_count": 107,
+  "stories_count": 98,
+  "policy": "Authoritative single source of truth from authentic YourQuote archive."
 }

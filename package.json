@@ -2,7 +2,7 @@
   "name": "literary-archive",
   "version": "1.0.0",
   "private": true,
-  "description": "Mohit Kaushik Yenugwar — a personal literary archive and publishing platform.",
+  "description": "Mohit Yenugwar — a personal literary archive and publishing platform.",
   "engines": {
     "node": ">=20.9.0"
   },
@@ -23,6 +23,7 @@
     "catalog:publish": "tsx scripts/publish-seed-content.ts",
     "db:studio": "prisma studio",
     "admin:create": "tsx scripts/create-admin.ts",
+    "admin:reset": "tsx scripts/reset-admin.ts",
     "publish:scheduled": "tsx scripts/publish-scheduled.ts",
     "bookstagram:import": "tsx scripts/import-photos.ts",
     "postinstall": "prisma generate"
