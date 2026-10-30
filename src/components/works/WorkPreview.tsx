@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { CopyQuoteButton } from "@/components/ui/CopyQuoteButton";
+import { StaggerContainer, StaggerItem } from "@/components/ui/MotionWrapper";
 import { Card } from "@/components/ui/card";
 import { contentTypeLabel } from "@/lib/constants";
 import { formatDate } from "@/lib/format";
@@ -78,24 +80,34 @@ export function WorkPreview({ work, headingLevel = 3 }: { work: WorkListItem; he
           )}
         </div>
 
-        <span className="inline-flex items-center gap-1 font-semibold text-ink transition-transform duration-150 group-hover:translate-x-1" aria-hidden="true">
-          <span>{work.excerpt.truncated ? "Read more" : "View"}</span>
-          <ArrowRight className="h-3.5 w-3.5" />
-        </span>
+        <div className="flex items-center gap-2.5">
+          <div className="relative z-10">
+            <CopyQuoteButton
+              text={work.excerpt.text}
+              author={work.authorName}
+              title={work.title || undefined}
+            />
+          </div>
+          <span className="inline-flex items-center gap-1 font-semibold text-ink transition-transform duration-150 group-hover:translate-x-1" aria-hidden="true">
+            <span>{work.excerpt.truncated ? "Read more" : "View"}</span>
+            <ArrowRight className="h-3.5 w-3.5" />
+          </span>
+        </div>
         {work.excerpt.truncated && <span className="sr-only">Preview shows the opening only. Open the work to read it in full.</span>}
       </div>
     </Card>
   );
 }
-
 export function WorkGrid({ works, headingLevel = 3 }: { works: WorkListItem[]; headingLevel?: 2 | 3 }) {
   return (
-    <ul className="grid gap-6 md:grid-cols-2">
-      {works.map((work) => (
-        <li key={work.id}>
-          <WorkPreview work={work} headingLevel={headingLevel} />
-        </li>
-      ))}
-    </ul>
+    <StaggerContainer>
+      <ul className="grid gap-6 md:grid-cols-2">
+        {works.map((work) => (
+          <StaggerItem key={work.id}>
+            <WorkPreview work={work} headingLevel={headingLevel} />
+          </StaggerItem>
+        ))}
+      </ul>
+    </StaggerContainer>
   );
 }

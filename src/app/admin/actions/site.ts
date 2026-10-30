@@ -188,3 +188,75 @@ export async function toggleInquiryHandledAction(_prev: ActionState, formData: F
   refresh();
   return success("Updated.");
 }
+
+export async function deleteInquiryAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
+  await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  if (!id) return failure("Missing message id.");
+  try {
+    await db.contactInquiry.delete({ where: { id } });
+  } catch (error) {
+    return errorToState(error);
+  }
+  refresh();
+  return success("Message deleted.");
+}
+
+export async function deleteMultipleInquiriesAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
+  await requireAdmin();
+  const rawIds = String(formData.get("ids") ?? "");
+  const ids = rawIds.split(",").map((s) => s.trim()).filter(Boolean);
+  if (ids.length === 0) return failure("No messages selected.");
+  try {
+    await db.contactInquiry.deleteMany({ where: { id: { in: ids } } });
+  } catch (error) {
+    return errorToState(error);
+  }
+  refresh();
+  return success(`${ids.length} message${ids.length === 1 ? "" : "s"} deleted.`);
+}
+
+export async function deleteMultipleCollectionsAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
+  await requireAdmin();
+  const rawIds = String(formData.get("ids") ?? "");
+  const ids = rawIds.split(",").map((s) => s.trim()).filter(Boolean);
+  if (ids.length === 0) return failure("No collections selected.");
+  try {
+    await db.collection.deleteMany({ where: { id: { in: ids } } });
+  } catch (error) {
+    return errorToState(error);
+  }
+  refresh();
+  redirect("/admin/collections?deleted=1");
+}
+
+// ─── Homepage Customization ────────────────────────────────────────────────
+
+export async function saveHomepageConfigAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
+  await requireAdmin();
+  const { saveHomepageConfig } = await import("@/lib/settings/service");
+  const marqueeRaw = String(formData.get("marqueeItems") ?? "");
+  const marqueeItems = marqueeRaw
+    .split(/[\n,]/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  try {
+    await saveHomepageConfig({
+      heroHeadline: String(formData.get("heroHeadline") ?? "").trim(),
+      heroSubtitle: String(formData.get("heroSubtitle") ?? "").trim(),
+      heroCtaText: String(formData.get("heroCtaText") ?? "").trim(),
+      heroCtaHref: String(formData.get("heroCtaHref") ?? "").trim(),
+      heroSecondaryText: String(formData.get("heroSecondaryText") ?? "").trim(),
+      heroSecondaryHref: String(formData.get("heroSecondaryHref") ?? "").trim(),
+      marqueeEnabled: formData.get("marqueeEnabled") === "on" || formData.get("marqueeEnabled") === "true",
+      marqueeItems: marqueeItems.length > 0 ? marqueeItems : undefined,
+      featuredWorkId: String(formData.get("featuredWorkId") ?? "").trim() || undefined,
+      showAuthorNote: formData.get("showAuthorNote") === "on" || formData.get("showAuthorNote") === "true",
+    });
+  } catch (error) {
+    return errorToState(error);
+  }
+  refresh();
+  return success("Homepage customized and saved successfully.");
+}

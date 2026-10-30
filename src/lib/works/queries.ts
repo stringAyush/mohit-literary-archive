@@ -64,9 +64,13 @@ const newestFirst: Prisma.WorkOrderByWithRelationInput[] = [{ firstPublishedAt: 
 
 // ─── Home page ────────────────────────────────────────────────────────────
 
-export async function getFeaturedWork() {
+export async function getFeaturedWork(preferredId?: string) {
   const where = publicWorkWhere();
   const include = { author: { select: { displayName: true } } } satisfies Prisma.WorkInclude;
+  if (preferredId) {
+    const preferred = await db.work.findFirst({ where: { ...where, id: preferredId }, include });
+    if (preferred) return { work: preferred, isFallback: false };
+  }
   const featured = await db.work.findFirst({ where: { ...where, featured: true }, orderBy: newestFirst, include });
   if (featured) return { work: featured, isFallback: false };
   const latest = await db.work.findFirst({ where, orderBy: newestFirst, include });

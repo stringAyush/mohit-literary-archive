@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 import { Pagination } from "@/components/ui/Pagination";
+import { FadeIn } from "@/components/ui/MotionWrapper";
 import { WorkGrid } from "@/components/works/WorkPreview";
 import { oneLineSummary } from "@/lib/works/excerpt";
 import { getPublicCollectionBySlug } from "@/lib/works/queries";
@@ -60,21 +61,23 @@ export default async function CollectionPage({ params, searchParams }: Props) {
         </ol>
       </nav>
 
-      <header className="mt-12 grid gap-8 border-b hairline pb-12 lg:mt-16 lg:grid-cols-[1fr_1.3fr] lg:gap-20">
-        <div>
-          <p className="eyebrow">
-            Collection · {total} {total === 1 ? "piece" : "pieces"}
-          </p>
-          <h1 className="mt-4 font-display text-[clamp(2.5rem,5vw,4rem)] leading-[1.05] tracking-[-0.015em]">
-            {collection.name}
-          </h1>
-        </div>
-        {(collection.introduction || collection.description) && (
-          <p className="self-end whitespace-pre-line font-editorial text-[1.5rem] leading-[1.5] text-ink/85">
-            {collection.introduction ?? collection.description}
-          </p>
-        )}
-      </header>
+      <FadeIn>
+        <header className="mt-12 grid gap-8 border-b hairline pb-12 lg:mt-16 lg:grid-cols-[1fr_1.3fr] lg:gap-20">
+          <div>
+            <p className="eyebrow">
+              Collection · {total} {total === 1 ? "piece" : "pieces"}
+            </p>
+            <h1 className="mt-4 font-display text-[clamp(2.5rem,5vw,4rem)] leading-[1.05] tracking-[-0.015em]">
+              {collection.name}
+            </h1>
+          </div>
+          {(collection.introduction || collection.description) && (
+            <p className="self-end whitespace-pre-line font-editorial text-[1.5rem] leading-[1.5] text-ink/85">
+              {collection.introduction ?? collection.description}
+            </p>
+          )}
+        </header>
+      </FadeIn>
 
       <div className="mt-6">
         {items.length > 0 ? (

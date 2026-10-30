@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { FadeIn } from "@/components/ui/MotionWrapper";
 import { WorkPreview } from "@/components/works/WorkPreview";
 import { SITE_NAME } from "@/lib/constants";
 import { getPrimaryAuthor, getSelectedWorks, profileLinks } from "@/lib/works/queries";
@@ -23,7 +24,8 @@ export default async function AboutPage() {
 
   return (
     <div className="page-container pb-16 pt-12 lg:pb-24 lg:pt-20">
-      <div className="reading-column">
+      <FadeIn>
+        <div className="reading-column">
         <p className="eyebrow flex items-center gap-1.5">
           <span className="h-1.5 w-1.5 rounded-full bg-accent" />
           About the writer
@@ -82,25 +84,28 @@ export default async function AboutPage() {
           </Link>
         </section>
       </div>
+      </FadeIn>
 
       {selected.length > 0 && (
-        <section aria-labelledby="selected-heading" className="mt-20 lg:mt-28">
-          <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-            <h2 id="selected-heading" className="font-display text-[1.875rem] leading-tight sm:text-[2.25rem]">
-              Selected works
-            </h2>
-            <Link href="/works" className="text-link font-sans text-sm">
-              The whole archive
-            </Link>
-          </div>
-          <ul className="grid gap-x-10 md:grid-cols-3">
-            {selected.map((work) => (
-              <li key={work.id}>
-                <WorkPreview work={work} />
-              </li>
-            ))}
-          </ul>
-        </section>
+        <FadeIn delay={0.1}>
+          <section aria-labelledby="selected-heading" className="mt-20 lg:mt-28">
+            <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+              <h2 id="selected-heading" className="font-display text-[1.875rem] leading-tight sm:text-[2.25rem]">
+                Selected works
+              </h2>
+              <Link href="/works" className="text-link font-sans text-sm">
+                The whole archive
+              </Link>
+            </div>
+            <ul className="grid gap-x-10 md:grid-cols-3">
+              {selected.map((work) => (
+                <li key={work.id}>
+                  <WorkPreview work={work} />
+                </li>
+              ))}
+            </ul>
+          </section>
+        </FadeIn>
       )}
     </div>
   );

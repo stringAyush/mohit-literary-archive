@@ -1,13 +1,11 @@
 import type { Prisma, WorkStatus } from "@prisma/client";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { DeleteWorkButton } from "@/components/admin/DeleteWorkButton";
-import { PageHeader, StageBadge, StatusBadge } from "@/components/admin/ui";
+import { PageHeader } from "@/components/admin/ui";
+import { WorksBatchTable } from "@/components/admin/WorksBatchTable";
 import { hrefFor, Pagination } from "@/components/ui/Pagination";
 import { requireAdmin } from "@/lib/auth/admin";
-import { contentTypeLabel } from "@/lib/constants";
 import { db } from "@/lib/db";
-import { formatDateTime } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Works" };
@@ -90,6 +88,12 @@ export default async function AdminWorksPage({ searchParams }: Props) {
         </p>
       )}
 
+      {raw.deletedMultiple && (
+        <p role="status" className="mb-6 border-l-2 border-[#3d6b4a] bg-[#3d6b4a]/5 px-4 py-3 font-sans text-sm text-[#2f5539]">
+          {raw.deletedMultiple} selected works have been permanently deleted from the archive.
+        </p>
+      )}
+
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <nav aria-label="Filter by status">
           <ul className="flex flex-wrap gap-1">
@@ -123,55 +127,7 @@ export default async function AdminWorksPage({ searchParams }: Props) {
       {works.length === 0 ? (
         <p className="border-y hairline py-12 text-center font-sans text-sm text-muted">No works match.</p>
       ) : (
-        <div className="overflow-x-auto border hairline bg-surface">
-          <table className="w-full min-w-[720px] font-sans text-sm">
-            <caption className="sr-only">Works, most recently changed first</caption>
-            <thead className="border-b hairline text-left text-xs text-muted">
-              <tr>
-                <th scope="col" className="px-4 py-3 font-medium">Work</th>
-                <th scope="col" className="px-4 py-3 font-medium">Form</th>
-                <th scope="col" className="px-4 py-3 font-medium">Stage</th>
-                <th scope="col" className="px-4 py-3 font-medium">Status</th>
-                <th scope="col" className="px-4 py-3 font-medium">Last changed</th>
-                <th scope="col" className="px-4 py-3 font-medium text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-line">
-              {works.map((work) => (
-                <tr key={work.id} className="align-top hover:bg-paper">
-                  <td className="max-w-md px-4 py-3">
-                    <Link href={`/admin/works/${work.id}`} className="font-medium text-ink underline decoration-line underline-offset-4 hover:text-accent">
-                      {work.title ?? (work.body.split("\n")[0]?.slice(0, 80) || `Untitled (${work.slug})`)}
-                    </Link>
-                    <div className="mt-1 font-mono text-xs text-muted">/works/{work.slug}</div>
-                    <div className="mt-1 flex flex-wrap gap-2 text-xs text-muted">
-                      {work.textStatus === "EXCERPT_ONLY" && <span className="text-accent font-medium">Excerpt</span>}
-                      {work.textStatus === "METADATA_ONLY" && <span className="text-muted">Metadata only</span>}
-                      {work.featured && <span>★ Featured</span>}
-                      {work.isDemo && <span>Demo text</span>}
-                    </div>
-                  </td>
-                  <td className="px-4 py-3">{contentTypeLabel(work.contentType)}</td>
-                  <td className="px-4 py-3"><StageBadge work={work} /></td>
-                  <td className="px-4 py-3"><StatusBadge status={work.status} /></td>
-                  <td className="whitespace-nowrap px-4 py-3 text-muted">{formatDateTime(work.updatedAt)}</td>
-                  <td className="whitespace-nowrap px-4 py-3 text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <Link href={`/admin/works/${work.id}`} className="btn btn-quiet h-8 min-h-8 px-2.5 text-xs">
-                        Edit
-                      </Link>
-                      <DeleteWorkButton
-                        workId={work.id}
-                        workTitle={work.title ?? (work.body.split("\n")[0]?.slice(0, 40) || work.slug)}
-                        variant="table-action"
-                      />
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <WorksBatchTable works={works} />
       )}
       <Pagination
         basePath="/admin/works"

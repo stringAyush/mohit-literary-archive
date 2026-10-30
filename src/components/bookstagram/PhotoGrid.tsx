@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Camera } from "lucide-react";
+import { MotionCard } from "@/components/ui/MotionWrapper";
 import { type PhotoPostData } from "@/lib/bookstagram/types";
 import { PhotoCard } from "./PhotoCard";
 import { PhotoLightbox } from "./PhotoLightbox";
@@ -33,11 +34,13 @@ export function PhotoGrid({ posts }: Props) {
       <div className="columns-1 sm:columns-2 md:columns-3 xl:columns-4 gap-5 sm:gap-6 [column-fill:_balance]">
         {posts.map((post, index) => (
           <div key={post.id} className="mb-6 break-inside-avoid inline-block w-full">
-            <PhotoCard
-              post={post}
-              onOpenLightbox={() => setLightboxIndex(index)}
-              priority={index < 4}
-            />
+            <MotionCard>
+              <PhotoCard
+                post={post}
+                onOpenLightbox={() => setLightboxIndex(index)}
+                priority={index < 4}
+              />
+            </MotionCard>
           </div>
         ))}
       </div>

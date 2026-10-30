@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { CollectionForm } from "@/components/admin/SiteForms";
+import { CollectionsBatchList } from "@/components/admin/CollectionsBatchList";
 import { PageHeader, Panel } from "@/components/admin/ui";
 import { requireAdmin } from "@/lib/auth/admin";
 import { db } from "@/lib/db";
@@ -34,33 +34,16 @@ export default async function AdminCollectionsPage({ searchParams }: Props) {
       )}
       <div className="grid gap-10 xl:grid-cols-[1fr_420px]">
         <div>
-          {collections.length === 0 ? (
-            <p className="border-y hairline py-10 text-center font-sans text-sm text-muted">No collections yet.</p>
-          ) : (
-            <ul className="divide-y divide-line border hairline bg-surface">
-              {collections.map((c, i) => {
-                const live = c.isPublished && publicCounts[i] > 0;
-                return (
-                  <li key={c.id} className="flex flex-wrap items-center justify-between gap-3 p-4 font-sans text-sm">
-                    <div>
-                      <Link href={`/admin/collections/${c.id}`} className="font-medium underline decoration-line underline-offset-4 hover:text-accent">
-                        {c.name}
-                      </Link>
-                      <p className="mt-1 text-xs text-muted">
-                        {c._count.works} works · {publicCounts[i]} published ·{" "}
-                        {live ? "visible to readers" : c.isPublished ? "public once it has published work" : "hidden"}
-                      </p>
-                    </div>
-                    {live && (
-                      <Link href={`/collections/${c.slug}`} className="text-xs text-accent underline">
-                        View ↗
-                      </Link>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          )}
+          <CollectionsBatchList
+            collections={collections.map((c, i) => ({
+              id: c.id,
+              name: c.name,
+              slug: c.slug,
+              isPublished: c.isPublished,
+              workCount: c._count.works,
+              publicCount: publicCounts[i],
+            }))}
+          />
         </div>
         <Panel title="New collection" id="new-collection">
           <CollectionForm collection={null} />

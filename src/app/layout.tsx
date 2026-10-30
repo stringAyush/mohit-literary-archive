@@ -29,8 +29,15 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={fontVariables}>
-      <body className="min-h-dvh bg-paper text-ink">{children}</body>
+    <html lang="en" className={fontVariables} suppressHydrationWarning>
+      <body className="min-h-dvh bg-paper text-ink">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');var d=window.matchMedia('(prefers-color-scheme: dark)').matches;if(t==='dark'||(!t&&d)){document.documentElement.classList.add('dark');}}catch(e){}})()`,
+          }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

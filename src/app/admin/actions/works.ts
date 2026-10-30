@@ -156,3 +156,22 @@ export async function deleteWorkAction(_prev: ActionState, formData: FormData): 
   refresh();
   redirect("/admin/works?deleted=1");
 }
+
+export async function deleteMultipleWorksAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
+  await requireAdmin();
+  const rawIds = String(formData.get("ids") ?? "");
+  const ids = rawIds.split(",").map((s) => s.trim()).filter(Boolean);
+  if (ids.length === 0) return failure("No works selected.");
+  try {
+    const { db } = await import("@/lib/db");
+    await db.$transaction(async (tx) => {
+      await tx.work.deleteMany({
+        where: { id: { in: ids } },
+      });
+    });
+  } catch (error) {
+    return errorToState(error);
+  }
+  refresh();
+  redirect(`/admin/works?deletedMultiple=${ids.length}`);
+}

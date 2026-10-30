@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { logoutAction } from "@/app/admin/actions/auth";
 import { AdminNav } from "@/components/admin/AdminNav";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { requireAdmin } from "@/lib/auth/admin";
 import { db } from "@/lib/db";
 
@@ -21,7 +22,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     { label: "Book Photography", href: "/admin/bookstagram" },
     { label: "Review queue", href: "/admin/review", count: reviewCount },
     { label: "Collections", href: "/admin/collections" },
-    { label: "Themes", href: "/admin/themes" },
+    { label: "Homepage", href: "/admin/homepage" },
     { label: "Writer profile", href: "/admin/author" },
     { label: "Import", href: "/admin/import" },
     { label: "Messages", href: "/admin/inquiries", count: inquiryCount },
@@ -32,11 +33,14 @@ export default async function DashboardLayout({ children }: { children: React.Re
     <div className="min-h-dvh bg-paper lg:grid lg:grid-cols-[240px_1fr]">
       <aside className="border-b hairline bg-surface lg:sticky lg:top-0 lg:h-dvh lg:border-b-0 lg:border-r">
         <div className="flex h-full flex-col gap-4 px-4 py-4 lg:px-5 lg:py-6">
-          <div className="flex items-center justify-between lg:block">
-            <Link href="/admin" className="font-display text-sm uppercase tracking-[0.14em] no-underline">
-              Archive admin
-            </Link>
-            <Link href="/" className="font-sans text-xs text-muted hover:text-accent lg:mt-1 lg:block">
+          <div className="flex items-center justify-between lg:flex-col lg:items-start lg:gap-2">
+            <div className="flex items-center justify-between w-full">
+              <Link href="/admin" className="font-display text-sm uppercase tracking-[0.14em] no-underline text-ink">
+                Archive admin
+              </Link>
+              <ThemeToggle />
+            </div>
+            <Link href="/" className="font-sans text-xs text-muted hover:text-accent">
               View site ↗
             </Link>
           </div>
@@ -55,6 +59,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
       </aside>
       <div className="min-w-0">
         <div className="flex items-center justify-end gap-4 border-b hairline px-5 py-2 font-sans text-xs text-muted lg:hidden">
+          <ThemeToggle />
           <span className="truncate">{admin.name}</span>
           <form action={logoutAction}>
             <button type="submit" className="min-h-9 text-ink underline">

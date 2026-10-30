@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { RotateCcw } from "lucide-react";
 import { ArchiveFilters } from "@/components/archive/ArchiveFilters";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { FadeIn } from "@/components/ui/MotionWrapper";
 import { hrefFor, Pagination } from "@/components/ui/Pagination";
 import { WorkGrid } from "@/components/works/WorkPreview";
 import { CONTENT_TYPES, contentTypeParam, contentTypePlural, languageLabel } from "@/lib/constants";
@@ -39,38 +40,40 @@ export default async function ArchivePage({ searchParams }: Props) {
 
   return (
     <div className="page-container pb-16 pt-12 lg:pb-24 lg:pt-20">
-      <header className="max-w-3xl">
-        <p className="eyebrow flex items-center gap-1.5">
-          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-          The Complete Archive
-        </p>
-        <h1 className="mt-4 font-display text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[1.05] tracking-[-0.015em] text-ink font-normal">
-          The Archive
-        </h1>
-        <p className="mt-4 font-editorial text-[1.4rem] leading-snug text-ink/80">
-          A growing collection of poems, reflections, excerpts, and literary observations.
-        </p>
-      </header>
+      <FadeIn>
+        <header className="max-w-3xl">
+          <p className="eyebrow flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+            The Complete Archive
+          </p>
+          <h1 className="mt-4 font-display text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[1.05] tracking-[-0.015em] text-ink font-normal">
+            The Archive
+          </h1>
+          <p className="mt-4 font-editorial text-[1.4rem] leading-snug text-ink/80">
+            A growing collection of poems, reflections, excerpts, and literary observations.
+          </p>
+        </header>
 
-      <div className="mt-8 lg:mt-12">
-        <ArchiveFilters
-          key={resultsKey}
-          values={{
-            q: params.q,
-            type: params.type ? contentTypeParam(params.type) : "",
-            collection: params.collection ?? "",
-            lang: params.language ?? "",
-            sort: params.sort,
-          }}
-          types={CONTENT_TYPES.filter((t) => options.types.some((o) => o.value === t.value)).map((t) => ({
-            value: contentTypeParam(t.value),
-            label: t.plural,
-            hindiLabel: t.hindiPlural,
-          }))}
-          collections={options.collections.map((c) => ({ value: c.slug, label: c.name }))}
-          languages={options.languages.map((code) => ({ value: code, label: languageLabel(code, true) }))}
-        />
-      </div>
+        <div className="mt-8 lg:mt-12">
+          <ArchiveFilters
+            key={resultsKey}
+            values={{
+              q: params.q,
+              type: params.type ? contentTypeParam(params.type) : "",
+              collection: params.collection ?? "",
+              lang: params.language ?? "",
+              sort: params.sort,
+            }}
+            types={CONTENT_TYPES.filter((t) => options.types.some((o) => o.value === t.value)).map((t) => ({
+              value: contentTypeParam(t.value),
+              label: t.plural,
+              hindiLabel: t.hindiPlural,
+            }))}
+            collections={options.collections.map((c) => ({ value: c.slug, label: c.name }))}
+            languages={options.languages.map((code) => ({ value: code, label: languageLabel(code, true) }))}
+          />
+        </div>
+      </FadeIn>
 
       <Suspense key={resultsKey} fallback={<ResultsSkeleton />}>
         <ArchiveResults params={params} />

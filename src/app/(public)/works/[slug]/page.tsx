@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import { cache } from "react";
+import { FadeIn } from "@/components/ui/MotionWrapper";
 import { WorkGrid } from "@/components/works/WorkPreview";
 import { ShareControls } from "@/components/works/ShareControls";
 import { WorkText } from "@/components/works/WorkText";
@@ -150,8 +151,9 @@ export default async function WorkPage({ params }: Props) {
         </nav>
       </div>
 
-      <div className="page-container">
-        <div className="reading-column pt-12 lg:pt-20">
+      <FadeIn>
+        <div className="page-container">
+          <div className="reading-column pt-12 lg:pt-20">
           {work.isDemo && (
             <p className="mb-8 border-l-2 border-accent bg-surface/80 backdrop-blur-xs px-4 py-3 font-sans text-sm text-ink">
               Demonstration content: sample text written while developing this website. It is not a work by{" "}
@@ -360,23 +362,26 @@ export default async function WorkPage({ params }: Props) {
           </footer>
         </div>
       </div>
+      </FadeIn>
 
-      <section aria-labelledby="related-heading" className="page-container mt-20 lg:mt-28">
-          <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-            <h2 id="related-heading" className="font-display text-[1.875rem] leading-tight sm:text-[2.25rem]">
-              {related.length > 0 ? "More to read" : "Keep reading"}
-            </h2>
-            <div className="flex gap-6 font-sans text-sm">
-              <Link href="/works" className="text-link">
-                Back to the archive
-              </Link>
-              <Link href="/collections" className="text-link">
-                Collections
-              </Link>
+      <FadeIn delay={0.1}>
+        <section aria-labelledby="related-heading" className="page-container mt-20 lg:mt-28">
+            <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+              <h2 id="related-heading" className="font-display text-[1.875rem] leading-tight sm:text-[2.25rem]">
+                {related.length > 0 ? "More to read" : "Keep reading"}
+              </h2>
+              <div className="flex gap-6 font-sans text-sm">
+                <Link href="/works" className="text-link">
+                  Back to the archive
+                </Link>
+                <Link href="/collections" className="text-link">
+                  Collections
+                </Link>
+              </div>
             </div>
-          </div>
-          {related.length > 0 && <WorkGrid works={related} />}
-      </section>
+            {related.length > 0 && <WorkGrid works={related} />}
+        </section>
+      </FadeIn>
     </article>
   );
 }

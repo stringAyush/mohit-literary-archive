@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight, FolderKanban } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { StaggerContainer, StaggerItem } from "@/components/ui/MotionWrapper";
 import type { PublicCollection } from "@/lib/works/queries";
 
 export function CollectionPanel({ collection, index }: { collection: PublicCollection; index?: number }) {
@@ -46,12 +47,14 @@ export function CollectionPanel({ collection, index }: { collection: PublicColle
 
 export function CollectionGrid({ collections }: { collections: PublicCollection[] }) {
   return (
-    <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {collections.map((collection, index) => (
-        <li key={collection.id}>
-          <CollectionPanel collection={collection} index={index} />
-        </li>
-      ))}
-    </ul>
+    <StaggerContainer>
+      <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {collections.map((collection, index) => (
+          <StaggerItem key={collection.id}>
+            <CollectionPanel collection={collection} index={index} />
+          </StaggerItem>
+        ))}
+      </ul>
+    </StaggerContainer>
   );
 }
