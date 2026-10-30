@@ -7,7 +7,7 @@ import { NAV_LINKS, isActivePath } from "./nav";
 export function NavLinks() {
   const pathname = usePathname();
   return (
-    <ul className="hidden items-center gap-8 lg:flex">
+    <ul className="hidden items-center gap-1 lg:flex">
       {NAV_LINKS.map((link) => {
         const active = isActivePath(pathname, link.href);
         return (
@@ -15,11 +15,13 @@ export function NavLinks() {
             <Link
               href={link.href}
               aria-current={active ? "page" : undefined}
-              className={`relative py-2 font-sans text-[0.875rem] tracking-[0.02em] no-underline transition-colors hover:text-accent ${
-                active ? "text-ink after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:bg-accent" : "text-muted"
+              className={`relative inline-flex items-center px-3.5 py-1.5 rounded-full font-sans text-xs font-medium tracking-wide no-underline transition-all duration-200 ${
+                active
+                  ? "bg-accent text-white font-medium shadow-xs"
+                  : "text-ink/80 hover:text-ink hover:bg-ink/5"
               }`}
             >
-              {link.label}
+              <span>{link.label}</span>
             </Link>
           </li>
         );

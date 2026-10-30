@@ -97,19 +97,19 @@ export function SearchDialog() {
       <button
         type="button"
         onClick={open}
-        className="inline-flex h-11 w-11 items-center justify-center text-ink transition-colors hover:text-accent"
+        className="inline-flex h-8 w-8 items-center justify-center rounded-full text-ink/75 transition-all hover:bg-ink/5 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         aria-label="Search the archive"
         aria-haspopup="dialog"
         aria-expanded={isOpen}
         aria-keyshortcuts="/"
       >
-        <SearchIcon className="h-[1.375rem] w-[1.375rem]" />
+        <SearchIcon className="h-4 w-4" />
       </button>
 
       <dialog
         ref={ref}
         aria-label="Search the archive"
-        className="mx-auto mt-[8vh] mb-auto max-h-[84vh] w-[min(44rem,calc(100vw-2rem))] max-w-none overflow-hidden rounded-xs border hairline bg-surface p-0 text-ink shadow-[0_24px_60px_-30px_rgb(36_34_31/0.45)]"
+        className="search-dialog mx-auto mt-[8vh] mb-auto max-h-[84vh] w-[min(44rem,calc(100vw-2rem))] max-w-none overflow-hidden rounded-2xl border border-line/80 bg-surface/95 p-0 text-ink shadow-[0_24px_60px_-20px_rgb(20_19_18/0.25)] backdrop-blur-xl ring-1 ring-white/60"
       >
         <form onSubmit={submit} role="search" className="flex items-center gap-2 border-b hairline px-4 sm:px-6">
           <SearchIcon className="h-5 w-5 shrink-0 text-muted" />
@@ -133,7 +133,7 @@ export function SearchDialog() {
             <button
               type="button"
               onClick={clear}
-              className="inline-flex h-11 shrink-0 items-center px-2 font-sans text-xs uppercase tracking-[0.12em] text-muted hover:text-accent"
+              className="inline-flex h-11 shrink-0 items-center px-2 font-sans text-xs uppercase tracking-[0.12em] text-muted hover:text-ink"
             >
               Clear
             </button>
@@ -141,7 +141,7 @@ export function SearchDialog() {
           <button
             type="button"
             onClick={close}
-            className="-mr-2 inline-flex h-11 w-11 shrink-0 items-center justify-center text-muted hover:text-accent"
+            className="-mr-2 inline-flex h-11 w-11 shrink-0 items-center justify-center text-muted hover:text-ink"
             aria-label="Close search"
           >
             <CloseIcon />
@@ -164,9 +164,9 @@ export function SearchDialog() {
                         <Link
                           href={`/works/${work.slug}`}
                           onClick={close}
-                          className="block py-3 no-underline transition-colors hover:text-accent"
+                          className="block py-3 px-2 -mx-2 rounded-lg no-underline transition-all hover:bg-accent/20"
                         >
-                          <span className="eyebrow mr-3 text-[0.6875rem]">{contentTypeLabel(work.contentType)}</span>
+                          <span className="eyebrow mr-3 text-[0.6875rem] text-ink font-semibold">{contentTypeLabel(work.contentType)}</span>
                           <span className="font-editorial text-xl">{work.title ?? work.excerpt}</span>
                           {work.title && (
                             <span className="mt-0.5 block truncate font-editorial text-base italic text-muted">
@@ -188,7 +188,7 @@ export function SearchDialog() {
                         <Link
                           href={`/collections/${collection.slug}`}
                           onClick={close}
-                          className="block py-3 font-display text-lg no-underline hover:text-accent"
+                          className="block py-3 px-2 -mx-2 rounded-lg font-display text-lg no-underline transition-all hover:bg-accent/20"
                         >
                           {collection.name}
                         </Link>

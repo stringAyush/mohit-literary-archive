@@ -21,15 +21,15 @@ export function CategoryFilter({ categories, totalCount }: Props) {
         <li>
           <Link
             href="/bookstagram"
-            className={`inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-sans text-xs font-medium transition-all no-underline ${
+            className={`inline-flex items-center gap-2 rounded-lg px-3.5 py-1.5 font-sans text-xs tracking-wider transition-all no-underline ${
               !activeCategory
-                ? "bg-accent text-white shadow-xs"
-                : "border border-line bg-surface text-ink hover:border-ink/40"
+                ? "bg-accent text-white font-medium shadow-xs border border-accent"
+                : "border border-line bg-surface/75 text-ink/80 hover:text-ink hover:border-ink/40"
             }`}
           >
             <span>All frames</span>
             <span
-              className={`rounded-full px-1.5 py-0.2 text-[10px] tabular-nums ${
+              className={`rounded px-1.5 py-0.2 text-[10px] tabular-nums ${
                 !activeCategory ? "bg-white/20 text-white" : "bg-paper text-muted"
               }`}
             >
@@ -47,15 +47,15 @@ export function CategoryFilter({ categories, totalCount }: Props) {
             <li key={cat}>
               <Link
                 href={`/bookstagram?category=${encodeURIComponent(cat)}`}
-                className={`inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-sans text-xs font-medium transition-all no-underline ${
+                className={`inline-flex items-center gap-2 rounded-lg px-3.5 py-1.5 font-sans text-xs tracking-wider transition-all no-underline ${
                   isActive
-                    ? "bg-accent text-white shadow-xs"
-                    : "border border-line bg-surface text-ink hover:border-ink/40"
+                    ? "bg-accent text-white font-medium shadow-xs border border-accent"
+                    : "border border-line bg-surface/75 text-ink/80 hover:text-ink hover:border-ink/40"
                 }`}
               >
                 <span>{cat}</span>
                 <span
-                  className={`rounded-full px-1.5 py-0.2 text-[10px] tabular-nums ${
+                  className={`rounded px-1.5 py-0.2 text-[10px] tabular-nums ${
                     isActive ? "bg-white/20 text-white" : "bg-paper text-muted"
                   }`}
                 >

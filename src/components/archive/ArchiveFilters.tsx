@@ -105,12 +105,12 @@ export function ArchiveFilters({ values, types, collections, languages }: Props)
       method="get"
       onSubmit={onSubmit}
       aria-busy={isPending}
-      className="rounded-2xl border border-line/70 bg-surface/85 p-5 shadow-xs backdrop-blur-md sm:p-6"
+      className="rounded-2xl border border-ink/10 bg-surface/75 p-5 shadow-[0_8px_30px_rgb(20,19,18,0.04)] backdrop-blur-md ring-1 ring-white/60 sm:p-6"
     >
       {/* ─── Language Section Tabs ─── */}
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b hairline pb-4">
         <div className="flex items-center gap-1.5 font-sans text-xs font-semibold uppercase tracking-wider text-muted">
-          <Globe className="h-3.5 w-3.5 text-accent" />
+          <Globe className="h-3.5 w-3.5 text-ink" />
           <span>Language Section:</span>
         </div>
         <div className="inline-flex rounded-xl bg-ink/5 p-1">
@@ -123,7 +123,7 @@ export function ArchiveFilters({ values, types, collections, languages }: Props)
                 onClick={() => setLanguageTab(tab.code)}
                 className={`rounded-lg px-3 py-1.5 font-sans text-xs font-medium transition-all ${
                   isActive
-                    ? "bg-surface text-ink shadow-xs"
+                    ? "bg-accent text-white font-medium shadow-xs"
                     : "text-muted hover:text-ink"
                 }`}
               >

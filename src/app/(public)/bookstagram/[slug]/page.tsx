@@ -164,7 +164,7 @@ export default async function PhotoPostPage({ params }: Props) {
                   {post.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="inline-flex items-center gap-1 rounded-full border border-line bg-paper px-2.5 py-1 font-sans text-[11px] text-muted"
+                      className="inline-flex items-center gap-1 rounded-xs border border-line bg-paper px-2.5 py-1 font-sans text-[11px] text-muted"
                     >
                       <Tag className="h-2.5 w-2.5 text-accent" />
                       <span>{tag}</span>

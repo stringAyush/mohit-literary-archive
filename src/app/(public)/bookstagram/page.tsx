@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Sparkles } from "lucide-react";
 import { CategoryFilter } from "@/components/bookstagram/CategoryFilter";
 import { PhotoGrid } from "@/components/bookstagram/PhotoGrid";
 import { getPhotoCategories, getPublicPhotoPosts } from "@/lib/bookstagram/queries";
@@ -54,12 +53,10 @@ export default async function BookstagramPage({ searchParams }: Props) {
       </main>
 
       {/* Editorial Note / Footer Insight */}
-      <aside className="mt-20 rounded-2xl border hairline bg-surface/70 p-8 sm:p-10 text-center">
-        <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-accent/10 text-accent mb-3">
-          <Sparkles className="h-4 w-4" />
-        </div>
-        <h2 className="font-display text-xl sm:text-2xl text-ink">Original Photography</h2>
-        <p className="mx-auto mt-2 max-w-xl font-sans text-sm text-muted">
+      <aside className="mt-20 rounded-2xl border border-ink/10 bg-surface/70 backdrop-blur-md p-8 sm:p-10 text-center ring-1 ring-white/60 shadow-[0_8px_32px_0_rgba(20,19,18,0.04)]">
+        <p className="eyebrow mb-2">Original Photography</p>
+        <h2 className="font-display text-2xl sm:text-3xl text-ink">Curated &amp; Composed by the Author</h2>
+        <p className="mx-auto mt-3 max-w-xl font-sans text-sm text-muted leading-relaxed">
           All photographs in this gallery are original works composed and photographed by Mohit Yenugwar.
           Images may not be reproduced or republished without prior written permission.
         </p>

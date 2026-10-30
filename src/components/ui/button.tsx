@@ -11,9 +11,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const variantStyles = {
       default: "bg-accent text-white shadow-xs hover:bg-accent-hover hover:shadow-sm",
       secondary: "bg-ink text-paper shadow-xs hover:bg-ink/90",
-      outline: "border border-line/80 bg-surface/80 text-ink shadow-xs hover:bg-surface hover:border-ink/50",
+      outline: "border border-line/80 bg-surface/80 text-ink shadow-xs backdrop-blur-sm hover:bg-surface hover:border-ink/50",
       ghost: "text-ink hover:bg-ink/5 hover:text-ink",
-      link: "text-accent underline-offset-4 hover:underline",
+      link: "text-accent underline decoration-accent/40 underline-offset-4 hover:text-accent-hover hover:decoration-accent",
     };
 
     const sizeStyles = {

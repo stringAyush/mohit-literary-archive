@@ -12,10 +12,10 @@ export function WorkPreview({ work, headingLevel = 3 }: { work: WorkListItem; he
   const lang = work.language === "other" ? undefined : work.language;
 
   return (
-    <Card className="group relative flex h-full flex-col overflow-hidden border border-line/75 bg-surface/80 p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/40 hover:bg-surface hover:shadow-md">
+    <Card className="group relative flex h-full flex-col overflow-hidden p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgb(20,19,18,0.08)]">
       {/* Top metadata */}
       <div className="flex flex-wrap items-center gap-2">
-        <span className="eyebrow text-accent text-[0.6875rem]">
+        <span className="rounded-xs bg-ink/5 px-2 py-0.5 eyebrow text-ink font-semibold text-[0.6875rem]">
           {contentTypeLabel(work.contentType)}
         </span>
         {work.textStatus === "EXCERPT_ONLY" && (
@@ -40,7 +40,7 @@ export function WorkPreview({ work, headingLevel = 3 }: { work: WorkListItem; he
       </div>
 
       {/* Title */}
-      <Heading className={work.title ? "mt-4 font-display text-[1.4rem] leading-snug tracking-tight text-ink transition-colors group-hover:text-accent" : "sr-only"}>
+      <Heading className={work.title ? "mt-4 font-display text-[1.55rem] font-normal leading-snug tracking-normal text-ink transition-all group-hover:underline decoration-accent decoration-2 underline-offset-4" : "sr-only"}>
         {label}
       </Heading>
 
@@ -61,13 +61,16 @@ export function WorkPreview({ work, headingLevel = 3 }: { work: WorkListItem; he
       {/* Footer metadata & read action */}
       <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t hairline pt-4 font-sans text-xs text-muted">
         <div className="flex items-center gap-2">
-          <span className="font-medium text-ink/80">{work.authorName}</span>
+          <span className="font-medium text-ink flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+            {work.authorName}
+          </span>
           {work.collections[0] && (
             <>
               <span className="text-line">•</span>
               <Link
                 href={`/collections/${work.collections[0].slug}`}
-                className="relative z-10 rounded-md px-1.5 py-0.5 transition-colors hover:bg-ink/5 hover:text-accent"
+                className="relative z-10 rounded-md px-1.5 py-0.5 transition-colors hover:bg-ink/5 hover:text-ink"
               >
                 {work.collections[0].name}
               </Link>
@@ -75,7 +78,7 @@ export function WorkPreview({ work, headingLevel = 3 }: { work: WorkListItem; he
           )}
         </div>
 
-        <span className="inline-flex items-center gap-1 font-medium text-accent transition-transform duration-150 group-hover:translate-x-0.5" aria-hidden="true">
+        <span className="inline-flex items-center gap-1 font-semibold text-ink transition-transform duration-150 group-hover:translate-x-1" aria-hidden="true">
           <span>{work.excerpt.truncated ? "Read more" : "View"}</span>
           <ArrowRight className="h-3.5 w-3.5" />
         </span>

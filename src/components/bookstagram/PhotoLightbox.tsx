@@ -59,7 +59,7 @@ export function PhotoLightbox({ posts, currentIndex, onClose, onNavigate }: Prop
             {String(currentIndex + 1).padStart(2, "0")} / {String(posts.length).padStart(2, "0")}
           </span>
           {currentPost.category && (
-            <span className="hidden sm:inline-block rounded-full bg-white/10 px-2.5 py-0.5 text-[11px] text-white/90">
+            <span className="hidden sm:inline-block rounded-xs bg-white/10 px-2 py-0.5 text-[11px] text-white/90">
               {currentPost.category}
             </span>
           )}
@@ -68,7 +68,7 @@ export function PhotoLightbox({ posts, currentIndex, onClose, onNavigate }: Prop
           type="button"
           onClick={onClose}
           aria-label="Close lightbox"
-          className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20 transition-colors"
+          className="rounded-lg bg-white/10 p-2 text-white hover:bg-white/20 transition-colors"
         >
           <X className="h-5 w-5" />
         </button>
@@ -80,7 +80,7 @@ export function PhotoLightbox({ posts, currentIndex, onClose, onNavigate }: Prop
           type="button"
           onClick={() => onNavigate(currentIndex - 1)}
           aria-label="Previous photograph"
-          className="absolute left-3 sm:left-6 z-10 rounded-full bg-black/40 p-3 text-white/90 hover:bg-black/80 hover:text-white transition-all backdrop-blur-xs"
+          className="absolute left-3 sm:left-6 z-10 rounded-xl bg-black/50 p-3 text-white/90 hover:bg-black/80 hover:text-white transition-all backdrop-blur-xs"
         >
           <ChevronLeft className="h-6 w-6" />
         </button>
@@ -91,7 +91,7 @@ export function PhotoLightbox({ posts, currentIndex, onClose, onNavigate }: Prop
           type="button"
           onClick={() => onNavigate(currentIndex + 1)}
           aria-label="Next photograph"
-          className="absolute right-3 sm:right-6 z-10 rounded-full bg-black/40 p-3 text-white/90 hover:bg-black/80 hover:text-white transition-all backdrop-blur-xs"
+          className="absolute right-3 sm:right-6 z-10 rounded-xl bg-black/50 p-3 text-white/90 hover:bg-black/80 hover:text-white transition-all backdrop-blur-xs"
         >
           <ChevronRight className="h-6 w-6" />
         </button>
@@ -149,7 +149,7 @@ export function PhotoLightbox({ posts, currentIndex, onClose, onNavigate }: Prop
                 {currentPost.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="inline-flex items-center gap-1 rounded-full bg-white/5 px-2.5 py-1 font-sans text-[11px] text-white/70"
+                    className="inline-flex items-center gap-1 rounded-xs bg-white/10 px-2.5 py-1 font-sans text-[11px] text-white/80"
                   >
                     <Tag className="h-2.5 w-2.5 text-accent" />
                     <span>{tag}</span>

@@ -5,12 +5,20 @@ import { Wordmark } from "./Wordmark";
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b hairline bg-paper/95 backdrop-blur-[2px] supports-[backdrop-filter]:bg-paper/90">
-      <div className="page-container flex h-[68px] items-center justify-between gap-6 lg:h-[84px]">
-        <Wordmark />
-        <nav aria-label="Main" className="flex items-center gap-2 lg:gap-8">
+    <header className="sticky top-0 z-40 w-full bg-paper/85 py-3 sm:py-4 backdrop-blur-md border-b hairline transition-all">
+      <div className="page-container flex items-center justify-between gap-4">
+        {/* Separated out name on the top left */}
+        <div className="shrink-0">
+          <Wordmark />
+        </div>
+
+        {/* Minimal navbar component with only the nav links and actions with search */}
+        <nav
+          aria-label="Main"
+          className="inline-flex items-center gap-1 sm:gap-1.5 rounded-full border border-ink/10 bg-surface/80 p-1 sm:p-1.5 shadow-[0_4px_24px_-4px_rgba(20,19,18,0.05)] backdrop-blur-md ring-1 ring-white/60"
+        >
           <NavLinks />
-          <div className="flex items-center lg:border-l lg:hairline lg:pl-5">
+          <div className="flex items-center pl-1 sm:pl-1.5 border-l border-line/70">
             <SearchDialog />
             <MobileMenu />
           </div>

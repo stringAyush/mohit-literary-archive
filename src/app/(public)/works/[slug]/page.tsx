@@ -132,18 +132,18 @@ export default async function WorkPage({ params }: Props) {
         <nav aria-label="Breadcrumb" className="font-sans text-[0.8125rem] text-muted">
           <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">
             <li>
-              <Link href="/works" className="hover:text-accent">
+              <Link href="/works" className="hover:text-ink hover:underline decoration-accent decoration-2">
                 The Archive
               </Link>
             </li>
             <li aria-hidden="true">/</li>
             <li>
-              <Link href={`/works?type=${contentTypeParam(work.contentType)}`} className="hover:text-accent">
+              <Link href={`/works?type=${contentTypeParam(work.contentType)}`} className="hover:text-ink hover:underline decoration-accent decoration-2">
                 {contentTypePlural(work.contentType)}
               </Link>
             </li>
             <li aria-hidden="true">/</li>
-            <li aria-current="page" className="max-w-[24ch] truncate text-ink sm:max-w-[40ch]">
+            <li aria-current="page" className="max-w-[24ch] truncate text-ink font-medium sm:max-w-[40ch]">
               {title}
             </li>
           </ol>
@@ -153,15 +153,15 @@ export default async function WorkPage({ params }: Props) {
       <div className="page-container">
         <div className="reading-column pt-12 lg:pt-20">
           {work.isDemo && (
-            <p className="mb-8 border-l-2 border-accent bg-surface px-4 py-3 font-sans text-sm text-ink">
+            <p className="mb-8 border-l-2 border-accent bg-surface/80 backdrop-blur-xs px-4 py-3 font-sans text-sm text-ink">
               Demonstration content: sample text written while developing this website. It is not a work by{" "}
               {SITE_NAME}, and it is never shown on the live site.
             </p>
           )}
 
           {work.textStatus === "EXCERPT_ONLY" && (
-            <div className="mb-8 border-l-2 border-accent bg-surface px-5 py-4 font-sans text-sm text-ink">
-              <p className="font-semibold uppercase tracking-wider text-xs text-accent">Excerpt / Literary Fragment</p>
+            <div className="mb-8 border-l-2 border-accent bg-surface/80 backdrop-blur-xs px-5 py-4 font-sans text-sm text-ink">
+              <p className="font-semibold uppercase tracking-wider text-xs text-ink">Excerpt / Literary Fragment</p>
               <p className="mt-1 text-xs text-muted leading-relaxed">
                 This entry preserves a verified excerpt from the original publication. It is not the complete poem.
               </p>
@@ -169,7 +169,7 @@ export default async function WorkPage({ params }: Props) {
           )}
 
           {work.textStatus === "METADATA_ONLY" && (
-            <div className="mb-8 border-l-2 border-muted bg-surface px-5 py-4 font-sans text-sm text-ink">
+            <div className="mb-8 border-l-2 border-muted bg-surface/80 backdrop-blur-xs px-5 py-4 font-sans text-sm text-ink">
               <p className="font-semibold uppercase tracking-wider text-xs text-muted">Catalog Entry / Discovery Record</p>
               <p className="mt-1 text-xs text-muted leading-relaxed">
                 This record represents an identified candidate title. The complete text has not yet been submitted or verified for publication.
@@ -180,9 +180,9 @@ export default async function WorkPage({ params }: Props) {
           {work.contentType === "QUOTE" || work.contentType === "APHORISM" ? (
             /* ─── Dedicated Quote Experience ─── */
             <div className="space-y-8">
-              <div className="relative rounded-2xl border border-line/80 bg-surface/90 p-8 sm:p-12 shadow-xs transition-shadow hover:shadow-sm">
+              <div className="relative rounded-2xl border border-ink/10 bg-surface/75 p-8 sm:p-12 shadow-[0_12px_36px_-8px_rgba(20,19,18,0.06)] backdrop-blur-md ring-1 ring-white/60 transition-shadow hover:shadow-[0_16px_48px_-8px_rgba(20,19,18,0.09)]">
                 <div className="flex items-center justify-between gap-4 border-b hairline pb-4">
-                  <span className="eyebrow text-accent font-semibold">{contentTypeLabel(work.contentType)}</span>
+                  <span className="eyebrow text-ink font-semibold rounded-xs bg-ink/5 px-2 py-0.5">{contentTypeLabel(work.contentType)}</span>
                   {work.originalPublishedAt && (
                     <span className="font-sans text-xs text-muted tabular-nums">
                       {formatCalendarDate(work.originalPublishedAt)}
@@ -191,7 +191,7 @@ export default async function WorkPage({ params }: Props) {
                 </div>
 
                 {work.title && (
-                  <h1 className="mt-6 font-display text-[1.75rem] sm:text-[2.1rem] leading-tight text-ink font-semibold">
+                  <h1 className="mt-6 font-display text-[1.75rem] sm:text-[2.25rem] leading-tight text-ink font-normal">
                     {work.title}
                   </h1>
                 )}
@@ -220,7 +220,7 @@ export default async function WorkPage({ params }: Props) {
             /* ─── Dedicated Story / Poem / Reflection Experience ─── */
             <div>
               <div className="flex flex-wrap items-center gap-2.5 font-sans text-xs text-muted mb-4">
-                <span className="eyebrow text-accent font-semibold">{contentTypeLabel(work.contentType)}</span>
+                <span className="eyebrow text-ink font-semibold rounded-xs bg-ink/5 px-2 py-0.5">{contentTypeLabel(work.contentType)}</span>
                 <span>•</span>
                 <span>{Math.max(1, Math.ceil((work.body.trim().split(/\s+/).length || 1) / 180))} min read</span>
                 <span>•</span>
@@ -230,7 +230,7 @@ export default async function WorkPage({ params }: Props) {
               </div>
 
               {work.title ? (
-                <h1 className="mt-4 font-display text-[clamp(2.25rem,4.5vw,3.25rem)] leading-[1.12] tracking-[-0.015em] text-ink font-semibold">
+                <h1 className="mt-4 font-display text-[clamp(2.25rem,4.5vw,3.25rem)] leading-[1.12] tracking-[-0.015em] text-ink font-normal">
                   {work.title}
                 </h1>
               ) : (
@@ -323,7 +323,7 @@ export default async function WorkPage({ params }: Props) {
                     <Link
                       key={tag.id}
                       href={`/works?q=${encodeURIComponent(tag.name)}`}
-                      className="inline-flex min-h-8 items-center border hairline px-2.5 text-ink no-underline transition-colors hover:border-accent hover:text-accent"
+                      className="inline-flex min-h-8 items-center rounded-md border border-line bg-surface/60 px-2.5 text-xs text-ink no-underline transition-all hover:bg-accent hover:border-accent hover:text-ink font-medium"
                     >
                       {tag.name}
                     </Link>
@@ -337,7 +337,7 @@ export default async function WorkPage({ params }: Props) {
             <p>
               © {copyrightYear ?? new Date().getFullYear()} {authorName}. All rights reserved. Short quotations with
               clear attribution and a link to this page are welcome; any other use needs permission — see{" "}
-              <Link href="/copyright" className="underline hover:text-accent">
+              <Link href="/copyright" className="underline hover:text-ink">
                 Copyright &amp; Permissions
               </Link>
               .

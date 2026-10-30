@@ -40,8 +40,11 @@ export default async function ArchivePage({ searchParams }: Props) {
   return (
     <div className="page-container pb-16 pt-12 lg:pb-24 lg:pt-20">
       <header className="max-w-3xl">
-        <p className="eyebrow">The Complete Archive</p>
-        <h1 className="mt-4 font-display text-[clamp(2.5rem,5vw,4rem)] leading-[1.05] tracking-[-0.015em] text-ink">
+        <p className="eyebrow flex items-center gap-1.5">
+          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+          The Complete Archive
+        </p>
+        <h1 className="mt-4 font-display text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[1.05] tracking-[-0.015em] text-ink font-normal">
           The Archive
         </h1>
         <p className="mt-4 font-editorial text-[1.4rem] leading-snug text-ink/80">
@@ -99,7 +102,7 @@ async function ArchiveResults({ params }: { params: ArchiveParams }) {
     <section aria-labelledby="results-heading" className="mt-10">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <span className="font-sans text-xs font-semibold uppercase tracking-wider text-muted tabular-nums">
+          <span className="font-sans text-xs font-semibold uppercase tracking-wider text-ink rounded-xs bg-ink/5 px-2 py-0.5 tabular-nums">
             {result.total === 0 ? "0 results" : `${result.total} ${result.total === 1 ? "work" : "works"}`}
           </span>
           {description && <span className="font-sans text-xs text-muted">· {description}</span>}

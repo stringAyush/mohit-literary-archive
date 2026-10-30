@@ -6,13 +6,14 @@ export function Wordmark({ tone = "ink" }: { tone?: "ink" | "night" }) {
   return (
     <Link
       href="/"
-      className="group inline-flex flex-col justify-center no-underline"
+      className="group inline-flex flex-col justify-center no-underline transition-opacity hover:opacity-85"
       aria-label={`${SITE_NAME}, ${SITE_SUBTITLE} — home`}
     >
-      <span className="whitespace-nowrap font-display text-[0.8125rem] font-semibold uppercase leading-none tracking-[0.11em] min-[400px]:text-[0.875rem] sm:text-[1.05rem] sm:tracking-[0.16em]">
-        {SITE_NAME}
+      <span className="whitespace-nowrap font-display text-[1rem] sm:text-[1.1875rem] font-normal tracking-[0.04em] text-ink leading-tight flex items-center gap-1.5">
+        <span>{SITE_NAME}</span>
+        <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent animate-pulse-dot" aria-hidden="true" />
       </span>
-      <span className={`mt-1.5 font-sans text-[0.625rem] font-medium uppercase tracking-[0.28em] sm:tracking-[0.32em] ${subtitleColor}`}>
+      <span className={`mt-0.5 font-sans text-[0.5625rem] font-semibold uppercase tracking-[0.24em] sm:text-[0.625rem] ${subtitleColor}`}>
         {SITE_SUBTITLE}
       </span>
     </Link>

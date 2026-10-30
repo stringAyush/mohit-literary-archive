@@ -24,8 +24,11 @@ export default async function AboutPage() {
   return (
     <div className="page-container pb-16 pt-12 lg:pb-24 lg:pt-20">
       <div className="reading-column">
-        <p className="eyebrow">About the writer</p>
-        <h1 className="mt-4 font-display text-[clamp(2.5rem,5vw,4rem)] leading-[1.05] tracking-[-0.015em]">{name}</h1>
+        <p className="eyebrow flex items-center gap-1.5">
+          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+          About the writer
+        </p>
+        <h1 className="mt-4 font-display text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[1.05] tracking-[-0.015em] font-normal text-ink">{name}</h1>
 
         {biography ? (
           <div className="mt-10 whitespace-pre-line font-editorial text-[1.375rem] leading-[1.65] text-ink sm:text-[1.5rem]">

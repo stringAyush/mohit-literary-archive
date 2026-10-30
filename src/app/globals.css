@@ -1,9 +1,8 @@
 @import "tailwindcss";
 
 /* ─── Design tokens ──────────────────────────────────────────────────────
-   Colours come from the design specification. text_secondary is darkened
-   from #777168 to #6E685F so small metadata meets WCAG AA (4.5:1) on every
-   background; #777168 measures 4.4:1 on the page background. */
+   Colours come from the design specification: warm paper (#f7f4ee),
+   terracotta accent (#a64b35), deep ink (#24221f), and refined editorial typography. */
 @theme {
   --color-paper: #f7f4ee;
   --color-surface: #fffefa;
@@ -27,9 +26,9 @@
 
 /* Font families come from next/font (see src/app/fonts.ts), which sets these variables on <html>. */
 @theme inline {
-  --font-display: var(--font-playfair), "Playfair Display", Georgia, "Times New Roman", serif;
-  --font-editorial: var(--font-cormorant), var(--font-devanagari), "Cormorant Garamond", Georgia, serif;
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-instrument), var(--font-cormorant), "Instrument Serif", "Cormorant Garamond", Georgia, serif;
+  --font-editorial: var(--font-cormorant), var(--font-instrument), var(--font-devanagari), "Cormorant Garamond", Georgia, serif;
+  --font-sans: var(--font-geist), var(--font-inter), "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 /* ─── Base ─────────────────────────────────────────────────────────────── */
@@ -52,6 +51,7 @@
 
   ::selection {
     background-color: color-mix(in srgb, var(--color-accent) 22%, transparent);
+    color: var(--color-ink);
   }
 
   :focus-visible {
@@ -149,6 +149,31 @@
   border-color: var(--color-line);
 }
 
+/* Glassmorphism utilities */
+@utility glass-card {
+  background-color: color-mix(in srgb, var(--color-surface) 80%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 8%, transparent);
+  box-shadow: 0 8px 32px 0 rgba(36, 34, 31, 0.04), inset 0 1px 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+@utility glass-nav {
+  background-color: color-mix(in srgb, var(--color-surface) 85%, transparent);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 10%, transparent);
+  box-shadow: 0 8px 24px -4px rgba(36, 34, 31, 0.05), inset 0 1px 0 0 rgba(255, 255, 255, 0.85);
+}
+
+@utility glass-stack {
+  background-color: color-mix(in srgb, var(--color-surface) 75%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 8%, transparent);
+  box-shadow: 0 12px 36px -8px rgba(36, 34, 31, 0.06), inset 0 1px 1px 0 rgba(255, 255, 255, 0.7);
+}
+
 /* ─── Components ───────────────────────────────────────────────────────── */
 @layer components {
   .btn {
@@ -182,6 +207,7 @@
   }
   .btn-primary:hover:not(:disabled) {
     background-color: var(--color-accent-hover);
+    color: var(--color-surface);
   }
   .btn-secondary {
     border-color: var(--color-ink);
@@ -282,3 +308,146 @@
     accent-color: var(--color-accent);
   }
 }
+
+/* ─── Motion Graphics & Dynamic Animations ────────────────────────────── */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes progress-shimmer {
+  0% {
+    transform: translateX(-100%);
+    opacity: 1;
+  }
+  60% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes drawer-slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0.4;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes backdrop-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes menu-item-enter {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-25%);
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes float-subtle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.65;
+  }
+}
+
+.animate-page-enter {
+  animation: page-enter 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 35s linear infinite;
+}
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 50s linear infinite;
+}
+
+.animate-float-subtle {
+  animation: float-subtle 4.5s ease-in-out infinite;
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2.4s ease-in-out infinite;
+}
+
+/* Native dialog animations */
+dialog.mobile-menu-drawer[open] {
+  animation: drawer-slide-in 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+dialog.mobile-menu-drawer::backdrop {
+  background: rgba(36, 34, 31, 0.38);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: backdrop-fade-in 0.25s ease-out forwards;
+}
+
+dialog.search-dialog[open] {
+  animation: page-enter 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+dialog.search-dialog::backdrop {
+  background: rgba(36, 34, 31, 0.42);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: backdrop-fade-in 0.2s ease-out forwards;
+}
+

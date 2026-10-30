@@ -22,45 +22,56 @@ export function MobileMenu() {
       <button
         type="button"
         onClick={open}
-        className="inline-flex h-11 w-11 items-center justify-center text-ink transition-colors hover:text-accent lg:hidden"
+        className="inline-flex h-8 w-8 items-center justify-center rounded-full text-ink transition-all hover:bg-ink/5 lg:hidden"
         aria-label="Open menu"
         aria-haspopup="dialog"
         aria-expanded={isOpen}
       >
-        <MenuIcon className="h-6 w-6" />
+        <MenuIcon className="h-5 w-5" />
       </button>
 
       <dialog
         ref={ref}
         aria-label="Site menu"
-        className="m-0 ml-auto h-dvh max-h-none w-[min(22rem,88vw)] max-w-none bg-paper p-0 text-ink shadow-[-1px_0_0_var(--color-line)]"
+        className="mobile-menu-drawer m-0 ml-auto h-dvh max-h-none w-[min(22rem,88vw)] max-w-none bg-paper/95 backdrop-blur-xl p-0 text-ink shadow-[-1px_0_0_var(--color-line)]"
       >
         <div className="flex h-full flex-col px-6 pb-8">
           <div className="flex h-[68px] items-center justify-between border-b hairline">
-            <span className="eyebrow">Menu</span>
+            <span className="eyebrow flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse-dot" />
+              Navigation
+            </span>
             <button
               type="button"
               onClick={close}
-              className="-mr-2 inline-flex h-11 w-11 items-center justify-center hover:text-accent"
+              className="-mr-2 inline-flex h-10 w-10 items-center justify-center rounded-full hover:bg-ink/5 transition-transform duration-200 hover:rotate-90"
               aria-label="Close menu"
             >
-              <CloseIcon className="h-6 w-6" />
+              <CloseIcon className="h-5 w-5" />
             </button>
           </div>
           <nav aria-label="Main" className="mt-6">
             <ul>
-              {NAV_LINKS.map((link) => {
+              {NAV_LINKS.map((link, index) => {
                 const active = isActivePath(pathname, link.href);
                 return (
-                  <li key={link.href} className="border-b hairline">
+                  <li
+                    key={link.href}
+                    className="border-b hairline"
+                    style={{
+                      animation: "menu-item-enter 0.35s cubic-bezier(0.16, 1, 0.3, 1) backwards",
+                      animationDelay: `${(index + 1) * 65}ms`,
+                    }}
+                  >
                     <Link
                       href={link.href}
                       aria-current={active ? "page" : undefined}
-                      className={`flex min-h-14 items-center font-display text-2xl no-underline transition-colors hover:text-accent ${
-                        active ? "text-accent" : "text-ink"
+                      className={`flex min-h-14 items-center justify-between font-display text-2xl no-underline transition-all duration-200 hover:translate-x-1 ${
+                        active ? "text-ink font-semibold" : "text-ink/80 hover:text-ink"
                       }`}
                     >
-                      {link.label}
+                      <span>{link.label}</span>
+                      {active && <span className="h-2 w-2 rounded-full bg-accent animate-pulse-dot" />}
                     </Link>
                   </li>
                 );

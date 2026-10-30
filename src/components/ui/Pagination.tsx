@@ -60,7 +60,7 @@ export function Pagination({ basePath, params, page, pageCount }: Props) {
               {p === page ? (
                 <span
                   aria-current="page"
-                  className="inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-accent px-3.5 font-sans text-xs font-bold text-white shadow-xs"
+                  className="inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-accent px-3.5 font-sans text-xs font-semibold text-white shadow-xs"
                 >
                   {p}
                 </span>
