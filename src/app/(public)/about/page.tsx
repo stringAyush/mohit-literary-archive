@@ -5,7 +5,7 @@ import { WorkPreview } from "@/components/works/WorkPreview";
 import { SITE_NAME } from "@/lib/constants";
 import { getPrimaryAuthor, getSelectedWorks, profileLinks } from "@/lib/works/queries";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "About the writer",

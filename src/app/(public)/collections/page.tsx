@@ -4,7 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { FadeIn } from "@/components/ui/MotionWrapper";
 import { getPublicCollections } from "@/lib/works/queries";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Collections",

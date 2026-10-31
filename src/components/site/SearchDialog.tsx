@@ -4,6 +4,7 @@ import type { ContentType } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { CloseIcon, SearchIcon } from "@/components/ui/icons";
 import { contentTypeLabel } from "@/lib/constants";
@@ -18,11 +19,16 @@ type Status = "idle" | "loading" | "done" | "error";
 export function SearchDialog() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [results, setResults] = useState<Results>({ works: [], collections: [] });
   const statusId = useId();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const open = useCallback(() => setIsOpen(true), []);
   const close = useCallback(() => setIsOpen(false), []);
@@ -121,20 +127,27 @@ export function SearchDialog() {
         <SearchIcon className="h-4 w-4" />
       </button>
 
-      <AnimatePresence>
-        {isOpen && (
-          <div className="fixed inset-0 z-50 flex items-start justify-center p-4 sm:p-6 overflow-y-auto">
-            {/* Backdrop */}
-            <motion.div
-              key="search-backdrop"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              onClick={close}
-              className="fixed inset-0 bg-black/60 backdrop-blur-xs"
-              aria-hidden="true"
-            />
+      {mounted &&
+        createPortal(
+          <AnimatePresence>
+            {isOpen && (
+              <div
+                className="fixed inset-0 z-50 flex items-start justify-center p-4 sm:p-6 overflow-y-auto"
+                onClick={(e) => {
+                  if (e.target === e.currentTarget) close();
+                }}
+              >
+                {/* Backdrop */}
+                <motion.div
+                  key="search-backdrop"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  onClick={close}
+                  className="fixed inset-0 bg-black/60 backdrop-blur-xs"
+                  aria-hidden="true"
+                />
 
             {/* Modal */}
             <motion.div
@@ -247,7 +260,9 @@ export function SearchDialog() {
             </motion.div>
           </div>
         )}
-      </AnimatePresence>
+      </AnimatePresence>,
+      document.body,
+    )}
     </>
   );
 }

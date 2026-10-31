@@ -4,10 +4,9 @@ import { notFound } from "next/navigation";
 import { ArtworkStudio } from "@/components/artwork/ArtworkStudio";
 import { contentTypeLabel } from "@/lib/constants";
 import { yearOf } from "@/lib/format";
-import { absolutePublicUrl } from "@/lib/site";
 import { getPublicWorkBySlug } from "@/lib/works/queries";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -57,7 +56,7 @@ export default async function ArtworkPage({ params }: Props) {
         title={work.title}
         author={work.author.displayName}
         label={contentTypeLabel(work.contentType)}
-        url={absolutePublicUrl(`/works/${work.slug}`)}
+        url={`mohityenugwar.com/works/${work.slug}`}
         copyright={`© ${year} ${work.author.displayName}`}
         isPoem={work.contentType === "POEM"}
       />

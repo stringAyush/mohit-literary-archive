@@ -8,7 +8,7 @@ import { WorkGrid } from "@/components/works/WorkPreview";
 import { oneLineSummary } from "@/lib/works/excerpt";
 import { getPublicCollectionBySlug } from "@/lib/works/queries";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 type Props = {
   params: Promise<{ slug: string }>;

@@ -8,7 +8,7 @@ import { InstagramIcon } from "@/components/ui/icons";
 import { getAdjacentPhotoPosts, getPhotoPostBySlug } from "@/lib/bookstagram/queries";
 import { formatDate } from "@/lib/format";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 type Props = {
   params: Promise<{ slug: string }>;

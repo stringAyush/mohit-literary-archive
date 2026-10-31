@@ -17,7 +17,7 @@ import {
 } from "@/lib/works/archive-params";
 import { getArchiveFilterOptions, getArchivePage } from "@/lib/works/queries";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 type Props = { searchParams: Promise<RawSearchParams> };
 

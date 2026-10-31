@@ -249,10 +249,38 @@ export async function saveHomepageConfigAction(_prev: ActionState, formData: For
       heroCtaHref: String(formData.get("heroCtaHref") ?? "").trim(),
       heroSecondaryText: String(formData.get("heroSecondaryText") ?? "").trim(),
       heroSecondaryHref: String(formData.get("heroSecondaryHref") ?? "").trim(),
+      showHeroBadge: formData.get("showHeroBadge") === "on" || formData.get("showHeroBadge") === "true",
+      heroBadgeText: String(formData.get("heroBadgeText") ?? "").trim(),
+
+      showContentsCard: formData.get("showContentsCard") === "on" || formData.get("showContentsCard") === "true",
+      contentsCardTitle: String(formData.get("contentsCardTitle") ?? "").trim(),
+      contentsCardBadge: String(formData.get("contentsCardBadge") ?? "").trim(),
+
       marqueeEnabled: formData.get("marqueeEnabled") === "on" || formData.get("marqueeEnabled") === "true",
       marqueeItems: marqueeItems.length > 0 ? marqueeItems : undefined,
+
+      showFeaturedWork: formData.get("showFeaturedWork") === "on" || formData.get("showFeaturedWork") === "true",
+      featuredSectionTitle: String(formData.get("featuredSectionTitle") ?? "").trim(),
       featuredWorkId: String(formData.get("featuredWorkId") ?? "").trim() || undefined,
+
+      showRecentWorks: formData.get("showRecentWorks") === "on" || formData.get("showRecentWorks") === "true",
+      recentWorksTitle: String(formData.get("recentWorksTitle") ?? "").trim(),
+      recentWorksCount: Math.max(1, Math.min(24, Number(formData.get("recentWorksCount")) || 6)),
+
+      showCollections: formData.get("showCollections") === "on" || formData.get("showCollections") === "true",
+      collectionsTitle: String(formData.get("collectionsTitle") ?? "").trim(),
+      collectionsCount: Math.max(1, Math.min(12, Number(formData.get("collectionsCount")) || 6)),
+
+      showPhotography: formData.get("showPhotography") === "on" || formData.get("showPhotography") === "true",
+      photographyEyebrow: String(formData.get("photographyEyebrow") ?? "").trim(),
+      photographyTitle: String(formData.get("photographyTitle") ?? "").trim(),
+      photographySubtitle: String(formData.get("photographySubtitle") ?? "").trim(),
+      photographyCount: Math.max(1, Math.min(12, Number(formData.get("photographyCount")) || 6)),
+
       showAuthorNote: formData.get("showAuthorNote") === "on" || formData.get("showAuthorNote") === "true",
+      authorNoteEyebrow: String(formData.get("authorNoteEyebrow") ?? "").trim(),
+      authorNoteTitle: String(formData.get("authorNoteTitle") ?? "").trim(),
+      authorNoteCustomText: String(formData.get("authorNoteCustomText") ?? "").trim(),
     });
   } catch (error) {
     return errorToState(error);

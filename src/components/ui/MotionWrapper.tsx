@@ -7,7 +7,7 @@ import type { ReactNode } from "react";
 export function ReadingProgressBar() {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
-    stiffness: 120,
+    stiffness: 100,
     damping: 30,
     restDelta: 0.001,
   });
@@ -15,13 +15,13 @@ export function ReadingProgressBar() {
   return (
     <motion.div
       aria-hidden="true"
-      className="fixed top-0 left-0 right-0 z-50 h-[2.5px] bg-accent shadow-[0_0_8px_var(--color-accent)] origin-left pointer-events-none"
+      className="fixed top-0 left-0 right-0 z-50 h-[2.5px] bg-accent shadow-[0_0_8px_var(--color-accent)] origin-left pointer-events-none will-change-transform"
       style={{ scaleX }}
     />
   );
 }
 
-/** Smooth viewport entrance with subtle spring translation */
+/** Smooth viewport entrance with subtle spring translation - serene & aesthetic pace */
 export function FadeIn({
   children,
   delay = 0,
@@ -33,7 +33,7 @@ export function FadeIn({
   direction?: "up" | "down" | "none";
   className?: string;
 }) {
-  const yOffset = direction === "up" ? 18 : direction === "down" ? -18 : 0;
+  const yOffset = direction === "up" ? 20 : direction === "down" ? -20 : 0;
 
   return (
     <motion.div
@@ -41,9 +41,9 @@ export function FadeIn({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{
-        duration: 0.5,
+        duration: 0.85,
         delay,
-        ease: [0.21, 1, 0.36, 1],
+        ease: [0.16, 1, 0.3, 1],
       }}
       className={className}
     >
@@ -52,7 +52,7 @@ export function FadeIn({
   );
 }
 
-/** Interactive card container with smooth hover physics */
+/** Interactive card container with smooth, calm hover physics */
 export function MotionCard({
   children,
   className = "",
@@ -62,7 +62,7 @@ export function MotionCard({
 }) {
   return (
     <motion.div
-      whileHover={{ y: -4, transition: { duration: 0.22, ease: "easeOut" } }}
+      whileHover={{ y: -4, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } }}
       whileTap={{ scale: 0.99 }}
       className={className}
     >
@@ -75,7 +75,7 @@ export function MotionCard({
 export function StaggerContainer({
   children,
   className = "",
-  staggerDelay = 0.08,
+  staggerDelay = 0.1,
 }: {
   children: ReactNode;
   className?: string;
@@ -111,11 +111,11 @@ export function StaggerItem({
   return (
     <motion.div
       variants={{
-        hidden: { opacity: 0, y: 16 },
+        hidden: { opacity: 0, y: 18 },
         show: {
           opacity: 1,
           y: 0,
-          transition: { duration: 0.45, ease: [0.21, 1, 0.36, 1] },
+          transition: { duration: 0.75, ease: [0.16, 1, 0.3, 1] },
         },
       }}
       className={className}

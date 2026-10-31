@@ -23,19 +23,20 @@ import {
   profileLinks,
 } from "@/lib/works/queries";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export default async function HomePage() {
-  const [config, author, collections, counts, featuredPhotos] = await Promise.all([
-    getHomepageConfig(),
+  const config = await getHomepageConfig();
+  const [author, collections, counts, featuredPhotos] = await Promise.all([
     getPrimaryAuthor(),
     getPublicCollections(),
-    getContentTypeCounts(),
-    getFeaturedPhotoPosts(6),
+    config.showContentsCard !== false ? getContentTypeCounts() : Promise.resolve([]),
+    config.showPhotography !== false ? getFeaturedPhotoPosts(config.photographyCount ?? 6) : Promise.resolve([]),
   ]);
-  const featured = await getFeaturedWork(config.featuredWorkId || undefined);
-  const recent = await getRecentWorks(6, featured?.work.id);
-  const hasWorks = Boolean(featured);
+
+  const featured = config.showFeaturedWork !== false ? await getFeaturedWork(config.featuredWorkId || undefined) : null;
+  const recent = config.showRecentWorks !== false ? await getRecentWorks(config.recentWorksCount ?? 6, featured?.work.id) : [];
+  const hasWorks = Boolean(featured) || recent.length > 0;
   const featuredExcerpt = featured ? makeExcerpt(featured.work.body, 16, 900) : null;
   const introApproved = Boolean(author?.profileApprovedAt && author.shortIntro);
   const links = profileLinks(author?.links);
@@ -44,8 +45,18 @@ export default async function HomePage() {
     <>
       {/* ─── Hero ─────────────────────────────────────────────── */}
       <section aria-labelledby="hero-heading" className="border-b hairline bg-linear-to-b from-paper via-surface/40 to-paper">
-        <div className="page-container grid gap-10 sm:gap-12 py-12 sm:py-16 lg:grid-cols-[1.45fr_1fr] lg:gap-16 lg:py-24">
+        <div
+          className={`page-container grid gap-10 sm:gap-12 py-12 sm:py-16 ${
+            config.showContentsCard !== false ? "lg:grid-cols-[1.45fr_1fr] lg:gap-16" : "max-w-4xl"
+          } lg:py-24`}
+        >
           <div className="flex flex-col justify-center">
+            {config.showHeroBadge !== false && config.heroBadgeText && (
+              <div className="mb-5 inline-flex items-center gap-2 self-start rounded-full border border-ink/10 bg-surface/80 px-3.5 py-1 text-xs font-medium text-ink shadow-xs backdrop-blur-xs">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse-dot" />
+                <span>{config.heroBadgeText}</span>
+              </div>
+            )}
             <h1
               id="hero-heading"
               className="max-w-[14ch] font-display text-[clamp(2.75rem,6.2vw,5.25rem)] leading-[1.02] tracking-[-0.02em] text-balance text-ink font-normal"
@@ -73,56 +84,58 @@ export default async function HomePage() {
           </div>
 
           {/* Table of contents glass card */}
-          <aside aria-labelledby="contents-heading" className="w-full self-end">
-            <Card className="border border-ink/10 bg-surface/80 p-5 sm:p-6 lg:p-7 shadow-[0_12px_36px_-8px_rgba(20,19,18,0.06)] backdrop-blur-md ring-1 ring-white/60 transition-transform duration-300 hover:shadow-[0_16px_40px_-8px_rgba(20,19,18,0.09)]">
-              <div className="flex items-center justify-between border-b hairline pb-4">
-                <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-accent animate-pulse-dot" />
-                  <h2 id="contents-heading" className="font-sans text-xs font-semibold uppercase tracking-[0.14em] text-ink">
-                    Contents
-                  </h2>
+          {config.showContentsCard !== false && (
+            <aside aria-labelledby="contents-heading" className="w-full self-end">
+              <Card className="border border-ink/10 bg-surface/80 p-5 sm:p-6 lg:p-7 shadow-[0_12px_36px_-8px_rgba(20,19,18,0.06)] backdrop-blur-md ring-1 ring-white/60 transition-transform duration-300 hover:shadow-[0_16px_40px_-8px_rgba(20,19,18,0.09)]">
+                <div className="flex items-center justify-between border-b hairline pb-4">
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-accent animate-pulse-dot" />
+                    <h2 id="contents-heading" className="font-sans text-xs font-semibold uppercase tracking-[0.14em] text-ink">
+                      {config.contentsCardTitle ?? "Contents"}
+                    </h2>
+                  </div>
+                  <span className="eyebrow text-[0.6875rem]">{config.contentsCardBadge ?? "Archive Index"}</span>
                 </div>
-                <span className="eyebrow text-[0.6875rem]">Archive Index</span>
-              </div>
 
-              {counts.length > 0 ? (
-                <ol className="divide-y divide-line/60">
-                  {CONTENT_TYPES.filter((t) => counts.some((c) => c.contentType === t.value)).map((type, index) => {
-                    const count = counts.find((c) => c.contentType === type.value)?.count ?? 0;
-                    return (
-                      <li key={type.value}>
-                        <Link
-                          href={`/works?type=${contentTypeParam(type.value)}`}
-                          className="group flex min-h-12 items-center justify-between py-2.5 transition-colors no-underline hover:text-ink"
-                        >
-                          <div className="flex items-center gap-3">
-                            <span className="w-5 font-sans text-xs font-medium tabular-nums text-muted group-hover:text-ink transition-colors">
-                              {String(index + 1).padStart(2, "0")}
+                {counts.length > 0 ? (
+                  <ol className="divide-y divide-line/60">
+                    {CONTENT_TYPES.filter((t) => counts.some((c) => c.contentType === t.value)).map((type, index) => {
+                      const count = counts.find((c) => c.contentType === type.value)?.count ?? 0;
+                      return (
+                        <li key={type.value}>
+                          <Link
+                            href={`/works?type=${contentTypeParam(type.value)}`}
+                            className="group flex min-h-12 items-center justify-between py-2.5 transition-colors no-underline hover:text-ink"
+                          >
+                            <div className="flex items-center gap-3">
+                              <span className="w-5 font-sans text-xs font-medium tabular-nums text-muted group-hover:text-ink transition-colors">
+                                {String(index + 1).padStart(2, "0")}
+                              </span>
+                              <span className="font-display text-[1.35rem] text-ink transition-all group-hover:translate-x-1 group-hover:underline decoration-accent decoration-2 underline-offset-4">
+                                {type.plural}
+                              </span>
+                            </div>
+                            <span className="inline-flex items-center justify-center rounded-sm bg-ink/5 px-2 py-0.5 font-sans text-xs font-semibold tabular-nums text-ink/80 transition-colors group-hover:bg-accent group-hover:text-white">
+                              {count}
                             </span>
-                            <span className="font-display text-[1.35rem] text-ink transition-all group-hover:translate-x-1 group-hover:underline decoration-accent decoration-2 underline-offset-4">
-                              {type.plural}
-                            </span>
-                          </div>
-                          <span className="inline-flex items-center justify-center rounded-sm bg-ink/5 px-2 py-0.5 font-sans text-xs font-semibold tabular-nums text-ink/80 transition-colors group-hover:bg-accent group-hover:text-white">
-                            {count}
-                          </span>
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ol>
-              ) : (
-                <p className="mt-4 font-editorial text-lg italic text-muted">
-                  The first pages are being prepared.
-                </p>
-              )}
-            </Card>
-          </aside>
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ol>
+                ) : (
+                  <p className="mt-4 font-editorial text-lg italic text-muted">
+                    The first pages are being prepared.
+                  </p>
+                )}
+              </Card>
+            </aside>
+          )}
         </div>
       </section>
 
-      {/* ─── Awwwards-style Dynamic Kinetic Marquee ─────────────── */}
-      {config.marqueeEnabled && config.marqueeItems.length > 0 && (
+      {/* ─── Dynamic Category Marquee Ticker ─── */}
+      {config.marqueeEnabled && config.marqueeItems && config.marqueeItems.length > 0 && (
         <div className="relative overflow-hidden border-b hairline bg-surface/60 py-3 backdrop-blur-xs select-none">
           <div className="animate-marquee flex items-center gap-8 font-sans text-xs tracking-[0.2em] uppercase text-muted">
             {[1, 2, 3, 4].map((idx) => (
@@ -151,7 +164,7 @@ export default async function HomePage() {
       )}
 
       {/* ─── Featured work ────────────────────────────────────── */}
-      {featured && featuredExcerpt && (
+      {config.showFeaturedWork !== false && featured && featuredExcerpt && (
         <FadeIn>
           <section aria-labelledby="featured-heading" className="page-container section-space">
             <Card className="relative overflow-hidden border border-ink/10 bg-surface/80 p-8 shadow-[0_12px_36px_-8px_rgba(20,19,18,0.06)] backdrop-blur-md ring-1 ring-white/60 transition-all sm:p-12 hover:shadow-[0_16px_48px_-8px_rgba(20,19,18,0.09)]">
@@ -159,7 +172,7 @@ export default async function HomePage() {
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex items-center gap-2">
                     <span className="h-2 w-2 rounded-full bg-accent animate-pulse-dot" />
-                    <p className="eyebrow text-ink font-semibold">Featured Piece</p>
+                    <p className="eyebrow text-ink font-semibold">{config.featuredSectionTitle ?? "Featured Piece"}</p>
                   </div>
                   <div className="flex items-center gap-3">
                     <CopyQuoteButton
@@ -217,12 +230,12 @@ export default async function HomePage() {
       )}
 
       {/* ─── Recent works ─────────────────────────────────────── */}
-      {recent.length > 0 && (
+      {config.showRecentWorks !== false && recent.length > 0 && (
         <FadeIn delay={0.08}>
           <section aria-labelledby="recent-heading" className="page-container section-space">
             <SectionHeading
               id="recent-heading"
-              title="Recently written"
+              title={config.recentWorksTitle ?? "Recently written"}
               link={{ label: "See the whole archive", href: "/works" }}
             />
             <WorkGrid works={recent} />
@@ -231,34 +244,34 @@ export default async function HomePage() {
       )}
 
       {/* ─── Collections ──────────────────────────────────────── */}
-      {collections.length > 0 && (
+      {config.showCollections !== false && collections.length > 0 && (
         <FadeIn delay={0.12}>
           <section aria-labelledby="collections-heading" className="border-t hairline bg-surface-2/30">
             <div className="page-container section-space">
               <SectionHeading
                 id="collections-heading"
-                title="Explore by feeling"
+                title={config.collectionsTitle ?? "Explore by feeling"}
                 link={{ label: "All collections", href: "/collections" }}
               />
-              <CollectionGrid collections={collections.slice(0, 6)} />
+              <CollectionGrid collections={collections.slice(0, config.collectionsCount ?? 6)} />
             </div>
           </section>
         </FadeIn>
       )}
 
       {/* ─── Book Photography ─────────────────────────────────── */}
-      {featuredPhotos.length > 0 && (
+      {config.showPhotography !== false && featuredPhotos.length > 0 && (
         <FadeIn delay={0.16}>
           <section aria-labelledby="photography-heading" className="border-t hairline bg-paper">
             <div className="page-container section-space">
               <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
                 <div>
-                  <p className="eyebrow mb-2">Through the reader&apos;s lens</p>
+                  <p className="eyebrow mb-2">{config.photographyEyebrow ?? "Through the reader's lens"}</p>
                   <h2 id="photography-heading" className="font-display text-[2rem] leading-tight sm:text-[2.5rem] font-normal text-ink">
-                    Book Photography
+                    {config.photographyTitle ?? "Book Photography"}
                   </h2>
                   <p className="mt-2 max-w-xl font-editorial text-xl text-ink/80">
-                    Book covers, natural light reading setups, and quiet moments between pages.
+                    {config.photographySubtitle ?? "Book covers, natural light reading setups, and quiet moments between pages."}
                   </p>
                 </div>
                 <Link
@@ -272,7 +285,7 @@ export default async function HomePage() {
 
               {/* ─── Architectural Clean Masonry Grid ─── */}
               <div className="columns-1 sm:columns-2 lg:columns-3 gap-5 sm:gap-6 [column-fill:_balance]">
-                {featuredPhotos.map((photo, idx) => {
+                {featuredPhotos.map((photo) => {
                   const img = photo.images[0];
                   if (!img) return null;
                   const aspectRatio =
@@ -295,8 +308,7 @@ export default async function HomePage() {
                                 fill
                                 className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                                loading={idx < 3 ? "eager" : "lazy"}
-                                priority={idx < 3}
+                                loading="lazy"
                               />
 
                               {/* Hover Scrim */}
@@ -366,19 +378,23 @@ export default async function HomePage() {
       )}
 
       {/* ─── Author note ──────────────────────────────────────── */}
-      {config.showAuthorNote && (
+      {config.showAuthorNote !== false && (
         <FadeIn delay={0.2}>
           <section aria-labelledby="author-heading" className="page-container section-space">
             <Card className="border border-ink/10 bg-surface/80 p-8 sm:p-12 shadow-[0_12px_36px_-8px_rgba(20,19,18,0.06)] backdrop-blur-md ring-1 ring-white/60">
               <div className="grid gap-8 lg:grid-cols-[1fr_2fr] lg:gap-16">
                 <div>
-                  <p className="eyebrow mb-3">Author Note</p>
+                  <p className="eyebrow mb-3">{config.authorNoteEyebrow ?? "Author Note"}</p>
                   <h2 id="author-heading" className="font-display text-[2rem] leading-tight sm:text-[2.5rem] font-normal text-ink">
-                    Behind the words
+                    {config.authorNoteTitle ?? "Behind the words"}
                   </h2>
                 </div>
                 <div className="max-w-[640px]">
-                  {introApproved ? (
+                  {config.authorNoteCustomText?.trim() ? (
+                    <p className="font-editorial text-[1.4rem] leading-[1.6] text-ink/90 whitespace-pre-line">
+                      {config.authorNoteCustomText.trim()}
+                    </p>
+                  ) : introApproved ? (
                     <p className="font-editorial text-[1.4rem] leading-[1.6] text-ink/90 whitespace-pre-line">
                       {author!.shortIntro}
                     </p>

@@ -12,7 +12,7 @@ export function SiteHeader() {
     <motion.header
       initial={{ y: -16, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
       className="sticky top-0 z-40 w-full bg-paper/85 py-3 sm:py-4 backdrop-blur-md border-b hairline transition-all"
     >
       <div className="page-container flex items-center justify-between gap-4">
@@ -27,7 +27,7 @@ export function SiteHeader() {
           className="inline-flex items-center gap-1 sm:gap-1.5 rounded-full border border-ink/10 bg-surface/80 p-1 sm:p-1.5 shadow-[0_4px_24px_-4px_rgba(20,19,18,0.05)] backdrop-blur-md ring-1 ring-white/60"
         >
           <NavLinks />
-          <div className="flex items-center gap-0.5 pl-1 sm:pl-1.5 border-l border-line/70">
+          <div className="flex items-center gap-0.5 lg:pl-1.5 lg:border-l lg:border-line/70">
             <SearchDialog />
             <ThemeToggle />
             <MobileMenu />

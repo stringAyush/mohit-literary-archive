@@ -4,7 +4,7 @@ import { PhotoGrid } from "@/components/bookstagram/PhotoGrid";
 import { FadeIn } from "@/components/ui/MotionWrapper";
 import { getPhotoCategories, getPublicPhotoPosts } from "@/lib/bookstagram/queries";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Book Photography — Bookstagram",

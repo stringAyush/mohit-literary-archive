@@ -7,10 +7,38 @@ export type HomepageConfig = {
   heroCtaHref: string;
   heroSecondaryText: string;
   heroSecondaryHref: string;
+  showHeroBadge: boolean;
+  heroBadgeText: string;
+
+  showContentsCard: boolean;
+  contentsCardTitle: string;
+  contentsCardBadge: string;
+
   marqueeEnabled: boolean;
   marqueeItems: string[];
+
+  showFeaturedWork: boolean;
+  featuredSectionTitle: string;
   featuredWorkId?: string;
+
+  showRecentWorks: boolean;
+  recentWorksTitle: string;
+  recentWorksCount: number;
+
+  showCollections: boolean;
+  collectionsTitle: string;
+  collectionsCount: number;
+
+  showPhotography: boolean;
+  photographyEyebrow: string;
+  photographyTitle: string;
+  photographySubtitle: string;
+  photographyCount: number;
+
   showAuthorNote: boolean;
+  authorNoteEyebrow: string;
+  authorNoteTitle: string;
+  authorNoteCustomText?: string;
 };
 
 export const DEFAULT_HOMEPAGE_CONFIG: HomepageConfig = {
@@ -20,6 +48,13 @@ export const DEFAULT_HOMEPAGE_CONFIG: HomepageConfig = {
   heroCtaHref: "/works",
   heroSecondaryText: "About the writer",
   heroSecondaryHref: "/about",
+  showHeroBadge: true,
+  heroBadgeText: "Personal Literary Archive · Est. 2024",
+
+  showContentsCard: true,
+  contentsCardTitle: "Contents",
+  contentsCardBadge: "Archive Index",
+
   marqueeEnabled: true,
   marqueeItems: [
     "Poetry & Ghazals",
@@ -28,7 +63,28 @@ export const DEFAULT_HOMEPAGE_CONFIG: HomepageConfig = {
     "Book Photography",
     "Literary Monograph",
   ],
+
+  showFeaturedWork: true,
+  featuredSectionTitle: "Featured Piece",
+
+  showRecentWorks: true,
+  recentWorksTitle: "Recently written",
+  recentWorksCount: 6,
+
+  showCollections: true,
+  collectionsTitle: "Explore by feeling",
+  collectionsCount: 6,
+
+  showPhotography: true,
+  photographyEyebrow: "Through the reader's lens",
+  photographyTitle: "Book Photography",
+  photographySubtitle: "Book covers, natural light reading setups, and quiet moments between pages.",
+  photographyCount: 6,
+
   showAuthorNote: true,
+  authorNoteEyebrow: "Author Note",
+  authorNoteTitle: "Behind the words",
+  authorNoteCustomText: "",
 };
 
 export async function getHomepageConfig(): Promise<HomepageConfig> {

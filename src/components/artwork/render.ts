@@ -173,7 +173,11 @@ export function drawCard(
   ctx.fillStyle = tone.muted;
   let footerY = height - (spec.template === "folio" ? 128 : 104);
   if (spec.url) {
-    ctx.fillText(spec.url.replace(/^https?:\/\//, ""), footerX, footerY, width - 2 * (spec.template === "margin" ? 190 : 120));
+    let displayUrl = spec.url.replace(/^https?:\/\//, "");
+    if (displayUrl.includes("mohit-literary-archive.vercel.app") || displayUrl.includes("localhost:3000")) {
+      displayUrl = displayUrl.replace(/^(mohit-literary-archive\.vercel\.app|localhost:\d+)/, "mohityenugwar.com");
+    }
+    ctx.fillText(displayUrl, footerX, footerY, width - 2 * (spec.template === "margin" ? 190 : 120));
     footerY += 32;
   }
   if (spec.copyright) {

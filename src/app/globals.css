@@ -436,7 +436,9 @@
 .animate-marquee {
   display: flex;
   width: max-content;
-  animation: marquee 35s linear infinite;
+  animation: marquee 45s linear infinite;
+  will-change: transform;
+  transform: translateZ(0);
 }
 .animate-marquee:hover {
   animation-play-state: paused;
@@ -545,14 +547,19 @@ html.dark dialog::backdrop {
 
 /* Fallback smooth transition when View Transitions API is not active */
 html.theme-transition,
-html.theme-transition *,
-html.theme-transition *::before,
-html.theme-transition *::after {
+html.theme-transition body,
+html.theme-transition header,
+html.theme-transition nav,
+html.theme-transition main,
+html.theme-transition footer,
+html.theme-transition article,
+html.theme-transition aside,
+html.theme-transition [class*="bg-"],
+html.theme-transition [class*="text-"],
+html.theme-transition [class*="border-"] {
   transition: background-color 400ms cubic-bezier(0.16, 1, 0.3, 1),
               border-color 400ms cubic-bezier(0.16, 1, 0.3, 1),
               color 400ms cubic-bezier(0.16, 1, 0.3, 1),
-              fill 400ms cubic-bezier(0.16, 1, 0.3, 1),
-              stroke 400ms cubic-bezier(0.16, 1, 0.3, 1),
               box-shadow 400ms cubic-bezier(0.16, 1, 0.3, 1) !important;
   transition-delay: 0s !important;
 }

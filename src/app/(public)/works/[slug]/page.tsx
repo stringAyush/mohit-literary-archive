@@ -19,7 +19,7 @@ import { absolutePublicUrl } from "@/lib/site";
 import { oneLineSummary } from "@/lib/works/excerpt";
 import { getPublicWorkBySlug, getRelatedWorks, resolveSlugRedirect } from "@/lib/works/queries";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 type Props = { params: Promise<{ slug: string }> };
 
