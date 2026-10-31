@@ -33,4 +33,5 @@ Photos/
 *.log
 __pycache__/
 *.pyc
+src/app/temp/
 

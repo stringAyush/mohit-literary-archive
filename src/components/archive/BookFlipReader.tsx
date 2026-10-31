@@ -20,11 +20,15 @@ import type { ContentType } from "@prisma/client";
 
 interface FlipBookInstance {
   pageFlip: () => {
-    flipNext: () => void;
-    flipPrev: () => void;
-    flip: (pageNum: number) => void;
+    flipNext: (corner?: string) => void;
+    flipPrev: (corner?: string) => void;
+    flip: (pageNum: number, corner?: string) => void;
+    turnToNextPage?: () => void;
+    turnToPrevPage?: () => void;
+    turnToPage?: (pageNum: number) => void;
     getPageCount: () => number;
     getCurrentPageIndex: () => number;
+    getState?: () => string;
   };
 }
 
@@ -43,6 +47,7 @@ const HTMLFlipBook = dynamic(() => import("react-pageflip"), {
 }) as unknown as React.ComponentType<Record<string, unknown>>;
 
 type PaperTheme = "parchment" | "ivory";
+type BookTheme = "parchment" | "ivory" | "night";
 
 type PageProps = {
   children: React.ReactNode;
@@ -58,8 +63,6 @@ const Page = forwardRef<HTMLDivElement, PageProps>(({ children, className = "", 
       data-density={isHard ? "hard" : "soft"}
       className={`page-sheet relative h-full w-full select-none overflow-hidden ${className}`}
       style={{
-        transform: "translate3d(0, 0, 0)",
-        WebkitTransform: "translate3d(0, 0, 0)",
         backfaceVisibility: "hidden",
         WebkitBackfaceVisibility: "hidden",
       }}
@@ -82,11 +85,13 @@ export function BookFlipReader({
   const menuRef = useRef<HTMLDivElement>(null);
 
   const [currentPage, setCurrentPage] = useState(0);
-  const [paperTheme, setPaperTheme] = useState<PaperTheme>("parchment");
+  const [bookTheme, setBookTheme] = useState<BookTheme>("parchment");
   const [isSiteDark, setIsSiteDark] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showFullscreenMenu, setShowFullscreenMenu] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const lastLightPaperRef = useRef<PaperTheme>("parchment");
+  const previousDarkRef = useRef<boolean | null>(null);
 
   // Exact dimensions calculated to fit screen perfectly on both PC and mobile
   const [dimensions, setDimensions] = useState({
@@ -95,12 +100,28 @@ export function BookFlipReader({
     isMobile: false,
   });
 
-  // Track site-wide dark mode automatically via MutationObserver
+  // Track site-wide dark mode automatically via MutationObserver and sync book theme
   useEffect(() => {
     setIsMounted(true);
 
     const checkDarkMode = () => {
-      setIsSiteDark(document.documentElement.classList.contains("dark"));
+      const isDark = document.documentElement.classList.contains("dark");
+      setIsSiteDark(isDark);
+
+      if (previousDarkRef.current !== null && previousDarkRef.current !== isDark) {
+        // Site theme was toggled
+        if (isDark) {
+          setBookTheme("night");
+        } else {
+          setBookTheme(lastLightPaperRef.current);
+        }
+      } else if (previousDarkRef.current === null) {
+        // First mount initialization
+        if (isDark) {
+          setBookTheme("night");
+        }
+      }
+      previousDarkRef.current = isDark;
     };
     checkDarkMode();
 
@@ -180,21 +201,44 @@ export function BookFlipReader({
     return () => window.removeEventListener("resize", handleResize);
   }, [isFullscreen]);
 
+  const lastFlipTimeRef = useRef(0);
+  const lastTouchTimeRef = useRef(0);
+
   const flipNext = useCallback(() => {
     try {
-      bookRef.current?.pageFlip()?.flipNext();
+      const pf = bookRef.current?.pageFlip();
+      if (!pf) return;
+      const state = pf.getState?.();
+      if (state && state !== "read") return;
+      const now = Date.now();
+      const minInterval = dimensions.isMobile ? 380 : 600;
+      if (now - lastFlipTimeRef.current < minInterval) return;
+      lastFlipTimeRef.current = now;
+      if (pf.flipNext) {
+        pf.flipNext("bottom");
+      } else if (pf.turnToNextPage) {
+        pf.turnToNextPage();
+      }
     } catch {
       // ignore
     }
-  }, []);
+  }, [dimensions.isMobile]);
 
   const flipPrev = useCallback(() => {
     try {
-      bookRef.current?.pageFlip()?.flipPrev();
+      const pf = bookRef.current?.pageFlip();
+      if (!pf) return;
+      const state = pf.getState?.();
+      if (state && state !== "read") return;
+      const now = Date.now();
+      const minInterval = dimensions.isMobile ? 380 : 600;
+      if (now - lastFlipTimeRef.current < minInterval) return;
+      lastFlipTimeRef.current = now;
+      pf.flipPrev();
     } catch {
       // ignore
     }
-  }, []);
+  }, [dimensions.isMobile]);
 
   // Dedicated touch and click handlers to guarantee instant response on mobile devices
   const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null);
@@ -217,12 +261,13 @@ export function BookFlipReader({
     const dy = touch.clientY - start.y;
     const dt = Date.now() - start.time;
     touchStartRef.current = null;
+    lastTouchTimeRef.current = Date.now();
 
     const target = e.target as HTMLElement | null;
     if (target && target.closest("a, button, input")) return;
 
-    // Horizontal swipe gesture (> 30px in < 600ms)
-    if (Math.abs(dx) > 30 && Math.abs(dy) < Math.abs(dx) * 1.5 && dt < 600) {
+    // Horizontal swipe gesture (> 25px in < 500ms)
+    if (Math.abs(dx) > 25 && Math.abs(dy) < Math.abs(dx) * 1.5 && dt < 500) {
       if (dx < 0) {
         flipNext();
       } else {
@@ -244,6 +289,9 @@ export function BookFlipReader({
   }, [flipNext, flipPrev]);
 
   const handleStageClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    // Prevent synthetic mouse clicks after touch events
+    if (Date.now() - lastTouchTimeRef.current < 500) return;
+
     const target = e.target as HTMLElement | null;
     if (target && target.closest("a, button, input")) return;
     const rect = e.currentTarget.getBoundingClientRect();
@@ -257,7 +305,12 @@ export function BookFlipReader({
 
   const jumpToPage = useCallback((pageNum: number) => {
     try {
-      bookRef.current?.pageFlip()?.flip(pageNum);
+      const pf = bookRef.current?.pageFlip();
+      if (!pf) return;
+      const state = pf.getState?.();
+      if (state && state !== "read") return;
+      lastFlipTimeRef.current = Date.now();
+      pf.flip(pageNum);
       setShowFullscreenMenu(false);
     } catch {
       // ignore
@@ -334,44 +387,13 @@ export function BookFlipReader({
     return () => document.removeEventListener("fullscreenchange", onFsChange);
   }, []);
 
-  // The book theme automatically switches to Night when site dark mode is active
-  const effectiveTheme: "parchment" | "ivory" | "night" = isSiteDark ? "night" : paperTheme;
-
-  // Theme palettes: Parchment, Ivory, Night
-  const themeStyles = useMemo(() => {
-    return {
-      parchment: {
-        bookBg: "bg-[#f5f0e6] text-[#29241f]",
-        pageBorder: "border-[#dfd7c8]",
-        spineShadowLeft: "shadow-[inset_-14px_0_20px_-10px_rgba(40,30,20,0.18)]",
-        spineShadowRight: "shadow-[inset_14px_0_20px_-10px_rgba(40,30,20,0.18)]",
-        subtleText: "text-[#756a5e]",
-        ruleColor: "border-[#d8cfbe]",
-        coverBg: "bg-linear-to-br from-[#1e2738] via-[#101726] to-[#080d18] text-[#f7f2ea]",
-        coverBorder: "border-[#334155]",
-      },
-      ivory: {
-        bookBg: "bg-[#fcfaf5] text-[#1c1917]",
-        pageBorder: "border-[#ebe4d8]",
-        spineShadowLeft: "shadow-[inset_-14px_0_18px_-10px_rgba(0,0,0,0.12)]",
-        spineShadowRight: "shadow-[inset_14px_0_18px_-10px_rgba(0,0,0,0.12)]",
-        subtleText: "text-[#78716c]",
-        ruleColor: "border-[#e5ded2]",
-        coverBg: "bg-linear-to-br from-[#292524] via-[#1c1917] to-[#0c0a09] text-[#fafaf9]",
-        coverBorder: "border-[#44403c]",
-      },
-      night: {
-        bookBg: "bg-[#161513] text-[#ece5d8]",
-        pageBorder: "border-[#2b2723]",
-        spineShadowLeft: "shadow-[inset_-14px_0_24px_-10px_rgba(0,0,0,0.6)]",
-        spineShadowRight: "shadow-[inset_14px_0_24px_-10px_rgba(0,0,0,0.6)]",
-        subtleText: "text-[#a39a8c]",
-        ruleColor: "border-[#36312a]",
-        coverBg: "bg-linear-to-br from-[#0d0c0b] via-[#141210] to-[#080706] text-[#f4efe8]",
-        coverBorder: "border-[#27231f]",
-      },
-    }[effectiveTheme];
-  }, [effectiveTheme]);
+  // Theme selection handler
+  const handleSelectTheme = (theme: BookTheme) => {
+    if (theme === "parchment" || theme === "ivory") {
+      lastLightPaperRef.current = theme;
+    }
+    setBookTheme(theme);
+  };
 
   // Helper to split works into pages cleanly without any cutoff or scrollbars
   type BookPageItem = {
@@ -385,7 +407,7 @@ export function BookFlipReader({
 
   const formattedPages = useMemo(() => {
     const pages: BookPageItem[] = [];
-    let pageCounter = dimensions.isMobile ? 1 : 3;
+    let pageCounter = 3;
 
     works.forEach((w) => {
       const rawBody = w.body.trim();
@@ -477,9 +499,9 @@ export function BookFlipReader({
     });
 
     return pages;
-  }, [works, dimensions.isMobile]);
+  }, [works]);
 
-  const colophonPageNum = formattedPages.length + (dimensions.isMobile ? 1 : 3);
+  const colophonPageNum = formattedPages.length + 3;
   const backCoverPageNum = colophonPageNum + 1;
 
   // Memoize all page elements to prevent react-pageflip from destroying and reloading HTML on re-renders
@@ -489,7 +511,7 @@ export function BookFlipReader({
       <Page
         key="page-cover-front"
         isHard={!dimensions.isMobile}
-        className={`p-5 sm:p-7 flex flex-col justify-between ${themeStyles.coverBg} border-r-2 ${themeStyles.coverBorder}`}
+        className="book-cover-sheet p-5 sm:p-7 flex flex-col justify-between border-r-2"
       >
         <div className="relative h-full w-full rounded-sm border-2 border-amber-400/30 p-5 sm:p-7 flex flex-col justify-between text-center">
           <span className="absolute top-2 left-2 text-[10px] text-amber-300/60 select-none">✦</span>
@@ -523,7 +545,16 @@ export function BookFlipReader({
 
           <div className="border-t border-amber-400/25 pt-3 flex items-center justify-between font-sans text-[9px] uppercase tracking-[0.22em] text-amber-200/70">
             <span>Nagpur · India</span>
-            <span className="text-amber-300">Open Folio</span>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                flipNext();
+              }}
+              className="text-amber-300 hover:text-amber-100 transition-colors cursor-pointer"
+            >
+              Open Folio
+            </button>
           </div>
         </div>
       </Page>,
@@ -531,25 +562,25 @@ export function BookFlipReader({
       /* ════ PAGE 1: TITLE & DEDICATION PAGE ════ */
       <Page
         key="page-title-dedication"
-        className={`p-6 sm:p-9 flex flex-col justify-between ${themeStyles.bookBg} border-r hairline ${themeStyles.pageBorder} ${themeStyles.spineShadowLeft}`}
+        className="book-page-sheet book-spine-left p-6 sm:p-9 flex flex-col justify-between border-r hairline"
       >
         <div className="text-center pt-6">
-          <span className="eyebrow text-[0.6875rem]">Literary Archive</span>
+          <span className="eyebrow text-[0.6875rem] book-page-subtle">Literary Archive</span>
           <h2 className="mt-4 font-display text-xl sm:text-2xl text-ink font-normal">
             Some things are better left in words.
           </h2>
-          <p className="mt-2 font-editorial text-sm italic text-muted">
+          <p className="mt-2 font-editorial text-sm italic book-page-subtle">
             Written &amp; Composed by Mohit Yenugwar
           </p>
         </div>
 
-        <div className="my-auto max-w-[280px] mx-auto text-center border-y hairline py-5 my-6 border-line/60">
+        <div className="my-auto max-w-[280px] mx-auto text-center border-y hairline py-5 my-6 book-page-rule border-line/60">
           <p className="font-editorial text-xs sm:text-sm leading-relaxed italic text-ink/85">
             &ldquo;A gathering of thoughts, verse, and narrative fragments composed in quiet hours, under natural light and open skies.&rdquo;
           </p>
         </div>
 
-        <div className="border-t hairline pt-3 flex items-center justify-between font-sans text-[10px] text-muted">
+        <div className="border-t hairline pt-3 flex items-center justify-between font-sans text-[10px] book-page-subtle book-page-rule">
           <span>The Literary Archive</span>
           <span>Page 1</span>
         </div>
@@ -558,13 +589,13 @@ export function BookFlipReader({
       /* ════ PAGE 2: TABLE OF CONTENTS (INDEX) ════ */
       <Page
         key="page-table-of-contents"
-        className={`p-6 sm:p-9 flex flex-col justify-between ${themeStyles.bookBg} border-l hairline ${themeStyles.pageBorder} ${themeStyles.spineShadowRight}`}
+        className="book-page-sheet book-spine-right p-6 sm:p-9 flex flex-col justify-between border-l hairline"
       >
-        <div className="border-b hairline pb-2.5 mb-3 flex items-center justify-between">
+        <div className="border-b hairline pb-2.5 mb-3 flex items-center justify-between book-page-rule">
           <h3 className="font-sans text-xs font-semibold uppercase tracking-[0.2em] text-ink">
             Table of Contents
           </h3>
-          <span className="font-sans text-[10px] text-muted uppercase">Index</span>
+          <span className="font-sans text-[10px] book-page-subtle uppercase">Index</span>
         </div>
 
         <div className="overflow-hidden flex-1 space-y-1.5 text-xs py-1">
@@ -576,21 +607,21 @@ export function BookFlipReader({
               className="group flex w-full items-center justify-between py-1 text-left transition-colors hover:text-accent"
             >
               <div className="flex items-center gap-2 truncate">
-                <span className="font-sans text-[10px] tabular-nums text-muted group-hover:text-accent">
+                <span className="font-sans text-[10px] tabular-nums book-page-subtle group-hover:text-accent">
                   {String(idx + 1).padStart(2, "0")}
                 </span>
                 <span className="font-editorial text-xs sm:text-sm truncate font-medium text-ink group-hover:text-accent">
                   {fp.work.title || fp.text.slice(0, 28)}
                 </span>
               </div>
-              <span className="font-sans text-[10px] tabular-nums text-muted shrink-0 ml-2">
+              <span className="font-sans text-[10px] tabular-nums book-page-subtle shrink-0 ml-2">
                 p. {fp.pageNumber}
               </span>
             </button>
           ))}
         </div>
 
-        <div className="border-t hairline pt-3 mt-auto flex items-center justify-between font-sans text-[10px] text-muted">
+        <div className="border-t hairline pt-3 mt-auto flex items-center justify-between font-sans text-[10px] book-page-subtle book-page-rule">
           <span>Flip to read</span>
           <span>Page 2</span>
         </div>
@@ -600,19 +631,17 @@ export function BookFlipReader({
       ...formattedPages.map((fp) => {
         const isPoem = fp.work.contentType === "POEM";
         const isRight = fp.isRightPage;
-        const spineShadow = isRight ? themeStyles.spineShadowRight : themeStyles.spineShadowLeft;
-        const borderStyle = isRight
-          ? `border-l hairline ${themeStyles.pageBorder}`
-          : `border-r hairline ${themeStyles.pageBorder}`;
+        const spineClass = isRight ? "book-spine-right" : "book-spine-left";
+        const borderStyle = isRight ? "border-l hairline" : "border-r hairline";
 
         return (
           <Page
             key={`page-${fp.pageNumber}-${fp.work.id}-${fp.partIndex}`}
-            className={`p-6 sm:p-9 flex flex-col justify-between ${themeStyles.bookBg} ${borderStyle} ${spineShadow}`}
+            className={`book-page-sheet ${spineClass} p-6 sm:p-9 flex flex-col justify-between ${borderStyle}`}
           >
             {/* Top Running Header */}
             <div
-              className={`flex h-7 items-center justify-between border-b ${themeStyles.ruleColor} pb-1.5 font-sans text-[9px] sm:text-[10px] uppercase tracking-[0.16em] ${themeStyles.subtleText}`}
+              className="flex h-7 items-center justify-between border-b book-page-rule pb-1.5 font-sans text-[9px] sm:text-[10px] uppercase tracking-[0.16em] book-page-subtle"
             >
               <span>{contentTypeLabel(fp.work.contentType as ContentType)}</span>
               <span className="truncate max-w-[140px] italic font-editorial lowercase">
@@ -629,7 +658,7 @@ export function BookFlipReader({
               )}
 
               {fp.partIndex > 1 && (
-                <p className="mb-2 font-sans text-[9px] uppercase tracking-wider text-muted">
+                <p className="mb-2 font-sans text-[9px] uppercase tracking-wider book-page-subtle">
                   (Continued)
                 </p>
               )}
@@ -651,7 +680,7 @@ export function BookFlipReader({
               </div>
 
               {fp.partIndex < fp.totalParts && (
-                <p className="mt-2 font-sans text-[9px] italic text-muted text-right">
+                <p className="mt-2 font-sans text-[9px] italic book-page-subtle text-right">
                   (Continued on next page)
                 </p>
               )}
@@ -659,7 +688,7 @@ export function BookFlipReader({
 
             {/* Bottom Running Footer */}
             <div
-              className={`h-7 border-t ${themeStyles.ruleColor} pt-1.5 flex items-center justify-between font-sans text-[9px] sm:text-[10px] ${themeStyles.subtleText}`}
+              className="h-7 border-t book-page-rule pt-1.5 flex items-center justify-between font-sans text-[9px] sm:text-[10px] book-page-subtle"
             >
               <Link
                 href={`/works/${fp.work.slug}`}
@@ -679,24 +708,24 @@ export function BookFlipReader({
       /* ════ COLOPHON PAGE ════ */
       <Page
         key="page-colophon"
-        className={`p-6 sm:p-9 flex flex-col justify-between ${themeStyles.bookBg} border-r hairline ${themeStyles.pageBorder} ${themeStyles.spineShadowLeft}`}
+        className="book-page-sheet book-spine-left p-6 sm:p-9 flex flex-col justify-between border-r hairline"
       >
         <div className="text-center pt-6">
-          <span className="eyebrow text-[0.6875rem]">Folio Colophon</span>
-          <div className="mx-auto my-3 h-px w-12 bg-line" />
+          <span className="eyebrow text-[0.6875rem] book-page-subtle">Folio Colophon</span>
+          <div className="mx-auto my-3 h-px w-12 bg-line book-page-rule" />
         </div>
 
         <div className="my-auto max-w-[280px] mx-auto text-center space-y-3 font-editorial text-xs sm:text-sm text-ink/80 leading-relaxed">
           <p>
             This digital folio was composed and published from the personal literary archive of Mohit Yenugwar.
           </p>
-          <p className="text-[11px] text-muted font-sans">
+          <p className="text-[11px] book-page-subtle font-sans">
             Typeset digitally in Cormorant Garamond, Instrument Serif, and Devanagari typography with lineated preservation.
           </p>
           <div className="text-sm text-accent">❦</div>
         </div>
 
-        <div className="border-t hairline pt-3 flex items-center justify-between font-sans text-[10px] text-muted">
+        <div className="border-t hairline pt-3 flex items-center justify-between font-sans text-[10px] book-page-subtle book-page-rule">
           <span>Mohit Yenugwar Archive</span>
           <span>Page {colophonPageNum}</span>
         </div>
@@ -706,7 +735,7 @@ export function BookFlipReader({
       <Page
         key="page-cover-back"
         isHard={!dimensions.isMobile}
-        className={`p-5 sm:p-7 flex flex-col justify-between ${themeStyles.coverBg} border-l-2 ${themeStyles.coverBorder}`}
+        className="book-cover-sheet p-5 sm:p-7 flex flex-col justify-between border-l-2"
       >
         <div className="relative h-full w-full rounded-sm border-2 border-amber-400/30 p-5 sm:p-7 flex flex-col justify-between text-center">
           <span className="text-amber-300 text-xs">✦</span>
@@ -727,13 +756,14 @@ export function BookFlipReader({
         </div>
       </Page>,
     ];
-  }, [formattedPages, themeStyles, colophonPageNum, jumpToPage, dimensions.isMobile]);
+  }, [formattedPages, colophonPageNum, jumpToPage, dimensions.isMobile, flipNext]);
 
   if (!isMounted) return null;
 
   return (
     <div
       ref={containerRef}
+      data-book-theme={bookTheme}
       className={`book-reader-wrapper relative flex flex-col items-center justify-center transition-all ${
         isFullscreen
           ? "fixed inset-0 z-50 h-screen w-screen overflow-hidden bg-[#121110] p-0 dark:bg-[#080706]"
@@ -742,7 +772,7 @@ export function BookFlipReader({
     >
       {/* ─── Top Kindle / Apple Books Control Bar (Hidden when Maximized) ─── */}
       {!isFullscreen && (
-        <div className="mb-4 sm:mb-6 flex w-full max-w-4xl flex-wrap items-center justify-between gap-3 border-b hairline pb-3 sm:pb-4">
+        <div className="relative z-30 mb-4 sm:mb-6 flex w-full max-w-4xl flex-wrap items-center justify-between gap-3 border-b hairline pb-3 sm:pb-4">
           <div className="flex items-center gap-2">
             {onSwitchToNormalView && (
               <button
@@ -758,7 +788,7 @@ export function BookFlipReader({
 
             <button
               type="button"
-              onClick={() => jumpToPage(dimensions.isMobile ? 0 : 2)}
+              onClick={() => jumpToPage(2)}
               className="inline-flex items-center gap-1.5 rounded-xl border border-line/80 bg-surface/80 px-3 py-1.5 font-sans text-xs font-medium text-ink shadow-xs transition-all hover:bg-surface"
               title="Jump to Table of Contents"
             >
@@ -775,31 +805,41 @@ export function BookFlipReader({
 
           {/* Right Tools: Paper Theme & Fullscreen */}
           <div className="flex items-center gap-2">
-            {/* Paper Theme Switcher: Only shown in light mode; in dark mode it is automatically Night */}
-            {!isSiteDark && (
-              <div className="inline-flex items-center rounded-xl border border-line/80 bg-surface/80 p-0.5 shadow-xs">
+            {/* Paper Theme Switcher: Parchment, Ivory, and Night in dark mode */}
+            <div className="inline-flex items-center rounded-xl border border-line/80 bg-surface/80 p-0.5 shadow-xs">
+              {isSiteDark && (
                 <button
                   type="button"
-                  onClick={() => setPaperTheme("parchment")}
+                  onClick={() => handleSelectTheme("night")}
                   className={`rounded-lg px-2.5 py-1 font-sans text-[11px] font-medium transition-colors ${
-                    paperTheme === "parchment" ? "bg-accent text-white" : "text-muted hover:text-ink"
+                    bookTheme === "night" ? "bg-accent text-white" : "text-muted hover:text-ink"
                   }`}
-                  title="Warm Parchment Paper"
+                  title="Night Edition (Dark)"
                 >
-                  Parchment
+                  Night
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setPaperTheme("ivory")}
-                  className={`rounded-lg px-2.5 py-1 font-sans text-[11px] font-medium transition-colors ${
-                    paperTheme === "ivory" ? "bg-accent text-white" : "text-muted hover:text-ink"
-                  }`}
-                  title="Ivory Light Paper"
-                >
-                  Ivory
-                </button>
-              </div>
-            )}
+              )}
+              <button
+                type="button"
+                onClick={() => handleSelectTheme("parchment")}
+                className={`rounded-lg px-2.5 py-1 font-sans text-[11px] font-medium transition-colors ${
+                  bookTheme === "parchment" ? "bg-accent text-white" : "text-muted hover:text-ink"
+                }`}
+                title="Warm Parchment Paper"
+              >
+                Parchment
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSelectTheme("ivory")}
+                className={`rounded-lg px-2.5 py-1 font-sans text-[11px] font-medium transition-colors ${
+                  bookTheme === "ivory" ? "bg-accent text-white" : "text-muted hover:text-ink"
+                }`}
+                title="Ivory Light Paper"
+              >
+                Ivory
+              </button>
+            </div>
 
             <button
               type="button"
@@ -815,10 +855,11 @@ export function BookFlipReader({
       )}
 
       {/* ─── Interactive Flip Book Stage (Click or hold & drag page to flip) ─── */}
-      <div className={`relative flex w-full items-center justify-center ${isFullscreen ? "my-auto" : "py-2 sm:py-4"}`}>
+      <div className={`relative z-10 flex w-full items-center justify-center ${isFullscreen ? "my-auto" : "py-2 sm:py-4"}`}>
         {/* Book Container: Locked dimensions prevent layout collapse and scrolling */}
         <div
-          className="book-stage relative flex items-center justify-center select-none shadow-[0_24px_60px_-15px_rgba(0,0,0,0.45)] rounded-sm cursor-pointer"
+          className="book-stage relative flex items-center justify-center select-none shadow-[0_24px_60px_-15px_rgba(0,0,0,0.45)] rounded-sm cursor-pointer overflow-hidden"
+          data-book-theme={bookTheme}
           onClick={handleStageClick}
           onTouchStart={handleStageTouchStart}
           onTouchEnd={handleStageTouchEnd}
@@ -826,7 +867,7 @@ export function BookFlipReader({
             width: dimensions.isMobile ? dimensions.pageWidth : dimensions.pageWidth * 2,
             height: dimensions.pageHeight,
             minHeight: dimensions.pageHeight,
-            touchAction: "none",
+            touchAction: dimensions.isMobile ? "pan-y" : "none",
           }}
         >
           <HTMLFlipBook
@@ -838,23 +879,29 @@ export function BookFlipReader({
             maxWidth={dimensions.pageWidth}
             minHeight={dimensions.pageHeight}
             maxHeight={dimensions.pageHeight}
-            maxShadowOpacity={dimensions.isMobile ? 0.25 : 0.45}
-            showCover={!dimensions.isMobile}
+            drawShadow={!dimensions.isMobile}
+            maxShadowOpacity={dimensions.isMobile ? 0 : 0.45}
+            showCover={true}
             mobileScrollSupport={false}
             clickEventForward={true}
             usePortrait={dimensions.isMobile}
-            flippingTime={dimensions.isMobile ? 700 : 600}
-            swipeDistance={30}
+            flippingTime={dimensions.isMobile ? 380 : 600}
+            swipeDistance={20}
             showPageCorners={false}
-            disableFlipByClick={true}
-            useMouseEvents={true}
-            autoSize={false}
+            disableFlipByClick={false}
+            useMouseEvents={!dimensions.isMobile}
+            autoSize={true}
             renderOnlyPageLengthChange={true}
             className="book-engine mx-auto"
             style={{ margin: "0 auto" }}
             ref={bookRef}
             onFlip={(e: { data: number }) => {
               setCurrentPage(e.data);
+            }}
+            onChangeState={(e: { data: string }) => {
+              if (e.data !== "read") {
+                lastFlipTimeRef.current = Date.now();
+              }
             }}
           >
             {pageElements}
@@ -864,7 +911,7 @@ export function BookFlipReader({
 
       {/* ─── Bottom Navigation Bar (Hidden when Maximized) ─── */}
       {!isFullscreen && (
-        <div className="mt-4 sm:mt-6 flex w-full max-w-4xl items-center justify-between gap-2 border-t hairline pt-3 sm:pt-4 px-2 pb-2">
+        <div className="relative z-30 mt-4 sm:mt-6 flex w-full max-w-4xl items-center justify-between gap-2 border-t hairline pt-3 sm:pt-4 px-2 pb-2">
           {/* Page progress indicator */}
           <div className="flex items-center gap-2 font-sans text-xs text-muted">
             <span className="font-mono text-ink font-semibold whitespace-nowrap">
@@ -975,38 +1022,49 @@ export function BookFlipReader({
                 </button>
               </div>
 
-              {/* Theme Settings (Only Parchment & Ivory shown in light mode) */}
-              {!isSiteDark && (
-                <div className="border-t border-white/10 pt-3.5 mt-3.5">
-                  <span className="block font-sans text-[10px] uppercase tracking-wider text-white/60 mb-2 font-medium">
-                    Paper Texture
-                  </span>
-                  <div className="grid grid-cols-2 gap-2">
+              {/* Theme Settings (Parchment, Ivory, and Night in dark mode) */}
+              <div className="border-t border-white/10 pt-3.5 mt-3.5">
+                <span className="block font-sans text-[10px] uppercase tracking-wider text-white/60 mb-2 font-medium">
+                  Paper Theme
+                </span>
+                <div className={`grid ${isSiteDark ? "grid-cols-3" : "grid-cols-2"} gap-2`}>
+                  {isSiteDark && (
                     <button
                       type="button"
-                      onClick={() => setPaperTheme("parchment")}
+                      onClick={() => handleSelectTheme("night")}
                       className={`rounded-xl py-1.5 text-center font-sans text-xs font-medium transition-all ${
-                        paperTheme === "parchment"
+                        bookTheme === "night"
                           ? "bg-accent text-white font-semibold shadow-xs"
                           : "border border-white/15 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
                       }`}
                     >
-                      Parchment
+                      Night
                     </button>
-                    <button
-                      type="button"
-                      onClick={() => setPaperTheme("ivory")}
-                      className={`rounded-xl py-1.5 text-center font-sans text-xs font-medium transition-all ${
-                        paperTheme === "ivory"
-                          ? "bg-accent text-white font-semibold shadow-xs"
-                          : "border border-white/15 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
-                      }`}
-                    >
-                      Ivory
-                    </button>
-                  </div>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => handleSelectTheme("parchment")}
+                    className={`rounded-xl py-1.5 text-center font-sans text-xs font-medium transition-all ${
+                      bookTheme === "parchment"
+                        ? "bg-accent text-white font-semibold shadow-xs"
+                        : "border border-white/15 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
+                    }`}
+                  >
+                    Parchment
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleSelectTheme("ivory")}
+                    className={`rounded-xl py-1.5 text-center font-sans text-xs font-medium transition-all ${
+                      bookTheme === "ivory"
+                        ? "bg-accent text-white font-semibold shadow-xs"
+                        : "border border-white/15 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
+                    }`}
+                  >
+                    Ivory
+                  </button>
                 </div>
-              )}
+              </div>
 
               {/* Page Scrubber Slider */}
               <div className="border-t border-white/10 pt-3.5 mt-3.5">

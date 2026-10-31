@@ -564,12 +564,28 @@ html.theme-transition [class*="border-"] {
   transition-delay: 0s !important;
 }
 
-/* ─── Book Flip Reader Styles (Eliminate white bezels & glitches) ──────── */
+/* ─── Book Flip Reader Styles & Dynamic Themes ─────────────────────────── */
+.book-reader-wrapper {
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+.book-stage {
+  contain: layout;
+  overflow: hidden;
+}
+
 .stf__parent,
 .stf__wrapper,
 .stf__block,
 .stf__parent canvas {
   background: transparent !important;
+}
+
+.stf__wrapper {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .page-sheet {
@@ -590,5 +606,157 @@ html.theme-transition [class*="border-"] {
 .stf__hardShadow,
 .stf__hardInnerShadow {
   pointer-events: none;
+}
+
+/* Mobile performance optimizations for book reader */
+@media (max-width: 767px) {
+  .book-stage {
+    touch-action: pan-y pinch-zoom;
+    -webkit-overflow-scrolling: touch;
+    contain: layout paint;
+  }
+  
+  .book-page-sheet {
+    /* Eliminate heavy blur inset box-shadows on mobile portrait single page */
+    box-shadow: none !important;
+    contain: layout style;
+  }
+
+  .stf__item {
+    contain: layout style;
+    will-change: transform;
+  }
+
+  .stf__outerShadow,
+  .stf__innerShadow,
+  .stf__hardShadow,
+  .stf__hardInnerShadow {
+    display: none !important;
+  }
+}
+
+/* ─── Book Dynamic Theme Tokens ─── */
+.book-stage,
+.book-reader-wrapper {
+  --book-bg: #f5f0e6;
+  --book-text: #29241f;
+  --book-border: #dfd7c8;
+  --book-shadow-left: inset -14px 0 20px -10px rgba(40, 30, 20, 0.18);
+  --book-shadow-right: inset 14px 0 20px -10px rgba(40, 30, 20, 0.18);
+  --book-subtle: #756a5e;
+  --book-rule: #d8cfbe;
+  --cover-bg-start: #1e2738;
+  --cover-bg-mid: #101726;
+  --cover-bg-end: #080d18;
+  --cover-border: #334155;
+  --cover-text: #f7f2ea;
+}
+
+/* Parchment Theme */
+.book-stage[data-book-theme="parchment"],
+.book-reader-wrapper[data-book-theme="parchment"] {
+  --book-bg: #f5f0e6;
+  --book-text: #29241f;
+  --book-border: #dfd7c8;
+  --book-shadow-left: inset -14px 0 20px -10px rgba(40, 30, 20, 0.18);
+  --book-shadow-right: inset 14px 0 20px -10px rgba(40, 30, 20, 0.18);
+  --book-subtle: #756a5e;
+  --book-rule: #d8cfbe;
+  --cover-bg-start: #1e2738;
+  --cover-bg-mid: #101726;
+  --cover-bg-end: #080d18;
+  --cover-border: #334155;
+  --cover-text: #f7f2ea;
+}
+
+/* Ivory Theme */
+.book-stage[data-book-theme="ivory"],
+.book-reader-wrapper[data-book-theme="ivory"] {
+  --book-bg: #fcfaf5;
+  --book-text: #1c1917;
+  --book-border: #ebe4d8;
+  --book-shadow-left: inset -14px 0 18px -10px rgba(0, 0, 0, 0.12);
+  --book-shadow-right: inset 14px 0 18px -10px rgba(0, 0, 0, 0.12);
+  --book-subtle: #78716c;
+  --book-rule: #e5ded2;
+  --cover-bg-start: #292524;
+  --cover-bg-mid: #1c1917;
+  --cover-bg-end: #0c0a09;
+  --cover-border: #44403c;
+  --cover-text: #fafaf9;
+}
+
+/* Night Theme */
+.book-stage[data-book-theme="night"],
+.book-reader-wrapper[data-book-theme="night"],
+html.dark .book-stage:not([data-book-theme="parchment"]):not([data-book-theme="ivory"]),
+html.dark .book-reader-wrapper:not([data-book-theme="parchment"]):not([data-book-theme="ivory"]) {
+  --book-bg: #161513;
+  --book-text: #ece5d8;
+  --book-border: #2b2723;
+  --book-shadow-left: inset -14px 0 24px -10px rgba(0, 0, 0, 0.6);
+  --book-shadow-right: inset 14px 0 24px -10px rgba(0, 0, 0, 0.6);
+  --book-subtle: #a39a8c;
+  --book-rule: #36312a;
+  --cover-bg-start: #0d0c0b;
+  --cover-bg-mid: #141210;
+  --cover-bg-end: #080706;
+  --cover-border: #27231f;
+  --cover-text: #f4efe8;
+}
+
+/* Page Elements Dynamic Styling */
+.book-page-sheet {
+  --color-ink: var(--book-text) !important;
+  --color-muted: var(--book-subtle) !important;
+  --color-line: var(--book-rule) !important;
+  background-color: var(--book-bg) !important;
+  color: var(--book-text) !important;
+  border-color: var(--book-border) !important;
+  transition: background-color 250ms ease, color 250ms ease, border-color 250ms ease;
+}
+
+.book-page-sheet .book-page-rule {
+  border-color: var(--book-rule) !important;
+}
+
+.book-page-sheet .book-page-subtle {
+  color: var(--book-subtle) !important;
+}
+
+.book-page-sheet .text-ink,
+.book-page-sheet [class*="text-ink"],
+.book-page-sheet h1,
+.book-page-sheet h2,
+.book-page-sheet h3,
+.book-page-sheet h4,
+.book-page-sheet p:not([class*="amber"]):not([class*="accent"]),
+.book-page-sheet span:not([class*="amber"]):not([class*="accent"]):not([class*="text-muted"]):not([class*="book-page-subtle"]) {
+  color: var(--book-text);
+}
+
+.book-page-sheet .text-muted {
+  color: var(--book-subtle) !important;
+}
+
+.book-page-sheet .border-line,
+.book-page-sheet .border-line\/60 {
+  border-color: var(--book-rule) !important;
+}
+
+.book-page-sheet.book-spine-left {
+  box-shadow: var(--book-shadow-left) !important;
+}
+
+.book-page-sheet.book-spine-right {
+  box-shadow: var(--book-shadow-right) !important;
+}
+
+/* Cover Styling */
+.book-cover-sheet {
+  background: linear-gradient(to bottom right, var(--cover-bg-start), var(--cover-bg-mid), var(--cover-bg-end)) !important;
+  border-color: var(--cover-border) !important;
+  color: var(--cover-text) !important;
+  transition: background 300ms ease, border-color 300ms ease;
 }
 
