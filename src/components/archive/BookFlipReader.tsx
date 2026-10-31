@@ -4,10 +4,8 @@ import React, { forwardRef, useCallback, useEffect, useMemo, useRef, useState } 
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import {
-  ArrowLeft,
   BookOpen,
-  ChevronLeft,
-  ChevronRight,
+  LayoutGrid,
   List,
   Maximize2,
   Menu,
@@ -58,7 +56,7 @@ const Page = forwardRef<HTMLDivElement, PageProps>(({ children, className = "", 
     <div
       ref={ref}
       data-density={isHard ? "hard" : "soft"}
-      className={`page-sheet relative h-full w-full select-none ${className}`}
+      className={`page-sheet relative h-full w-full select-none overflow-hidden ${className}`}
       style={{
         transform: "translate3d(0, 0, 0)",
         WebkitTransform: "translate3d(0, 0, 0)",
@@ -128,7 +126,7 @@ export function BookFlipReader({
           // Mobile Portrait: single page fits screen with edge padding
           const availW = w - 24;
           const availH = h - 64;
-          let pWidth = Math.min(availW, 400);
+          let pWidth = Math.min(availW, 380);
           let pHeight = Math.min(availH, Math.round(pWidth * 1.45));
           if (pHeight > availH) {
             pHeight = availH;
@@ -152,7 +150,8 @@ export function BookFlipReader({
       } else {
         // ── Normal In-Page Mode ──
         if (mobile) {
-          const pWidth = Math.min(Math.max(w - 36, 280), 360);
+          const maxAvailW = Math.max(w - 40, 260);
+          const pWidth = Math.min(maxAvailW, 360);
           const pHeight = Math.min(Math.round(pWidth * 1.45), 520);
           setDimensions({ pageWidth: pWidth, pageHeight: pHeight, isMobile: true });
         } else {
@@ -196,6 +195,65 @@ export function BookFlipReader({
       // ignore
     }
   }, []);
+
+  // Dedicated touch and click handlers to guarantee instant response on mobile devices
+  const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null);
+
+  const handleStageTouchStart = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    if (e.touches.length === 1) {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+        time: Date.now(),
+      };
+    }
+  }, []);
+
+  const handleStageTouchEnd = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    if (!touchStartRef.current || e.changedTouches.length === 0) return;
+    const start = touchStartRef.current;
+    const touch = e.changedTouches[0];
+    const dx = touch.clientX - start.x;
+    const dy = touch.clientY - start.y;
+    const dt = Date.now() - start.time;
+    touchStartRef.current = null;
+
+    const target = e.target as HTMLElement | null;
+    if (target && target.closest("a, button, input")) return;
+
+    // Horizontal swipe gesture (> 30px in < 600ms)
+    if (Math.abs(dx) > 30 && Math.abs(dy) < Math.abs(dx) * 1.5 && dt < 600) {
+      if (dx < 0) {
+        flipNext();
+      } else {
+        flipPrev();
+      }
+      return;
+    }
+
+    // Direct tap / click gesture (< 15px movement in < 350ms)
+    if (Math.abs(dx) < 15 && Math.abs(dy) < 15 && dt < 350) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const clickX = touch.clientX - rect.left;
+      if (clickX > rect.width * 0.45) {
+        flipNext();
+      } else {
+        flipPrev();
+      }
+    }
+  }, [flipNext, flipPrev]);
+
+  const handleStageClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement | null;
+    if (target && target.closest("a, button, input")) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    if (clickX > rect.width * 0.45) {
+      flipNext();
+    } else {
+      flipPrev();
+    }
+  }, [flipNext, flipPrev]);
 
   const jumpToPage = useCallback((pageNum: number) => {
     try {
@@ -430,7 +488,7 @@ export function BookFlipReader({
       /* ════ PAGE 0: HARDCOVER FRONT ════ */
       <Page
         key="page-cover-front"
-        isHard
+        isHard={!dimensions.isMobile}
         className={`p-5 sm:p-7 flex flex-col justify-between ${themeStyles.coverBg} border-r-2 ${themeStyles.coverBorder}`}
       >
         <div className="relative h-full w-full rounded-sm border-2 border-amber-400/30 p-5 sm:p-7 flex flex-col justify-between text-center">
@@ -465,7 +523,7 @@ export function BookFlipReader({
 
           <div className="border-t border-amber-400/25 pt-3 flex items-center justify-between font-sans text-[9px] uppercase tracking-[0.22em] text-amber-200/70">
             <span>Nagpur · India</span>
-            <span className="text-amber-300">Open Book →</span>
+            <span className="text-amber-300">Open Folio</span>
           </div>
         </div>
       </Page>,
@@ -510,7 +568,7 @@ export function BookFlipReader({
         </div>
 
         <div className="overflow-hidden flex-1 space-y-1.5 text-xs py-1">
-          {formattedPages.slice(0, 14).map((fp, idx) => (
+          {formattedPages.slice(0, dimensions.isMobile ? 8 : 14).map((fp, idx) => (
             <button
               key={`${fp.work.id}-${fp.partIndex}`}
               type="button"
@@ -533,7 +591,7 @@ export function BookFlipReader({
         </div>
 
         <div className="border-t hairline pt-3 mt-auto flex items-center justify-between font-sans text-[10px] text-muted">
-          <span>Flip forward to read</span>
+          <span>Flip to read</span>
           <span>Page 2</span>
         </div>
       </Page>,
@@ -594,7 +652,7 @@ export function BookFlipReader({
 
               {fp.partIndex < fp.totalParts && (
                 <p className="mt-2 font-sans text-[9px] italic text-muted text-right">
-                  Continued on next page →
+                  (Continued on next page)
                 </p>
               )}
             </div>
@@ -608,7 +666,7 @@ export function BookFlipReader({
                 className="hover:text-accent truncate max-w-[170px] no-underline"
                 title="Open full piece in standalone view"
               >
-                {fp.work.title || "Open piece"} ↗
+                {fp.work.title || "Open piece"}
               </Link>
               <span className="tabular-nums font-mono">
                 — {fp.pageNumber} —
@@ -647,7 +705,7 @@ export function BookFlipReader({
       /* ════ HARDCOVER BACK ════ */
       <Page
         key="page-cover-back"
-        isHard
+        isHard={!dimensions.isMobile}
         className={`p-5 sm:p-7 flex flex-col justify-between ${themeStyles.coverBg} border-l-2 ${themeStyles.coverBorder}`}
       >
         <div className="relative h-full w-full rounded-sm border-2 border-amber-400/30 p-5 sm:p-7 flex flex-col justify-between text-center">
@@ -669,7 +727,7 @@ export function BookFlipReader({
         </div>
       </Page>,
     ];
-  }, [formattedPages, themeStyles, colophonPageNum, jumpToPage]);
+  }, [formattedPages, themeStyles, colophonPageNum, jumpToPage, dimensions.isMobile]);
 
   if (!isMounted) return null;
 
@@ -693,7 +751,7 @@ export function BookFlipReader({
                 className="inline-flex items-center gap-1.5 rounded-xl border border-line/80 bg-surface/80 px-3.5 py-1.5 font-sans text-xs font-medium text-ink shadow-xs transition-all hover:bg-surface hover:text-accent"
                 title="Return to standard archive directory"
               >
-                <ArrowLeft className="h-3.5 w-3.5" />
+                <LayoutGrid className="h-3.5 w-3.5" />
                 <span>Standard View</span>
               </button>
             )}
@@ -756,46 +814,19 @@ export function BookFlipReader({
         </div>
       )}
 
-      {/* ─── Interactive Flip Book Stage (Fixed height prevents webpage scroll-up during flips) ─── */}
+      {/* ─── Interactive Flip Book Stage (Click or hold & drag page to flip) ─── */}
       <div className={`relative flex w-full items-center justify-center ${isFullscreen ? "my-auto" : "py-2 sm:py-4"}`}>
-        {/* Previous page overlay arrow on left edge */}
-        <button
-          type="button"
-          onClick={flipPrev}
-          disabled={currentPage <= 0}
-          className={`absolute ${
-            isFullscreen ? "left-4 sm:left-8" : "-left-2 sm:-left-6"
-          } top-1/2 -translate-y-1/2 z-30 inline-flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-line/80 ${
-            isFullscreen ? "bg-black/50 text-white/90 border-white/20 hover:bg-black/80" : "bg-surface/90 text-ink hover:bg-surface"
-          } shadow-md backdrop-blur-md transition-all hover:scale-105 disabled:opacity-0 disabled:pointer-events-none`}
-          aria-label="Previous page"
-        >
-          <ChevronLeft className="h-5 w-5" />
-        </button>
-
-        {/* Next page overlay arrow on right edge */}
-        <button
-          type="button"
-          onClick={flipNext}
-          disabled={currentPage >= backCoverPageNum}
-          className={`absolute ${
-            isFullscreen ? "right-4 sm:right-8" : "-right-2 sm:-right-6"
-          } top-1/2 -translate-y-1/2 z-30 inline-flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-line/80 ${
-            isFullscreen ? "bg-black/50 text-white/90 border-white/20 hover:bg-black/80" : "bg-surface/90 text-ink hover:bg-surface"
-          } shadow-md backdrop-blur-md transition-all hover:scale-105 disabled:opacity-0 disabled:pointer-events-none`}
-          aria-label="Next page"
-        >
-          <ChevronRight className="h-5 w-5" />
-        </button>
-
         {/* Book Container: Locked dimensions prevent layout collapse and scrolling */}
         <div
-          className="book-stage relative flex items-center justify-center select-none shadow-[0_24px_60px_-15px_rgba(0,0,0,0.45)] rounded-sm"
+          className="book-stage relative flex items-center justify-center select-none shadow-[0_24px_60px_-15px_rgba(0,0,0,0.45)] rounded-sm cursor-pointer"
+          onClick={handleStageClick}
+          onTouchStart={handleStageTouchStart}
+          onTouchEnd={handleStageTouchEnd}
           style={{
             width: dimensions.isMobile ? dimensions.pageWidth : dimensions.pageWidth * 2,
             height: dimensions.pageHeight,
             minHeight: dimensions.pageHeight,
-            touchAction: "pan-y",
+            touchAction: "none",
           }}
         >
           <HTMLFlipBook
@@ -809,13 +840,15 @@ export function BookFlipReader({
             maxHeight={dimensions.pageHeight}
             maxShadowOpacity={dimensions.isMobile ? 0.25 : 0.45}
             showCover={!dimensions.isMobile}
-            mobileScrollSupport={true}
+            mobileScrollSupport={false}
             clickEventForward={true}
             usePortrait={dimensions.isMobile}
-            flippingTime={dimensions.isMobile ? 400 : 500}
-            swipeDistance={20}
+            flippingTime={dimensions.isMobile ? 700 : 600}
+            swipeDistance={30}
             showPageCorners={false}
-            disableFlipByClick={false}
+            disableFlipByClick={true}
+            useMouseEvents={true}
+            autoSize={false}
             renderOnlyPageLengthChange={true}
             className="book-engine mx-auto"
             style={{ margin: "0 auto" }}
@@ -831,56 +864,32 @@ export function BookFlipReader({
 
       {/* ─── Bottom Navigation Bar (Hidden when Maximized) ─── */}
       {!isFullscreen && (
-        <div className="mt-4 sm:mt-6 flex w-full max-w-4xl flex-wrap items-center justify-between gap-3 border-t hairline pt-3 sm:pt-4">
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={flipPrev}
-              disabled={currentPage <= 0}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-line/80 bg-surface/80 px-3.5 py-1.5 font-sans text-xs font-semibold text-ink shadow-xs transition-all hover:bg-surface disabled:opacity-40"
-            >
-              <ChevronLeft className="h-4 w-4" />
-              <span>Previous</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={flipNext}
-              disabled={currentPage >= backCoverPageNum}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-line/80 bg-surface/80 px-3.5 py-1.5 font-sans text-xs font-semibold text-ink shadow-xs transition-all hover:bg-surface disabled:opacity-40"
-            >
-              <span>Next</span>
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          </div>
-
+        <div className="mt-4 sm:mt-6 flex w-full max-w-4xl items-center justify-between gap-2 border-t hairline pt-3 sm:pt-4 px-2 pb-2">
           {/* Page progress indicator */}
-          <div className="flex items-center gap-3 font-sans text-xs text-muted">
-            <span className="font-mono text-ink font-semibold">
+          <div className="flex items-center gap-2 font-sans text-xs text-muted">
+            <span className="font-mono text-ink font-semibold whitespace-nowrap">
               {currentPage === 0
                 ? "Cover"
                 : currentPage >= backCoverPageNum
                 ? "Back Cover"
                 : `Page ${currentPage} of ${backCoverPageNum}`}
             </span>
-            <span className="text-line hidden sm:inline">·</span>
-            <span className="text-[11px] hidden sm:inline">
-              Turn pages by clicking corners or dragging
+            <span className="text-line hidden md:inline">·</span>
+            <span className="text-[11px] text-muted hidden md:inline">
+              Click or hold &amp; drag the page to flip
             </span>
           </div>
 
           {/* Quick Return to Cover */}
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => jumpToPage(0)}
-              className="inline-flex items-center gap-1 text-muted hover:text-ink font-sans text-xs"
-              title="Return to Cover"
-            >
-              <RotateCcw className="h-3 w-3" />
-              <span>Cover</span>
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => jumpToPage(0)}
+            className="inline-flex items-center gap-1.5 rounded-xl border border-line/80 bg-surface/80 px-3 py-1.5 font-sans text-xs text-muted hover:text-ink shadow-xs transition-all hover:bg-surface whitespace-nowrap shrink-0"
+            title="Return to Cover"
+          >
+            <RotateCcw className="h-3 w-3 text-accent" />
+            <span>Return to Cover</span>
+          </button>
         </div>
       )}
 
@@ -942,7 +951,7 @@ export function BookFlipReader({
                     }}
                     className="flex w-full items-center gap-2.5 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-left font-medium text-white/90 hover:bg-white/15 transition-colors"
                   >
-                    <ArrowLeft className="h-4 w-4 text-accent" />
+                    <LayoutGrid className="h-4 w-4 text-accent" />
                     <span>Return to Standard Archive</span>
                   </button>
                 )}

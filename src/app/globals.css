@@ -576,10 +576,19 @@ html.theme-transition [class*="border-"] {
   box-sizing: border-box;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  overflow: hidden;
 }
 
 .stf__item {
   user-select: none;
   -webkit-user-select: none;
+  overflow: hidden;
+}
+
+.stf__outerShadow,
+.stf__innerShadow,
+.stf__hardShadow,
+.stf__hardInnerShadow {
+  pointer-events: none;
 }
 
