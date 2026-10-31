@@ -564,3 +564,22 @@ html.theme-transition [class*="border-"] {
   transition-delay: 0s !important;
 }
 
+/* ─── Book Flip Reader Styles (Eliminate white bezels & glitches) ──────── */
+.stf__parent,
+.stf__wrapper,
+.stf__block,
+.stf__parent canvas {
+  background: transparent !important;
+}
+
+.page-sheet {
+  box-sizing: border-box;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.stf__item {
+  user-select: none;
+  -webkit-user-select: none;
+}
+

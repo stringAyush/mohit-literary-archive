@@ -62,7 +62,7 @@ export function SiteFooter() {
             ))}
           </div>
         </div>
-        <div className="mt-14 border-t border-white/15 pt-6 font-sans text-xs text-night-muted">
+        <div className="mt-14 border-t border-white/15 pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 font-sans text-xs text-night-muted">
           <p>
             © {year} {SITE_NAME}. All rights reserved. Writing on this site may not be reproduced without permission —
             see{" "}
@@ -70,6 +70,9 @@ export function SiteFooter() {
               Copyright &amp; Permissions
             </Link>
             .
+          </p>
+          <p className="font-editorial italic text-xs text-night-muted/80">
+            A digital literary publication &amp; continuous folio.
           </p>
         </div>
       </div>

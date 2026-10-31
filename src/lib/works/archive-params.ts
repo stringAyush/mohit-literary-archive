@@ -12,6 +12,7 @@ export type ArchiveParams = {
   language: string | null;
   sort: ArchiveSort;
   page: number;
+  view: "normal" | "book";
 };
 
 function first(value: string | string[] | undefined): string {
@@ -24,6 +25,7 @@ export function parseArchiveParams(raw: RawSearchParams): ArchiveParams {
   const collection = first(raw.collection).trim();
   const language = first(raw.lang).trim();
   const page = Number.parseInt(first(raw.page), 10);
+  const viewParam = first(raw.view).trim().toLowerCase();
   return {
     q,
     type: contentTypeFromParam(first(raw.type)),
@@ -31,6 +33,7 @@ export function parseArchiveParams(raw: RawSearchParams): ArchiveParams {
     language: (LANGUAGE_CODES as readonly string[]).includes(language) ? language : null,
     sort: first(raw.sort) === "oldest" ? "oldest" : "newest",
     page: Number.isFinite(page) && page > 0 ? Math.min(page, 10_000) : 1,
+    view: viewParam === "book" ? "book" : "normal",
   };
 }
 
@@ -43,6 +46,7 @@ export function archiveParamsToQuery(params: ArchiveParams): Record<string, stri
     lang: params.language ?? undefined,
     sort: params.sort === "oldest" ? "oldest" : undefined,
     page: params.page > 1 ? String(params.page) : undefined,
+    view: params.view === "book" ? "book" : undefined,
   };
 }
 

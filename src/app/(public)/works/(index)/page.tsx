@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { RotateCcw } from "lucide-react";
 import { ArchiveFilters } from "@/components/archive/ArchiveFilters";
+import { ArchiveViewSection } from "@/components/archive/ArchiveViewSection";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { FadeIn } from "@/components/ui/MotionWrapper";
 import { hrefFor, Pagination } from "@/components/ui/Pagination";
@@ -15,7 +16,7 @@ import {
   type ArchiveParams,
   type RawSearchParams,
 } from "@/lib/works/archive-params";
-import { getArchiveFilterOptions, getArchivePage } from "@/lib/works/queries";
+import { getArchiveFilterOptions, getArchivePage, getFlipBookWorks } from "@/lib/works/queries";
 
 export const revalidate = 60;
 
@@ -26,7 +27,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   const filtered = hasActiveFilters(params) || params.page > 1 || params.sort !== "newest";
   return {
     title: params.q ? `Search: ${params.q}` : "The Archive",
-    description: "A growing collection of published writing — quotes, poems, aphorisms and reflections.",
+    description: "A growing collection of published writing — poems, short stories, aphorisms and reflections.",
     alternates: { canonical: "/works" },
     robots: filtered ? { index: false, follow: true } : undefined,
   };
@@ -42,15 +43,16 @@ export default async function ArchivePage({ searchParams }: Props) {
     <div className="page-container pb-16 pt-12 lg:pb-24 lg:pt-20">
       <FadeIn>
         <header className="max-w-3xl">
-          <p className="eyebrow flex items-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-            The Complete Archive
-          </p>
-          <h1 className="mt-4 font-display text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[1.05] tracking-[-0.015em] text-ink font-normal">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.25em] text-muted">
+              Digital Literary Folio &amp; Archive
+            </span>
+          </div>
+          <h1 className="font-display text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[1.05] tracking-[-0.015em] text-ink font-normal">
             The Archive
           </h1>
-          <p className="mt-4 font-editorial text-[1.4rem] leading-snug text-ink/80">
-            A growing collection of poems, reflections, excerpts, and literary observations.
+          <p className="mt-3 font-editorial text-[1.35rem] leading-snug text-ink/80">
+            A growing collection of poems, short stories, reflections, excerpts, and literary observations.
           </p>
         </header>
 
@@ -63,6 +65,7 @@ export default async function ArchivePage({ searchParams }: Props) {
               collection: params.collection ?? "",
               lang: params.language ?? "",
               sort: params.sort,
+              view: params.view,
             }}
             types={CONTENT_TYPES.filter((t) => options.types.some((o) => o.value === t.value)).map((t) => ({
               value: contentTypeParam(t.value),
@@ -83,14 +86,24 @@ export default async function ArchivePage({ searchParams }: Props) {
 }
 
 async function ArchiveResults({ params }: { params: ArchiveParams }) {
-  const result = await getArchivePage({
-    q: params.q,
-    type: params.type,
-    collection: params.collection,
-    language: params.language,
-    sort: params.sort,
-    page: params.page,
-  });
+  const [result, flipWorks] = await Promise.all([
+    getArchivePage({
+      q: params.q,
+      type: params.type,
+      collection: params.collection,
+      language: params.language,
+      sort: params.sort,
+      page: params.page,
+    }),
+    getFlipBookWorks({
+      q: params.q,
+      type: params.type ?? undefined,
+      collection: params.collection ?? undefined,
+      language: params.language ?? undefined,
+      sort: params.sort,
+    }),
+  ]);
+
   const query = archiveParamsToQuery(params);
   const filtered = hasActiveFilters(params);
 
@@ -132,16 +145,25 @@ async function ArchiveResults({ params }: { params: ArchiveParams }) {
           message={filtered ? "Try fewer filters, or search for a single word." : "Nothing has been published yet."}
           action={filtered ? { label: "Show everything", href: "/works" } : undefined}
         />
-      ) : result.items.length === 0 ? (
-        <EmptyState
-          title="This page is past the end of the results."
-          action={{ label: "Go to the first page", href: hrefFor("/works", query, 1) }}
-        />
       ) : (
-        <>
-          <WorkGrid works={result.items} headingLevel={3} />
-          <Pagination basePath="/works" params={query} page={result.page} pageCount={result.pageCount} />
-        </>
+        <ArchiveViewSection
+          initialView={params.view}
+          flipWorks={flipWorks}
+          totalWorks={result.total}
+          normalContent={
+            result.items.length === 0 ? (
+              <EmptyState
+                title="This page is past the end of the results."
+                action={{ label: "Go to the first page", href: hrefFor("/works", query, 1) }}
+              />
+            ) : (
+              <>
+                <WorkGrid works={result.items} headingLevel={3} />
+                <Pagination basePath="/works" params={query} page={result.page} pageCount={result.pageCount} />
+              </>
+            )
+          }
+        />
       )}
     </section>
   );

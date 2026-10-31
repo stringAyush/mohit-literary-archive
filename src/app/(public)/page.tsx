@@ -51,12 +51,16 @@ export default async function HomePage() {
           } lg:py-24`}
         >
           <div className="flex flex-col justify-center">
-            {config.showHeroBadge !== false && config.heroBadgeText && (
-              <div className="mb-5 inline-flex items-center gap-2 self-start rounded-full border border-ink/10 bg-surface/80 px-3.5 py-1 text-xs font-medium text-ink shadow-xs backdrop-blur-xs">
-                <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse-dot" />
-                <span>{config.heroBadgeText}</span>
-              </div>
-            )}
+            {/* Literary Publication Folio Header */}
+            <div className="mb-5 flex flex-wrap items-center gap-2.5 font-sans text-[11px] font-semibold uppercase tracking-[0.24em] text-muted">
+              <span className="font-semibold text-ink">Digital Literary Publication</span>
+              <span className="text-line">/</span>
+              <span>Continuous Folio</span>
+              <span className="text-line">/</span>
+              <span className="text-accent flex items-center gap-1.5 font-medium lowercase italic font-editorial tracking-normal text-xs">
+                online edition
+              </span>
+            </div>
             <h1
               id="hero-heading"
               className="max-w-[14ch] font-display text-[clamp(2.75rem,6.2vw,5.25rem)] leading-[1.02] tracking-[-0.02em] text-balance text-ink font-normal"

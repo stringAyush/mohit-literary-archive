@@ -13,8 +13,8 @@ export function Wordmark({ tone = "ink" }: { tone?: "ink" | "night" }) {
         <span>{SITE_NAME}</span>
         <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent animate-pulse-dot" aria-hidden="true" />
       </span>
-      <span className={`mt-0.5 font-sans text-[0.5625rem] font-semibold uppercase tracking-[0.24em] sm:text-[0.625rem] ${subtitleColor}`}>
-        {SITE_SUBTITLE}
+      <span className={`mt-0.5 font-sans text-[0.5625rem] font-semibold uppercase tracking-[0.22em] sm:text-[0.625rem] ${subtitleColor}`}>
+        Literary Folio &amp; Archive
       </span>
     </Link>
   );

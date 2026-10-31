@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 type Option = { value: string; label: string; hindiLabel?: string };
 
 type Props = {
-  values: { q: string; type: string; collection: string; lang: string; sort: string };
+  values: { q: string; type: string; collection: string; lang: string; sort: string; view?: string };
   types: Option[];
   collections: Option[];
   languages: Option[];
@@ -107,6 +107,7 @@ export function ArchiveFilters({ values, types, collections, languages }: Props)
       aria-busy={isPending}
       className="rounded-2xl border border-ink/10 bg-surface/75 p-5 shadow-[0_8px_30px_rgb(20,19,18,0.04)] backdrop-blur-md ring-1 ring-white/60 sm:p-6"
     >
+      {values.view === "book" && <input type="hidden" name="view" value="book" />}
       {/* ─── Language Section Tabs ─── */}
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b hairline pb-4">
         <div className="flex items-center gap-1.5 font-sans text-xs font-semibold uppercase tracking-wider text-muted">

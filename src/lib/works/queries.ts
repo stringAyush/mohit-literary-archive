@@ -397,8 +397,6 @@ export async function quickSearch(q: string, limit = 6): Promise<QuickSearchResu
   };
 }
 
-// ─── Sitemap ──────────────────────────────────────────────────────────────
-
 export async function getSitemapEntries() {
   const [works, collections] = await Promise.all([
     db.work.findMany({
@@ -413,4 +411,84 @@ export async function getSitemapEntries() {
     select: { slug: true, updatedAt: true },
   });
   return { works, collections: collectionDates };
+}
+
+// ─── Book Flip Reader Query ───────────────────────────────────────────────
+
+export type FlipBookPiece = {
+  id: string;
+  slug: string;
+  title: string | null;
+  body: string;
+  contentType: ContentType;
+  language: string;
+  firstPublishedAt: Date | null;
+  authorName: string;
+  collections: { slug: string; name: string }[];
+};
+
+export async function getFlipBookWorks(filters?: ArchiveFilters): Promise<FlipBookPiece[]> {
+  const baseWhere = publicWorkWhere();
+  const condition: Prisma.WorkWhereInput = {
+    ...baseWhere,
+  };
+
+  if (filters?.type) {
+    condition.contentType = filters.type;
+  } else {
+    condition.contentType = { in: ["POEM", "SHORT_STORY", "PROSE", "REFLECTION", "QUOTE"] };
+  }
+
+  if (filters?.language) {
+    condition.language = filters.language;
+  }
+
+  if (filters?.collection) {
+    condition.collections = {
+      some: { collection: { slug: filters.collection, isPublished: true } },
+    };
+  }
+
+  if (filters?.q && filters.q.trim()) {
+    const q = filters.q.trim();
+    condition.OR = [
+      { title: { contains: q, mode: "insensitive" } },
+      { body: { contains: q, mode: "insensitive" } },
+    ];
+  }
+
+  const works = await db.work.findMany({
+    where: condition,
+    orderBy: [
+      { firstPublishedAt: filters?.sort === "oldest" ? "asc" : "desc" },
+      { id: "asc" },
+    ],
+    take: 60,
+    select: {
+      id: true,
+      slug: true,
+      title: true,
+      body: true,
+      contentType: true,
+      language: true,
+      firstPublishedAt: true,
+      author: { select: { displayName: true } },
+      collections: {
+        where: { collection: { isPublished: true } },
+        select: { collection: { select: { slug: true, name: true } } },
+      },
+    },
+  });
+
+  return works.map((w) => ({
+    id: w.id,
+    slug: w.slug,
+    title: w.title,
+    body: w.body,
+    contentType: w.contentType,
+    language: w.language,
+    firstPublishedAt: w.firstPublishedAt,
+    authorName: w.author.displayName,
+    collections: w.collections.map((c) => c.collection),
+  }));
 }

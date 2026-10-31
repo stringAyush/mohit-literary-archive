@@ -48,8 +48,8 @@ export const DEFAULT_HOMEPAGE_CONFIG: HomepageConfig = {
   heroCtaHref: "/works",
   heroSecondaryText: "About the writer",
   heroSecondaryHref: "/about",
-  showHeroBadge: true,
-  heroBadgeText: "Personal Literary Archive · Est. 2024",
+  showHeroBadge: false,
+  heroBadgeText: "",
 
   showContentsCard: true,
   contentsCardTitle: "Contents",
