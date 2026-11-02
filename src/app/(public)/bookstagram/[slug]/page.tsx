@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { LazyImage } from "@/components/ui/LazyImage";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, BookOpen, Calendar, ExternalLink, Tag } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { BackButton } from "@/components/ui/BackButton";
 import { InstagramIcon } from "@/components/ui/icons";
 import { getAdjacentPhotoPosts, getPhotoPostBySlug } from "@/lib/bookstagram/queries";
 import { formatDate } from "@/lib/format";
@@ -39,16 +40,10 @@ export default async function PhotoPostPage({ params }: Props) {
 
   return (
     <div className="page-container py-10 lg:py-16">
-      {/* Back link */}
-      <nav aria-label="Breadcrumb" className="mb-8">
-        <Link
-          href="/bookstagram"
-          className="inline-flex items-center gap-2 font-sans text-xs text-muted hover:text-accent transition-colors no-underline"
-        >
-          <ArrowLeft className="h-3.5 w-3.5" />
-          <span>Back to Book Photography gallery</span>
-        </Link>
-      </nav>
+      {/* Back button */}
+      <div className="mb-8">
+        <BackButton fallbackHref="/bookstagram" label="Back to photography" />
+      </div>
 
       {/* Main Grid: Images & Metadata */}
       <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr] lg:gap-14">
@@ -65,7 +60,7 @@ export default async function PhotoPostPage({ params }: Props) {
                   aspectRatio: img.width && img.height ? `${img.width} / ${img.height}` : "1.4",
                 }}
               >
-                <Image
+                <LazyImage
                   src={img.url}
                   alt={img.altText || post.title}
                   fill

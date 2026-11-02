@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { BackButton } from "@/components/ui/BackButton";
 import { SITE_NAME } from "@/lib/constants";
 
 export const metadata: Metadata = {
@@ -21,6 +22,9 @@ const sections = [
 export default function CopyrightPage() {
   return (
     <div className="page-container pb-16 pt-12 lg:pb-24 lg:pt-20">
+      <div className="mb-6">
+        <BackButton fallbackHref="/" label="Back to home" />
+      </div>
       <div className="grid gap-12 lg:grid-cols-[240px_1fr] lg:gap-20">
         <aside className="lg:sticky lg:top-28 lg:self-start">
           <p className="eyebrow">On this page</p>

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { cache } from "react";
 import { Pagination } from "@/components/ui/Pagination";
 import { FadeIn } from "@/components/ui/MotionWrapper";
+import { BackButton } from "@/components/ui/BackButton";
 import { WorkGrid } from "@/components/works/WorkPreview";
 import { oneLineSummary } from "@/lib/works/excerpt";
 import { getPublicCollectionBySlug } from "@/lib/works/queries";
@@ -47,6 +48,9 @@ export default async function CollectionPage({ params, searchParams }: Props) {
 
   return (
     <div className="page-container pb-16 pt-8 lg:pb-24 lg:pt-12">
+      <div className="mb-4">
+        <BackButton fallbackHref="/collections" label="Back to collections" />
+      </div>
       <nav aria-label="Breadcrumb" className="font-sans text-[0.8125rem] text-muted">
         <ol className="flex flex-wrap gap-x-2">
           <li>

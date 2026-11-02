@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { CategoryFilter } from "@/components/bookstagram/CategoryFilter";
 import { PhotoGrid } from "@/components/bookstagram/PhotoGrid";
 import { FadeIn } from "@/components/ui/MotionWrapper";
+import { BackButton } from "@/components/ui/BackButton";
 import { getPhotoCategories, getPublicPhotoPosts } from "@/lib/bookstagram/queries";
 
 export const revalidate = 60;
@@ -26,6 +27,9 @@ export default async function BookstagramPage({ searchParams }: Props) {
 
   return (
     <div className="page-container py-12 lg:py-20">
+      <div className="mb-6">
+        <BackButton fallbackHref="/" label="Back to home" />
+      </div>
       {/* Editorial Header */}
       <FadeIn>
         <header className="mb-12 max-w-3xl">

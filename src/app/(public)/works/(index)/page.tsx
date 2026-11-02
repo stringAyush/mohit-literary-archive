@@ -7,7 +7,8 @@ import { ArchiveViewSection } from "@/components/archive/ArchiveViewSection";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { FadeIn } from "@/components/ui/MotionWrapper";
 import { hrefFor, Pagination } from "@/components/ui/Pagination";
-import { WorkGrid } from "@/components/works/WorkPreview";
+import { BackButton } from "@/components/ui/BackButton";
+import { ArchiveInfiniteWorkGrid } from "@/components/works/ArchiveInfiniteWorkGrid";
 import { CONTENT_TYPES, contentTypeParam, contentTypePlural, languageLabel } from "@/lib/constants";
 import {
   archiveParamsToQuery,
@@ -41,6 +42,9 @@ export default async function ArchivePage({ searchParams }: Props) {
 
   return (
     <div className="page-container pb-16 pt-12 lg:pb-24 lg:pt-20">
+      <div className="mb-6">
+        <BackButton fallbackHref="/" label="Back to home" />
+      </div>
       <FadeIn>
         <header className="max-w-3xl">
           <div className="flex items-center gap-2 mb-3">
@@ -158,8 +162,23 @@ async function ArchiveResults({ params }: { params: ArchiveParams }) {
               />
             ) : (
               <>
-                <WorkGrid works={result.items} headingLevel={3} />
-                <Pagination basePath="/works" params={query} page={result.page} pageCount={result.pageCount} />
+                <ArchiveInfiniteWorkGrid
+                  initialWorks={result.items}
+                  initialPage={result.page}
+                  pageCount={result.pageCount}
+                  total={result.total}
+                  filters={{
+                    q: params.q,
+                    type: params.type,
+                    collection: params.collection,
+                    language: params.language,
+                    sort: params.sort,
+                  }}
+                  headingLevel={3}
+                />
+                <noscript>
+                  <Pagination basePath="/works" params={query} page={result.page} pageCount={result.pageCount} />
+                </noscript>
               </>
             )
           }

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import { cache } from "react";
 import { FadeIn } from "@/components/ui/MotionWrapper";
+import { BackButton } from "@/components/ui/BackButton";
 import { WorkGrid } from "@/components/works/WorkPreview";
 import { ShareControls } from "@/components/works/ShareControls";
 import { WorkText } from "@/components/works/WorkText";
@@ -130,6 +131,9 @@ export default async function WorkPage({ params }: Props) {
       />
 
       <div className="page-container pt-8 lg:pt-12">
+        <div className="mb-4">
+          <BackButton fallbackHref="/works" label="Back to archive" />
+        </div>
         <nav aria-label="Breadcrumb" className="font-sans text-[0.8125rem] text-muted">
           <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">
             <li>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SITE_NAME } from "@/lib/constants";
 import { Wordmark } from "./Wordmark";
+import { InstagramIcon, LinkedinIcon, YourQuoteIcon } from "@/components/ui/icons";
 
 const SECTIONS = [
   {
@@ -39,6 +40,38 @@ export function SiteFooter() {
             <p className="mt-6 font-editorial text-xl leading-snug text-night-muted">
               Some things are better left in words.
             </p>
+            <div className="mt-6 flex items-center gap-3">
+              <a
+                href="https://www.linkedin.com/in/mohit-yenugwar-63054823a/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn Profile"
+                title="LinkedIn"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-night-muted transition-all hover:bg-white/10 hover:text-white hover:border-white/30"
+              >
+                <LinkedinIcon className="h-4 w-4" />
+              </a>
+              <a
+                href="https://www.instagram.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram Profile"
+                title="Instagram"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-night-muted transition-all hover:bg-white/10 hover:text-white hover:border-white/30"
+              >
+                <InstagramIcon className="h-4 w-4" />
+              </a>
+              <a
+                href="https://www.yourquote.in/mohit-yenugwar-v0m/quotes"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="YourQuote Profile"
+                title="YourQuote"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-night-muted transition-all hover:bg-white/10 hover:text-white hover:border-white/30"
+              >
+                <YourQuoteIcon className="h-4 w-4" />
+              </a>
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-4">
             {SECTIONS.map((section) => (

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { CollectionGrid } from "@/components/collections/CollectionPanel";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { FadeIn } from "@/components/ui/MotionWrapper";
+import { BackButton } from "@/components/ui/BackButton";
 import { getPublicCollections } from "@/lib/works/queries";
 
 export const revalidate = 60;
@@ -16,6 +17,9 @@ export default async function CollectionsPage() {
   const collections = await getPublicCollections();
   return (
     <div className="page-container pb-16 pt-12 lg:pb-24 lg:pt-20">
+      <div className="mb-6">
+        <BackButton fallbackHref="/" label="Back to home" />
+      </div>
       <FadeIn>
         <header className="max-w-3xl">
           <p className="eyebrow">Curated groupings</p>

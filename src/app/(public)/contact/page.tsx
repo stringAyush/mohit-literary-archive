@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { FadeIn } from "@/components/ui/MotionWrapper";
+import { BackButton } from "@/components/ui/BackButton";
 import { SITE_NAME } from "@/lib/constants";
 import { getEnv } from "@/lib/env";
 import { createFormToken } from "@/lib/form-token";
@@ -22,6 +23,9 @@ export default async function ContactPage({ searchParams }: Props) {
 
   return (
     <div className="page-container pb-16 pt-12 lg:pb-24 lg:pt-20">
+      <div className="mb-6">
+        <BackButton fallbackHref="/" label="Back to home" />
+      </div>
       <FadeIn>
         <div className="grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
           <header>

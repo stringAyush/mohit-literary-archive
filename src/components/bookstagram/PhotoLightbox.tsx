@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useCallback } from "react";
-import Image from "next/image";
+import { LazyImage } from "@/components/ui/LazyImage";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, BookOpen, ExternalLink, Tag } from "lucide-react";
@@ -115,7 +115,7 @@ export function PhotoLightbox({ posts, currentIndex, onClose, onNavigate }: Prop
             {/* Photo view */}
             <div className="relative flex h-[50vh] sm:h-[60vh] lg:h-[75vh] w-full items-center justify-center bg-black/50 p-2 sm:p-6 lg:w-3/5">
               <div className="relative h-full w-full">
-                <Image
+                <LazyImage
                   src={currentImage.url}
                   alt={currentImage.altText || currentPost.title}
                   fill

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { BackButton } from "@/components/ui/BackButton";
+import { SocialLinkIcon } from "@/components/ui/icons";
 import { FadeIn } from "@/components/ui/MotionWrapper";
 import { WorkPreview } from "@/components/works/WorkPreview";
 import { SITE_NAME } from "@/lib/constants";
@@ -26,6 +28,9 @@ export default async function AboutPage() {
     <div className="page-container pb-16 pt-12 lg:pb-24 lg:pt-20">
       <FadeIn>
         <div className="reading-column">
+        <div className="mb-6">
+          <BackButton fallbackHref="/" label="Back to home" />
+        </div>
         <p className="eyebrow flex items-center gap-1.5">
           <span className="h-1.5 w-1.5 rounded-full bg-accent" />
           About the writer
@@ -61,8 +66,9 @@ export default async function AboutPage() {
             <ul className="mt-4 space-y-1 font-sans text-sm">
               {links.map((link) => (
                 <li key={link.url}>
-                  <a href={link.url} className="text-link inline-flex min-h-11 items-center" rel="noopener noreferrer" target="_blank">
-                    {link.label}
+                  <a href={link.url} className="text-link inline-flex min-h-11 items-center gap-2" rel="noopener noreferrer" target="_blank">
+                    <SocialLinkIcon url={link.url} className="h-4 w-4 shrink-0 text-muted" />
+                    <span>{link.label}</span>
                     <span className="sr-only"> (opens in a new tab)</span>
                   </a>
                 </li>

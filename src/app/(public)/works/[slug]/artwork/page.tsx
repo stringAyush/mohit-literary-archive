@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArtworkStudio } from "@/components/artwork/ArtworkStudio";
+import { BackButton } from "@/components/ui/BackButton";
 import { contentTypeLabel } from "@/lib/constants";
 import { yearOf } from "@/lib/format";
 import { getPublicWorkBySlug } from "@/lib/works/queries";
@@ -24,6 +25,9 @@ export default async function ArtworkPage({ params }: Props) {
 
   return (
     <div className="page-container pb-16 pt-8 lg:pb-24 lg:pt-12">
+      <div className="mb-4">
+        <BackButton fallbackHref={`/works/${work.slug}`} label="Back to piece" />
+      </div>
       <nav aria-label="Breadcrumb" className="font-sans text-[0.8125rem] text-muted">
         <ol className="flex flex-wrap gap-x-2">
           <li>

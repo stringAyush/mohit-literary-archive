@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { LazyImage } from "@/components/ui/LazyImage";
 import Link from "next/link";
 import { ArrowUpRight, BookOpen, Layers, Maximize2 } from "lucide-react";
 import { InstagramIcon } from "@/components/ui/icons";
@@ -28,13 +28,12 @@ export function PhotoCard({ post, onOpenLightbox, priority = false }: Props) {
           style={{ aspectRatio: `${aspectRatio}` }}
           onClick={onOpenLightbox}
         >
-          <Image
+          <LazyImage
             src={mainImage.url}
             alt={mainImage.altText || post.title}
             fill
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1280px) 33vw, 25vw"
-            loading={priority ? "eager" : "lazy"}
             priority={priority}
           />
 
@@ -121,7 +120,7 @@ export function PhotoCard({ post, onOpenLightbox, priority = false }: Props) {
         <div className="mt-2.5 flex items-center justify-between font-sans text-xs text-muted border-t hairline pt-2">
           <div className="flex items-center gap-1.5">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
-            <span className="text-[11px] font-medium text-ink">Mohit Yenugwar</span>
+            <span className="text-[11px] font-medium text-muted">Folio Photograph</span>
           </div>
 
           {post.instagramUrl && (

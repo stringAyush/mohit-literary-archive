@@ -3,8 +3,77 @@
 import React, { useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { BookOpen, LayoutGrid } from "lucide-react";
-import { BookFlipReader } from "./BookFlipReader";
+import dynamic from "next/dynamic";
 import type { FlipBookPiece } from "@/lib/works/queries";
+
+function BookFlipSkeleton() {
+  return (
+    <div className="flex flex-col items-center justify-center py-8 px-2" role="status" aria-live="polite">
+      {/* Folio Book Skeleton Frame */}
+      <div className="relative mx-auto flex h-[480px] sm:h-[560px] w-full max-w-[860px] items-stretch rounded-2xl border border-line/80 bg-surface/80 p-3 sm:p-4 shadow-xl backdrop-blur-md">
+        {/* Left Page Skeleton */}
+        <div className="hidden sm:flex flex-1 flex-col justify-between border-r hairline p-8 bg-paper/60 rounded-l-xl">
+          <div className="flex justify-between items-center border-b hairline pb-2">
+            <div className="h-3 w-16 bg-surface-2 rounded-full animate-pulse" />
+            <div className="h-3 w-12 bg-surface-2 rounded-full animate-pulse" />
+          </div>
+          <div className="space-y-4 my-auto">
+            <div className="h-5 w-3/4 bg-surface-2 rounded animate-pulse" />
+            <div className="space-y-2 pt-2">
+              <div className="h-3.5 w-full bg-surface-2/80 rounded animate-pulse" />
+              <div className="h-3.5 w-5/6 bg-surface-2/80 rounded animate-pulse" />
+              <div className="h-3.5 w-4/6 bg-surface-2/80 rounded animate-pulse" />
+              <div className="h-3.5 w-3/4 bg-surface-2/80 rounded animate-pulse" />
+            </div>
+          </div>
+          <div className="flex justify-between items-center border-t hairline pt-2">
+            <div className="h-2.5 w-14 bg-surface-2 rounded animate-pulse" />
+            <div className="h-2.5 w-6 bg-surface-2 rounded animate-pulse" />
+          </div>
+        </div>
+
+        {/* Center Spine Crease */}
+        <div className="hidden sm:block w-3 bg-gradient-to-r from-black/10 via-black/5 to-black/10 shrink-0" />
+
+        {/* Right Page Skeleton */}
+        <div className="flex flex-1 flex-col justify-between p-6 sm:p-8 bg-paper/60 rounded-xl sm:rounded-r-xl sm:rounded-l-none">
+          <div className="flex justify-between items-center border-b hairline pb-2">
+            <div className="h-3 w-16 bg-surface-2 rounded-full animate-pulse" />
+            <div className="h-3 w-12 bg-surface-2 rounded-full animate-pulse" />
+          </div>
+
+          {/* Central Binding Indicator */}
+          <div className="my-auto text-center space-y-3 py-6">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-accent/40 bg-accent/10 shadow-sm">
+              <div className="h-6 w-6 animate-spin rounded-full border-2 border-accent border-t-transparent" />
+            </div>
+            <div className="space-y-1">
+              <p className="font-editorial text-lg italic text-ink font-medium">
+                Binding the literary folio…
+              </p>
+              <p className="font-sans text-xs text-muted">
+                Preparing realistic page turns &amp; typography
+              </p>
+            </div>
+          </div>
+
+          <div className="flex justify-between items-center border-t hairline pt-2">
+            <div className="h-2.5 w-14 bg-surface-2 rounded animate-pulse" />
+            <div className="h-2.5 w-6 bg-surface-2 rounded animate-pulse" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const BookFlipReader = dynamic(
+  () => import("./BookFlipReader").then((mod) => mod.BookFlipReader),
+  {
+    ssr: false,
+    loading: () => <BookFlipSkeleton />,
+  }
+);
 
 type Props = {
   initialView: "normal" | "book";

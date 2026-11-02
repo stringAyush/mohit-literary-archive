@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { MobileMenu } from "./MobileMenu";
 import { NavLinks } from "./NavLinks";
 import { SearchDialog } from "./SearchDialog";
@@ -9,12 +8,7 @@ import { Wordmark } from "./Wordmark";
 
 export function SiteHeader() {
   return (
-    <motion.header
-      initial={{ y: -16, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-      className="sticky top-0 z-40 w-full bg-paper/85 py-3 sm:py-4 backdrop-blur-md border-b hairline transition-all"
-    >
+    <header className="sticky top-0 z-40 w-full bg-paper/85 py-3 sm:py-4 backdrop-blur-md border-b hairline transition-colors duration-200">
       <div className="page-container flex items-center justify-between gap-4">
         {/* Separated out name on the top left */}
         <div className="shrink-0">
@@ -34,7 +28,7 @@ export function SiteHeader() {
           </div>
         </nav>
       </div>
-    </motion.header>
+    </header>
   );
 }
 

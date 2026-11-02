@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, BookOpen, Layers, Quote } from "lucide-react";
-import { CollectionGrid } from "@/components/collections/CollectionPanel";
 import { CopyQuoteButton } from "@/components/ui/CopyQuoteButton";
+import { LazyImage } from "@/components/ui/LazyImage";
+import { SocialLinkIcon } from "@/components/ui/icons";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Card } from "@/components/ui/card";
@@ -18,7 +19,6 @@ import {
   getContentTypeCounts,
   getFeaturedWork,
   getPrimaryAuthor,
-  getPublicCollections,
   getRecentWorks,
   profileLinks,
 } from "@/lib/works/queries";
@@ -27,9 +27,8 @@ export const revalidate = 60;
 
 export default async function HomePage() {
   const config = await getHomepageConfig();
-  const [author, collections, counts, featuredPhotos] = await Promise.all([
+  const [author, counts, featuredPhotos] = await Promise.all([
     getPrimaryAuthor(),
-    getPublicCollections(),
     config.showContentsCard !== false ? getContentTypeCounts() : Promise.resolve([]),
     config.showPhotography !== false ? getFeaturedPhotoPosts(config.photographyCount ?? 6) : Promise.resolve([]),
   ]);
@@ -171,64 +170,105 @@ export default async function HomePage() {
       {config.showFeaturedWork !== false && featured && featuredExcerpt && (
         <FadeIn>
           <section aria-labelledby="featured-heading" className="page-container section-space">
-            <Card className="relative overflow-hidden border border-ink/10 bg-surface/80 p-8 shadow-[0_12px_36px_-8px_rgba(20,19,18,0.06)] backdrop-blur-md ring-1 ring-white/60 transition-all sm:p-12 hover:shadow-[0_16px_48px_-8px_rgba(20,19,18,0.09)]">
-              <div className="reading-column">
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-accent animate-pulse-dot" />
-                    <p className="eyebrow text-ink font-semibold">{config.featuredSectionTitle ?? "Featured Piece"}</p>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <CopyQuoteButton
-                      text={featuredExcerpt.text}
-                      author={featured.work.author.displayName}
-                      title={featured.work.title || undefined}
-                    />
-                    <Quote className="h-6 w-6 text-ink/20" />
-                  </div>
-                </div>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+              {/* Left Column: Featured Piece Card */}
+              <div className="lg:col-span-7 flex flex-col">
+                <Card className="relative flex flex-col justify-between h-full overflow-hidden border border-ink/10 bg-surface/80 p-7 sm:p-10 shadow-[0_12px_36px_-8px_rgba(20,19,18,0.06)] backdrop-blur-md ring-1 ring-white/60 transition-all hover:shadow-[0_16px_48px_-8px_rgba(20,19,18,0.09)]">
+                  <div>
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-2">
+                        <span className="h-2 w-2 rounded-full bg-accent animate-pulse-dot" />
+                        <p className="eyebrow text-ink font-semibold">{config.featuredSectionTitle ?? "Featured Piece"}</p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <CopyQuoteButton
+                          text={featuredExcerpt.text}
+                          author={featured.work.author.displayName}
+                          title={featured.work.title || undefined}
+                        />
+                        <Quote className="h-6 w-6 text-ink/20" />
+                      </div>
+                    </div>
 
-                {featured.work.title && (
-                  <h2 className="mt-8 font-display text-[2.25rem] leading-tight sm:text-[2.75rem] text-ink font-normal">
-                    {featured.work.title}
-                  </h2>
-                )}
-
-                <figure className="mt-6">
-                  <blockquote className="rounded-xl border-l-2 border-accent pl-6 my-6">
-                    <WorkText
-                      body={featuredExcerpt.text}
-                      language={featured.work.language}
-                      lineated={
-                        featured.work.contentType !== "REFLECTION" &&
-                        featured.work.contentType !== "SHORT_STORY" &&
-                        featured.work.contentType !== "PROSE"
-                      }
-                    />
-                  </blockquote>
-                  <figcaption className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 font-sans text-sm text-muted">
-                    <span className="font-editorial text-xl italic text-ink">— {featured.work.author.displayName}</span>
-                    <span className="eyebrow text-ink font-semibold text-xs rounded-xs bg-ink/5 px-2 py-0.5">{contentTypeLabel(featured.work.contentType)}</span>
-                    {featured.work.firstPublishedAt && (
-                      <span className="text-xs tabular-nums">{formatDate(featured.work.firstPublishedAt)}</span>
+                    {featured.work.title && (
+                      <h2 className="mt-7 font-display text-[2.25rem] leading-tight sm:text-[2.65rem] text-ink font-normal">
+                        {featured.work.title}
+                      </h2>
                     )}
-                    {featured.work.isDemo && <span className="eyebrow text-muted text-xs">Demo text</span>}
-                  </figcaption>
-                </figure>
 
-                <div className="mt-8 border-t hairline pt-6">
-                  <Link
-                    href={`/works/${featured.work.slug}`}
-                    className="inline-flex items-center gap-2 font-sans text-sm font-semibold text-ink transition-transform hover:translate-x-1 hover:underline decoration-accent decoration-2"
-                  >
-                    <span>
-                      {featuredExcerpt.truncated ? "Continue reading the full piece" : "Open this piece on its own page"}
-                    </span>
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </div>
+                    <figure className="mt-5">
+                      <blockquote className="rounded-xl border-l-2 border-accent pl-6 my-5">
+                        <WorkText
+                          body={featuredExcerpt.text}
+                          language={featured.work.language}
+                          lineated={
+                            featured.work.contentType !== "REFLECTION" &&
+                            featured.work.contentType !== "SHORT_STORY" &&
+                            featured.work.contentType !== "PROSE"
+                          }
+                        />
+                      </blockquote>
+                      <figcaption className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 font-sans text-sm text-muted">
+                        <span className="eyebrow text-ink font-semibold text-xs rounded-xs bg-ink/5 px-2 py-0.5">{contentTypeLabel(featured.work.contentType)}</span>
+                        {featured.work.firstPublishedAt && (
+                          <span className="text-xs tabular-nums">{formatDate(featured.work.firstPublishedAt)}</span>
+                        )}
+                        {featured.work.isDemo && <span className="eyebrow text-muted text-xs">Demo text</span>}
+                      </figcaption>
+                    </figure>
+                  </div>
+
+                  <div className="mt-8 border-t hairline pt-5">
+                    <Link
+                      href={`/works/${featured.work.slug}`}
+                      className="inline-flex items-center gap-2 font-sans text-sm font-semibold text-ink transition-transform hover:translate-x-1 hover:underline decoration-accent decoration-2"
+                    >
+                      <span>
+                        {featuredExcerpt.truncated ? "Continue reading the full piece" : "Open this piece on its own page"}
+                      </span>
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </div>
+                </Card>
               </div>
-            </Card>
+
+              {/* Right Column: Authentic Physical A4 Folio Book */}
+              <div className="lg:col-span-5 flex items-center justify-center py-4">
+                <Link
+                  href="/works?view=book"
+                  className="group relative block w-full max-w-[275px] sm:max-w-[315px] lg:max-w-[330px] aspect-[682/1024] no-underline cursor-pointer select-none"
+                  title="Open Folio in Interactive Book View"
+                >
+                  {/* Silk Crimson Bookmark Ribbon */}
+                  <div
+                    className="absolute -bottom-4 right-10 sm:right-12 z-20 h-10 w-4.5 bg-[#641b1c] shadow-[1px_2px_5px_rgba(0,0,0,0.5)] transition-transform duration-300 group-hover:translate-y-1"
+                    style={{
+                      clipPath: "polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%)",
+                    }}
+                  />
+
+                  {/* Physical Hardcover Book */}
+                  <div className="relative h-full w-full rounded-r-md rounded-l-xs overflow-hidden border border-black/40 bg-[#141110] border-l-[14px] sm:border-l-[18px] border-l-[#181312] border-r-[6px] sm:border-r-[8px] border-r-[#d5cebf] dark:border-r-[#2b2723] border-b-[5px] sm:border-b-[6px] border-b-[#c4bcac] dark:border-b-[#201d1a] shadow-[16px_28px_56px_-8px_rgba(0,0,0,0.65)] transition-all duration-300 ease-out group-hover:-translate-y-1.5 group-hover:shadow-[20px_36px_68px_-6px_rgba(0,0,0,0.75)]">
+                    
+                    {/* Front Cover Image */}
+                    <Image
+                      src="/art/book_cover.webp"
+                      alt="Mohit Yenugwar - A Digital Folio Book Cover"
+                      fill
+                      sizes="(max-width: 640px) 275px, (max-width: 1024px) 315px, 330px"
+                      className="object-cover object-center transform group-hover:scale-[1.015] transition-transform duration-500 ease-out"
+                      priority
+                    />
+
+                    {/* Spine highlight crease on left */}
+                    <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-3.5 bg-gradient-to-r from-black/60 via-black/20 to-transparent shadow-[inset_1px_0_2px_rgba(255,255,255,0.1)] z-10" />
+
+                    {/* Subtle hover gloss sheen */}
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-transparent via-white/0 to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
+                  </div>
+                </Link>
+              </div>
+            </div>
           </section>
         </FadeIn>
       )}
@@ -243,22 +283,6 @@ export default async function HomePage() {
               link={{ label: "See the whole archive", href: "/works" }}
             />
             <WorkGrid works={recent} />
-          </section>
-        </FadeIn>
-      )}
-
-      {/* ─── Collections ──────────────────────────────────────── */}
-      {config.showCollections !== false && collections.length > 0 && (
-        <FadeIn delay={0.12}>
-          <section aria-labelledby="collections-heading" className="border-t hairline bg-surface-2/30">
-            <div className="page-container section-space">
-              <SectionHeading
-                id="collections-heading"
-                title={config.collectionsTitle ?? "Explore by feeling"}
-                link={{ label: "All collections", href: "/collections" }}
-              />
-              <CollectionGrid collections={collections.slice(0, config.collectionsCount ?? 6)} />
-            </div>
           </section>
         </FadeIn>
       )}
@@ -306,13 +330,12 @@ export default async function HomePage() {
                               className="relative block w-full overflow-hidden"
                               style={{ aspectRatio: `${aspectRatio}` }}
                             >
-                              <Image
+                              <LazyImage
                                 src={img.url}
                                 alt={img.altText || photo.title}
                                 fill
                                 className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                                loading="lazy"
                               />
 
                               {/* Hover Scrim */}
@@ -366,7 +389,7 @@ export default async function HomePage() {
                             <div className="mt-2.5 flex items-center justify-between font-sans text-xs text-muted border-t hairline pt-2">
                               <div className="flex items-center gap-1.5">
                                 <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
-                                <span className="text-[11px] font-medium text-ink">Mohit Yenugwar</span>
+                                <span className="text-[11px] font-medium text-muted">Folio Photograph</span>
                               </div>
                             </div>
                           </div>
@@ -407,7 +430,7 @@ export default async function HomePage() {
                       The writing gathered here is by {author?.displayName ?? SITE_NAME}.
                     </p>
                   )}
-                  <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 font-sans text-sm">
+                  <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-3 font-sans text-sm">
                     <Link
                       href="/about"
                       className="inline-flex items-center gap-1.5 font-semibold text-ink hover:underline decoration-accent decoration-2"
@@ -419,11 +442,12 @@ export default async function HomePage() {
                       <a
                         key={link.url}
                         href={link.url}
-                        className="rounded-md border border-line/80 bg-paper px-3 py-1 font-sans text-xs font-medium text-muted transition-colors hover:border-ink/40 hover:text-ink"
+                        className="inline-flex items-center gap-1.5 rounded-md border border-line/80 bg-paper px-3 py-1 font-sans text-xs font-medium text-muted transition-colors hover:border-ink/40 hover:text-ink"
                         rel="noopener noreferrer"
                         target="_blank"
                       >
-                        {link.label}
+                        <SocialLinkIcon url={link.url} className="h-3.5 w-3.5 shrink-0" />
+                        <span>{link.label}</span>
                         <span className="sr-only"> (opens in a new tab)</span>
                       </a>
                     ))}

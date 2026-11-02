@@ -63,20 +63,19 @@ export function WorkPreview({ work, headingLevel = 3 }: { work: WorkListItem; he
       {/* Footer metadata & read action */}
       <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t hairline pt-4 font-sans text-xs text-muted">
         <div className="flex items-center gap-2">
-          <span className="font-medium text-ink flex items-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-            {work.authorName}
-          </span>
-          {work.collections[0] && (
-            <>
-              <span className="text-line">•</span>
-              <Link
-                href={`/collections/${work.collections[0].slug}`}
-                className="relative z-10 rounded-md px-1.5 py-0.5 transition-colors hover:bg-ink/5 hover:text-ink"
-              >
-                {work.collections[0].name}
-              </Link>
-            </>
+          {work.collections[0] ? (
+            <Link
+              href={`/collections/${work.collections[0].slug}`}
+              className="relative z-10 inline-flex items-center gap-1.5 rounded-md px-1.5 py-0.5 font-medium text-ink/80 transition-colors hover:bg-ink/5 hover:text-ink"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+              <span>{work.collections[0].name}</span>
+            </Link>
+          ) : (
+            <span className="inline-flex items-center gap-1.5 font-medium text-muted">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent/60" />
+              <span>Literary Folio</span>
+            </span>
           )}
         </div>
 

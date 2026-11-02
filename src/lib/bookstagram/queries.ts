@@ -38,8 +38,8 @@ export async function getPhotoPostBySlug(slug: string): Promise<PhotoPostData | 
   return post as unknown as PhotoPostData;
 }
 
-export async function getFeaturedPhotoPosts(limit = 4): Promise<PhotoPostData[]> {
-  const posts = await db.photoPost.findMany({
+export async function getFeaturedPhotoPosts(limit = 6): Promise<PhotoPostData[]> {
+  const featured = await db.photoPost.findMany({
     where: {
       isPublished: true,
       featured: true,
@@ -53,12 +53,27 @@ export async function getFeaturedPhotoPosts(limit = 4): Promise<PhotoPostData[]>
     },
   });
 
-  if (posts.length === 0) {
-    // Fallback to latest published posts
-    return getPublicPhotoPosts({ limit });
+  if (featured.length >= limit) {
+    return featured as unknown as PhotoPostData[];
   }
 
-  return posts as unknown as PhotoPostData[];
+  // Fallback to fill up to limit with other published posts
+  const remaining = limit - featured.length;
+  const more = await db.photoPost.findMany({
+    where: {
+      isPublished: true,
+      id: { notIn: featured.map((p) => p.id) },
+    },
+    orderBy: [{ sortOrder: "asc" }, { publishedAt: "desc" }, { createdAt: "desc" }],
+    take: remaining,
+    include: {
+      images: {
+        orderBy: { sortOrder: "asc" },
+      },
+    },
+  });
+
+  return [...featured, ...more] as unknown as PhotoPostData[];
 }
 
 export async function getPhotoCategories(): Promise<{ name: string; count: number }[]> {
